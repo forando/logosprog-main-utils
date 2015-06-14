@@ -39,6 +39,10 @@ public class SystemFileManager {
         }
     }
 
+    public String getFileName(){
+        return fileName;
+    }
+
 
     public boolean fileExists(){
 

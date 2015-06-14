@@ -15,7 +15,8 @@ public interface ObjectFromFileBuilder<T,E> {
     /**
      * Factory method that constructs object of predefined type
      * from external file.
-     * @param element Any element that may be needed to construct a {@link T} object
+     * @param element Any element that may be needed to construct a {@link T} object.
+     *                If no element needed, NULL can be passed.
      * @return An object of desired type
      * @throws IOException
      */

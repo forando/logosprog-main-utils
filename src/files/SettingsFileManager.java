@@ -21,9 +21,13 @@ public class SettingsFileManager extends SystemFileManager {
      */
     public static final String DIR_NAME = "settings";
 
+    public SettingsFileManager(String fileName, String rootDir, String... subDir) throws IOException {
+        super(fileName, rootDir, subDir);
+    }
+
     public static boolean fileExists(String fileName){
 
-        return SettingsFileManager.fileExists(fileName, DIR_NAME);
+        return fileExists(fileName, DIR_NAME);
     }
 
     /**

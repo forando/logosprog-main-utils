@@ -28,12 +28,10 @@ import java.io.IOException;
 public class XMLDataFileManager extends SystemFileManager {
 
 
+    Document document = null;
+
     public XMLDataFileManager(String fileName, String rootDir, String... subDir) throws IOException {
         super(fileName, rootDir, subDir);
-    }
-
-    public Document getDocument() throws IOException {
-        Document document;
 
         if (fileExists()){
             DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
@@ -44,11 +42,14 @@ public class XMLDataFileManager extends SystemFileManager {
                 document = builder.parse(new File(getFilePath()));
             } catch (ParserConfigurationException | SAXException e) {
                 e.printStackTrace();
-                throw new FileNotFoundException(getFilePath());
+                throw new IOException("File: " + getFilePath() + " not found");
             }
         }else{
-            throw new FileNotFoundException(getFilePath());
+            throw new IOException("File: " + getFilePath() + " not found");
         }
+    }
+
+    public Document getDocument() throws IOException {
         return document;
     }
 

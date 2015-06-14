@@ -4,10 +4,13 @@
 
 package files;
 
+import system.ConsoleMessage;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Properties;
 
 /**
  * Created by forando on 14.06.15.<br>
@@ -31,6 +34,21 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
      */
     public TemplateFileBuilder(String fileName, String rootDir, String subDir) throws IOException {
         super(fileName, rootDir, subDir);
+    }
+
+    @Override
+    public T build(InputStream element) throws IOException {
+        if (fileExists()){
+            mainObj = getObjectFromExternalFile();
+        }else{
+            boolean created = generateDefaultFile(element);
+            if (created){
+                mainObj = getObjectFromExternalFile();
+            }else {
+                ConsoleMessage.printErrorMessage("An error occurred during " + getFileName() + " file creation.");
+            }
+        }
+        return mainObj;
     }
 
     /**

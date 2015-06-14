@@ -26,29 +26,25 @@ import java.io.InputStream;
  * This class constructs external data.xml files <b>from default
  * template files</b>.
  */
-public class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
+public abstract class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
 
     //Document document = null;
 
     //XMLDataFileManager manager;
 
-    public TemplateXMLBuilder(String fileName, String rootDir, String subDir) throws IOException {
+    /**
+     *
+     * @param fileName A file name that will be used to construct {@link Document} object from
+     * @param rootDir Application root directory
+     * @param subDir Optional. A subdirectory name the file will be located
+     * @param is A {@link InputStream} object of an internal template .xml file that will be
+     *           used to generate default file from
+     * @throws IOException If either <b>fileName</b> or <b>rootDir</b> or <b>is</b> is null
+     */
+    public TemplateXMLBuilder(String fileName, String rootDir, String subDir, InputStream is) throws IOException {
         super(fileName, rootDir, subDir);
-    }
-
-    @Override
-    public Document build(InputStream is) throws IOException {
-        if (fileExists()){
-            mainObj = getObjectFromExternalFile();
-        }else{
-            boolean created = generateDefaultFile(is);
-            if (created){
-                mainObj = getObjectFromExternalFile();
-            }else {
-                ConsoleMessage.printErrorMessage("An error occurred during " + getFileName() + " file creation.");
-            }
-        }
-        return mainObj;
+        if (is == null) throw new IOException("InputStreame of an internal .xml template file is NULL!");
+        this.build(is);
     }
 
     @Override

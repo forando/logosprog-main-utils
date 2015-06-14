@@ -43,6 +43,10 @@ public class TemplateXMLDocBuilder implements XMLDocBuilder {
         return null;
     }
 
+    /**
+     * This method must be call only after {@link #build}
+     * @return
+     */
     protected Document getXMLDocument(){
         return doc;
     }

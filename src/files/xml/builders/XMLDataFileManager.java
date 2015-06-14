@@ -33,6 +33,10 @@ public class XMLDataFileManager extends SystemFileManager {
     public XMLDataFileManager(String fileName, String rootDir, String... subDir) throws IOException {
         super(fileName, rootDir, subDir);
 
+
+    }
+
+    public Document getDocument() throws IOException {
         if (fileExists()){
             DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
             f.setValidating(false);
@@ -47,9 +51,7 @@ public class XMLDataFileManager extends SystemFileManager {
         }else{
             throw new IOException("File: " + getFilePath() + " not found");
         }
-    }
 
-    public Document getDocument() throws IOException {
         return document;
     }
 

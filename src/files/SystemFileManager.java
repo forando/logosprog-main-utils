@@ -8,17 +8,44 @@ import java.io.*;
 
 /**
  * Created by forando on 14.06.15.<br>
- * This class provides basic static operations with files that are
+ * This class provides basic operations with files that are
  * used by each module/application. That's why they are called
  * system files.
  */
 public class SystemFileManager {
-    public static boolean systemFileExists(String fileName, String rootDir, String... subDIR){
 
-        if (null != subDIR && subDIR.length > 0){
-            return (new File(SystemFileManager.getFilePath(fileName, subDIR[0]))).exists();
+    /**
+     * A name to be given to a new file
+     */
+    protected String fileName;
+    /**
+     * The complete path to root directory.
+     */
+    protected String rootDir;
+    /**
+     * Optional. The subdirectory to root directory.
+     *          if it's given, then it will be included in the fileName path
+     */
+    protected String subDir;
+
+    public SystemFileManager(String fileName, String rootDir, String... subDir) throws NullPointerException{
+        if (fileName == null || rootDir == null || rootDir.isEmpty() || fileName.isEmpty())
+            throw new NullPointerException("You must pass in fileName and rootDir");
+        this.fileName = fileName;
+        this.rootDir = rootDir;
+        if (null != subDir && subDir.length > 0){
+            //next: proceed with multiple subdirectories
+            this.subDir = subDir[0];
+        }
+    }
+
+
+    public boolean fileExists(){
+
+        if (null != subDir){
+            return (new File(getFilePath())).exists();
         }else{
-            return (new File(SystemFileManager.getFilePath(fileName, rootDir))).exists();
+            return (new File(getFilePath())).exists();
         }
     }
 
@@ -26,15 +53,12 @@ public class SystemFileManager {
      * This method constructs whole path to desired system file.<br>
      *     This is where you can change the default location of all
      *     files of your application.
-     * @param fileName The system file name
-     * @param rootDir The complete path to root directory.
-     * @param subDIR Optional. The subdirectory to root directory.
-     *               if it's given, then it will be included in the fileName path
+     *     if it's given, then it will be included in the fileName path
      * @return Constructed path to the requested file
      */
-    protected static String getFilePath(String fileName, String rootDir, String... subDIR){
-        if (null != subDIR && subDIR.length > 0){
-            return rootDir + File.separator + subDIR[0] + File.separator + fileName;
+    protected String getFilePath(){
+        if (null != subDir){
+            return rootDir + File.separator + subDir + File.separator + fileName;
         }else{
             return rootDir + File.separator + fileName;
         }
@@ -44,15 +68,14 @@ public class SystemFileManager {
     /**
      * Creates parent DIR if it does not exist and than creates
      * an empty file
-     * @param path Complete path including file name with extension
      * @return True - if operation is successful
      */
-    public static boolean createEmptyFile(String path){
+    public boolean createEmptyFile(){
 
         boolean result = false;
         boolean dirCreated = true;
 
-        File f = new File(path);
+        File f = new File(getFilePath());
 
         /*
         Checking if directory for files already exists
@@ -69,13 +92,9 @@ public class SystemFileManager {
     /**
      * This method copies default file from internal app folders to specific
      * project folder.
-     * @param fileName A name to be given to a new file.
-     * @param rootDir The complete path to root directory.
-     * @param subDIR Optional. The subdirectory to root directory.
-     *               if it's given, then it will be included in the fileName path
      * @return True - if operation is successful.
      */
-    public static boolean generateDefaultSystemFile(String fileName, String rootDir, String... subDIR){
+    public boolean generateDefaultFile(){
 
         boolean result = false;
 
@@ -83,13 +102,13 @@ public class SystemFileManager {
         OutputStream os = null;
         String path;
 
-        if (null != subDIR && subDIR.length > 0) {
-            path = SystemFileManager.getFilePath(fileName, subDIR[0]);
+        if (null != subDir) {
+            path = getFilePath();
         }else{
-            path = SystemFileManager.getFilePath(fileName, rootDir);
+            path = getFilePath();
         }
 
-        if (!SystemFileManager.createEmptyFile(path)) return false;
+        if (!createEmptyFile()) return false;
 
         try {
 

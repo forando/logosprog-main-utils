@@ -1,4 +1,4 @@
-package properties.builders;
+package files.properties.builders;
 
 import java.io.IOException;
 import java.util.Properties;

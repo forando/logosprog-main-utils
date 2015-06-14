@@ -1,4 +1,4 @@
-package xml.builders;
+package files.xml.builders;
 
 import org.w3c.dom.Document;
 

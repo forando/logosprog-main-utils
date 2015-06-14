@@ -1,5 +1,6 @@
 package properties.builders;
 
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -8,5 +9,11 @@ import java.util.Properties;
  * builds Properties object
  */
 public interface PropertiesBuilder {
-    Properties build();
+    /**
+     * Converts external .txt config file of a specific module(application)
+     * into {@link Properties} object.
+     * @return {@link Properties} object
+     * @throws IOException
+     */
+    Properties build() throws IOException;
 }

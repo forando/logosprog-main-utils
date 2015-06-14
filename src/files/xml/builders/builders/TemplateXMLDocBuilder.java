@@ -6,6 +6,7 @@ package files.xml.builders.builders;
 
 import files.xml.builders.XMLDataFileManager;
 import org.w3c.dom.Document;
+import system.ConsoleMessage;
 
 import java.io.IOException;
 
@@ -15,35 +16,17 @@ import java.io.IOException;
  * template files</b>.
  */
 public class TemplateXMLDocBuilder implements XMLDocBuilder {
-    protected Document doc = null;
+    Document doc = null;
 
-    /**
-     * The name of a default data.xml file to be used for external file creation.<br>
-     *     <b>Attention!</b> this name must be exactly the same as the
-     *     name of the default file.
-     */
-    private String fileName;
+    XMLDataFileManager manager;
 
-    /**
-     * The complete path to root directory.
-     */
-    protected String rootDir;
-
-    /**
-     * The subdirectory to root directory where the file has to be put.
-     */
-    private String subDir;
-
-    public TemplateXMLDocBuilder(String fileName,String rootDir, String subDir) {
-        this.fileName = fileName;
-        this.rootDir = rootDir;
-        this.subDir = subDir;
+    public TemplateXMLDocBuilder(String fileName,String rootDir, String subDir) throws IOException{
+            manager = new XMLDataFileManager(fileName, rootDir, subDir);
     }
 
 
     @Override
     public Document build() throws IOException {
-        XMLDataFileManager manager = new XMLDataFileManager(fileName,rootDir, subDir);
 
         if (manager.fileExists()){
             doc = manager.getDocument();
@@ -53,10 +36,18 @@ public class TemplateXMLDocBuilder implements XMLDocBuilder {
             if (created){
                 doc = manager.getDocument();
             }else {
-                APP.printErrorMessage("An error occurred during " + fileName + " file creation.");
+                ConsoleMessage.printErrorMessage("An error occurred during " + manager.getFileName() + " file creation.");
             }
         }
 
         return null;
+    }
+
+    protected Document getXMLDocument(){
+        return doc;
+    }
+
+    protected XMLDataFileManager getManager(){
+        return manager;
     }
 }

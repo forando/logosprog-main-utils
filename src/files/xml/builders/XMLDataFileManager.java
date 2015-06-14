@@ -22,13 +22,13 @@ import java.io.IOException;
 
 /**
  * Created by forando on 14.06.15.<br>
- * This class provides basic static operations with *.xml files that are
- * used by each module (application) as data source.
+ * This class provides basic operations with *.xml files that are
+ * used by each module (application).
  */
 public class XMLDataFileManager extends SystemFileManager {
 
 
-    public XMLDataFileManager(String fileName, String rootDir, String... subDir) throws NullPointerException {
+    public XMLDataFileManager(String fileName, String rootDir, String... subDir) throws IOException {
         super(fileName, rootDir, subDir);
     }
 
@@ -64,5 +64,9 @@ public class XMLDataFileManager extends SystemFileManager {
             e.printStackTrace();
             throw new IOException("There was an error during xml saving");
         }
+    }
+
+    public String getFileName(){
+        return fileName;
     }
 }

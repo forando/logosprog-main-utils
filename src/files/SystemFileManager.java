@@ -28,9 +28,9 @@ public class SystemFileManager {
      */
     protected String subDir;
 
-    public SystemFileManager(String fileName, String rootDir, String... subDir) throws NullPointerException{
+    public SystemFileManager(String fileName, String rootDir, String... subDir) throws IOException{
         if (fileName == null || rootDir == null || rootDir.isEmpty() || fileName.isEmpty())
-            throw new NullPointerException("You must pass in fileName and rootDir");
+            throw new IOException("You must pass in fileName and rootDir");
         this.fileName = fileName;
         this.rootDir = rootDir;
         if (null != subDir && subDir.length > 0){

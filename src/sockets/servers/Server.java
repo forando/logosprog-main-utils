@@ -23,7 +23,7 @@ import java.util.List;
  * Created by forando on 15.06.15.
  */
 public class Server {
-    private ServerAccepter serverAccepter;
+    /*private ServerAccepter serverAccepter;
 
     public SocketOrganizer socketOrganizer;
 
@@ -188,9 +188,9 @@ public class Server {
                     }
                     break;
                 case SocketMessage.PRINTER:
-                            /*for (HostServerListener l : hostServerListeners){
+                            *//*for (HostServerListener l : hostServerListeners){
                                 l.onTerminalServerMessage(soc);
-                            }*/
+                            }*//*
                     break;
                 default:
                     break;
@@ -222,12 +222,12 @@ public class Server {
             }
         }
 
-        /**
+        *//**
          * Sends message to sockets <b>type</b>={@link SocketMessage#TERMINAL} which
          * IDs are specified in <b>idArr</b> list.
          * @param idArr Socket IDs for message to be sent.
          * @param message {@link java.lang.Object}
-         */
+         *//*
         public synchronized void sendTerminals(int[] idArr, Object message){
             int itemsInArray = terminals.size();
             for (int terminal : idArr) {
@@ -240,7 +240,7 @@ public class Server {
                     }
                 }
             }
-            /*if (operation==sockets.SocketMessage.HOLD_TERMINAL){
+            *//*if (operation==sockets.SocketMessage.HOLD_TERMINAL){
                 if (val == 1) {
                     isOnHoldTerminals = true;
                     System.out.println("server isOnHoldTerminals = " + isOnHoldTerminals);
@@ -248,15 +248,15 @@ public class Server {
                     isOnHoldTerminals = false;
                     System.out.println("server isOnHoldTerminals = " + isOnHoldTerminals);
                 }
-            }*/
+            }*//*
         }
 
-        /**
+        *//**
          * Sends message to sockets <b>type</b>={@link SocketMessage#DISPLAY} which
          * IDs are specified in <b>idArr</b> list.
          * @param idArr Socket IDs for message to be sent.
          * @param message {@link java.lang.Object}
-         */
+         *//*
         public synchronized void sendDisplays(int[] idArr, Object message){
             int itemsInArray = displays.size();
             for (int terminal : idArr) {
@@ -270,12 +270,12 @@ public class Server {
             }
         }
 
-        /**
+        *//**
          * Sends message to sockets <b>type</b>={@link SocketMessage#PRINTER} which
          * IDs are specified in <b>idArr</b> list.
          * @param idArr Socket IDs for message to be sent.
          * @param message {@link java.lang.Object}
-         */
+         *//*
         public synchronized void sendPrinters(int[] idArr, Object message){
             int itemsInArray = printers.size();
             for (int terminal : idArr) {
@@ -332,14 +332,14 @@ public class Server {
 
         public class SocketObject{
 
-            /**
+            *//**
              * Describes the type of a client, that is connected to this socket<br>
              *     can be: <ul>
              *         <li>{@link SocketMessage#DISPLAY}</li>
              *         <li>{@link SocketMessage#TERMINAL}</li>
              *         <li>{@link sockets.SocketMessage#PRINTER}</li>
              *     </ul>
-             */
+             *//*
             public int type;
             public Object message;
             public int id = -1;
@@ -395,26 +395,26 @@ public class Server {
                 listeners.add(listener);
             }
 
-            /**
+            *//**
              * This method notifies the {@link Host} that the socket is now available.<br>
              *     It also init input listener for the socket
              * @param clientTalksWithObject Can be <b>1</b> - if a client talks to this
              *                              socket using {@link SocketMessage} object, or <b>0</b> - if it doesn't.
-             */
+             *//*
             private void validate(byte clientTalksWithObject){
-                /*switch (clientTalksWithObject){
+                *//*switch (clientTalksWithObject){
                     case 0x01:
                         message = new sockets.SocketMessage(id,sockets.SocketMessage.REGISTER_SOCKET,0, new Date(),true);
                         break;
                     default:
                         message = new sockets.SocketMessage(id,sockets.SocketMessage.REGISTER_SOCKET,0, new Date(),false);
                         break;
-                }*/
+                }*//*
 
                 try {
                     //this.in = new ObjectInputStream(socket.getInputStream());
-                    /*input = new InputListener(this.socket);
-                    input.start();*/
+                    *//*input = new InputListener(this.socket);
+                    input.start();*//*
                     inPut = new InPut(socket, id);
                     inPut.addInputListener(new InPut.InputListener() {
                         @Override
@@ -430,27 +430,27 @@ public class Server {
                     });
                     inPut.start();
                     out = new ObjectOutputStream(socket.getOutputStream());
-                    /*for (HostServerListener l : hostServerListeners){
+                    *//*for (HostServerListener l : hostServerListeners){
                         l.onDisplayAvailable(this);
-                    }*/
+                    }*//*
                     //send(new sockets.DisplayMessage(0, 202, null, 0, new Date(), true));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                /*System.out.println("validate isOnHoldTerminals = " + isOnHoldTerminals);
+                *//*System.out.println("validate isOnHoldTerminals = " + isOnHoldTerminals);
                 if (isOnHoldTerminals){
                     message.operation = sockets.SocketMessage.HOLD_TERMINAL;
                     message.value = 1;
-                }*/
+                }*//*
             }
 
-            /**
+            *//**
              * This method registers the current object with an <b>ID</b>.
              * After that, the object becomes valid to {@link HostServer.SocketOrganizer}.
              * @param type The client type (see {@link HostServer.SocketOrganizer.SocketObject#type}).
              * @param id An ID to register this object with. If it's == -1, than id must be provided by server.
-             */
+             *//*
             private void register(byte type, byte id){
 
                 this.type = type;
@@ -487,14 +487,14 @@ public class Server {
                 validator.start();
             }
 
-            /**
+            *//**
              * The object of this class receives the very first <b>message</b> from a client (socket).<br>
              * The goal of this <b>message</b> is to notify the server whether the client is talking
              * using {@link SocketMessage} object or raw byteArray.<br>
              * It also provides {@link SocketObject} with an ID, thus
              * making it completely registered to the server.<br>
              * Once these two points done, the object becomes useless.
-             */
+             *//*
             private class Validator extends Thread{
                 private volatile Thread myThread;
 
@@ -516,11 +516,11 @@ public class Server {
                         return; // stopped before started.
                     }
                     try {
-                        /*
+                        *//*
                         b[0]: 1 - the client talks using serializable Objects, 0 - talks with bytes only
                         b[1]: type of a client (printer, terminal, display etc.)
                         b[2]: client id
-                         */
+                         *//*
                         byte[] b = new byte[3];
                         //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                         ReadableByteChannel channel = Channels.newChannel(socket.getInputStream());
@@ -566,5 +566,5 @@ public class Server {
         public void onTerminalMessage(SocketOrganizer.SocketObject soc);
         public void onDisplayAvailable(SocketOrganizer.SocketObject soc);
         public void onDisplayMessage(SocketOrganizer.SocketObject soc);
-    }
+    }*/
 }

@@ -43,9 +43,11 @@ public class Server<E extends SocketManager> {
 
     // Server thread accepts incoming client connections
     class ServerAcceptor extends Thread {
+        public static final String THREAD_NAME = "ServerAcceptor";
         int port;
         private volatile Thread myThread;
         ServerAcceptor(int port) {
+            this.setName(THREAD_NAME);
             this.port = port;
             myThread = this;
         }

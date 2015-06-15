@@ -16,7 +16,7 @@ import java.util.List;
  *     This class uses socket to listen for input messages
  */
 public class InPut extends Thread {
-    public static final String THREAD_NAME = "InPut";
+    public static final String THREAD_NAME = "SocketInPut";
     private volatile Thread myThread;
     private Socket socket;
     private ObjectInputStream in;

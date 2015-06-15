@@ -8,7 +8,7 @@ import sockets.servers.Client;
 
 /**
  * Created by forando on 15.06.15.<br>
- *     The class provides an app with a {@link Client} object to be able to talk to HostServer
+ *     This class provides an app with a {@link Client} object to be able to talk to HostServer
  */
 public class Connector implements Client.ClientListener {
 

@@ -145,9 +145,11 @@ public class Client {
     }
 
     private class Validator extends Thread{
+        public static final String THREAD_NAME = "ClientValidator";
         private volatile Thread myThread;
 
         public Validator(){
+            this.setName(THREAD_NAME);
             myThread = this;
         }
 

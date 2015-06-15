@@ -9,12 +9,14 @@ import java.io.ObjectOutputStream;
  *     This class uses socket to send messages.
  */
 public class OutPut  extends Thread {
+    public static final String THREAD_NAME = "SocketOutPut";
     private volatile Thread myThread;
     ObjectOutputStream out;
     private int id;
     private Object messageObject;
 
     public OutPut(ObjectOutputStream out, int id, Object messageObject){
+        this.setName(THREAD_NAME);
         myThread = this;
         this.out = out;
         this.id = id;

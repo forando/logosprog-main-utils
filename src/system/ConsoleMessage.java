@@ -5,7 +5,8 @@
 package system;
 
 /**
- * Created by forando on 14.06.15.
+ * Created by forando on 14.06.15.<br>
+ *     Provides different static methods to print messages to console
  */
 public class ConsoleMessage {
     /**
@@ -48,11 +49,21 @@ public class ConsoleMessage {
 
     /**
      * This method wraps an input message with ANSI escape code
-     * that allows to print that message to console in red color.<br>
+     * that allows to print that message to console in <b>RED</b> color.<br>
      * This formatting doesn't work on Windows console.
-     * @param message A message to be printed to console.
+     * @param message A message to be printed to a console.
      */
     public static void printErrorMessage(String message){
         System.out.println(ANSI_RED + message + ANSI_RESET);
+    }
+
+    /**
+     * This method wraps an input message with ANSI escape code
+     * that allows to print that message to console in <b>BLUE</b> color.<br>
+     * This formatting doesn't work on Windows console.
+     * @param message A message to be printed to a console.
+     */
+    public static void printInfoMessage(String message){
+        System.out.println(ANSI_BLUE + message + ANSI_RESET);
     }
 }

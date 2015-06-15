@@ -11,7 +11,9 @@ import java.net.Socket;
 
 /**
  * Created by forando on 15.06.15.<br>
- *     This class provides basic server functionality
+ *     This class provides basic server functionality.<br>
+ *     It's generalized by a predefined object that must
+ *     implement {@link SocketManager} interface.
  */
 public class Server<E extends SocketManager> {
 
@@ -21,10 +23,19 @@ public class Server<E extends SocketManager> {
 
     int PORT;
 
+    /**
+     * This constructor is for test only.<br> Here server port is set to <b>1337</b>
+     * @param socketManager An object that implements {@link SocketManager} interface
+     */
     public Server(E socketManager){
         this(socketManager, 1337);
     }
 
+    /**
+     * This constructor must be used in production
+     * @param socketManager An object that implements {@link SocketManager} interface
+     * @param port The port this server will be listening to.
+     */
     public Server(E socketManager, int port){
         this.socketManager = socketManager;
         this.PORT = port;
@@ -72,19 +83,29 @@ public class Server<E extends SocketManager> {
         }
     }
 
-    // Runs the sever accepter to catch incoming client connections
+    /**
+     * Runs the {@link ServerAcceptor} to catch incoming client connections
+     */
     public void start() {
         System.out.println("server: Running on port " + PORT);
         serverAcceptor = new ServerAcceptor(PORT);
         serverAcceptor.start();
     }
 
+    /**
+     * Stops the server.
+     */
     public void stop(){
         socketManager.closeAll();
         serverAcceptor.stopThread();
         System.out.println("server: stopped");
     }
 
+    /**
+     * Call this method to get {@link E} object.
+     * @return The object of generalized, during this class
+     * construction, type
+     */
     public E getGenerelizidObject(){
         return socketManager;
     }

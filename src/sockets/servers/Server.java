@@ -13,22 +13,20 @@ import java.net.Socket;
  * Created by forando on 15.06.15.<br>
  *     This class provides basic server functionality
  */
-public class Server {
+public class Server<E extends SocketManager> {
 
     private ServerAcceptor serverAcceptor;
 
-    public SocketManager socketManager;
+    public E socketManager;
 
-    String IP;
     int PORT;
 
-    public Server(SocketManager socketManager){
-        this(socketManager, "localhost", 1337);
+    public Server(E socketManager){
+        this(socketManager, 1337);
     }
 
-    public Server(SocketManager socketManager, String ip, int port){
+    public Server(E socketManager, int port){
         this.socketManager = socketManager;
-        this.IP = ip;
         this.PORT = port;
     }
 
@@ -85,5 +83,9 @@ public class Server {
         socketManager.closeAll();
         serverAcceptor.stopThread();
         System.out.println("server: stopped");
+    }
+
+    public E getGenerelizidObject(){
+        return socketManager;
     }
 }

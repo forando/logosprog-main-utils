@@ -4,6 +4,8 @@
 
 package files.audio;
 
+import files.ResourceInputStreamBuilder;
+
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,19 +22,48 @@ public class Audio {
     DataLine.Info dataLineInfo;
     boolean stopPlayback = false;
     boolean playbackFinished = true;
+    ResourceInputStreamBuilder streamBuilder;
+    String audioFileName;
 
-    public Audio(InputStream is) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-        this.audioInputStream = AudioSystem.getAudioInputStream(is);
-        this.audioFormat = audioInputStream.getFormat();
-        System.out.println(audioFormat);
-        this.dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
-        this.sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+    public Audio(ResourceInputStreamBuilder streamBuilder, String fileName) throws IOException {
+        streamBuilder.build(fileName);
+        this.streamBuilder = streamBuilder;
+        this.audioFileName = fileName;
     }
 
-    public void play(){
+    public void Play() {
         if (playbackFinished) {
 
+            try {
+                this.audioInputStream = AudioSystem.getAudioInputStream(streamBuilder.build(audioFileName));
+                this.audioFormat = audioInputStream.getFormat();
+                System.out.println(audioFormat);
+                this.dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
+                this.sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+            /*
+                Create a thread to Play back the variables
+                 and start it running.  It will run until
+                 the end of file, or the Stop button is
+                 clicked, whichever occurs first.
+                 Because of the variables buffers involved,
+                 there will normally be a delay between
+                 the click on the Stop button and the
+                 actual termination of playback.
+                 */
+                new PlayBackThread().start();
+            } catch (IOException |UnsupportedAudioFileException | LineUnavailableException e) {
+                e.printStackTrace();
+            }
+
         }
+    }
+
+    public void Stop() {
+        stopPlayback = true;
+    }
+
+    public void Reset() {
+        stopPlayback = false;
     }
 
     /**
@@ -51,7 +82,44 @@ public class Audio {
 
         @Override
         public void run() {
-            super.run();
+            playbackFinished = false;
+            try {
+                sourceDataLine.open(audioFormat);
+                sourceDataLine.start();
+                /*
+                Keep looping until the input read method returns -1 for empty
+                stream or the user clicks the Stop button causing stopPlayback
+                to switch from false to true.
+                 */
+                while ((readFromInputStream = audioInputStream.read(
+                        tempBuffer, 0, tempBuffer.length)) != -1
+                        && !stopPlayback) {
+                    if (readFromInputStream > 0) {
+                        /*
+                        Write variables to the internal buffer of the
+                        variables line where it will be delivered to the speaker.
+                         */
+                        sourceDataLine.write(
+                                tempBuffer, 0, readFromInputStream);
+                    }
+                }
+                /*
+                Block and wait for internal buffer
+                 of the variables line to empty.
+                 */
+                sourceDataLine.drain();
+                sourceDataLine.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            playbackFinished = true;
+
+            //Prepare to playback another file
+            // stopBtn.setEnabled(false);
+            //playBtn.setEnabled(true);
+            stopPlayback = false;
         }
     }
 }

@@ -22,7 +22,7 @@ import java.io.InputStream;
 /**
  * Created by forando on 14.06.15.<br>
  * This class constructs external data.xml files <b>from default
- * template files</b>.
+ * template.xml files</b>.
  */
 public abstract class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
 

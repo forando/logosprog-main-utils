@@ -12,9 +12,7 @@ import system.ConsoleMessage;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
@@ -65,17 +63,39 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
 
     @Override
     protected void setMainObject()throws IOException{
-        DOMSource source = new DOMSource(mainObj);
+        Document document = getMainObject();
+        /*
+        optional, but recommended.
+        read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+         */
+        document.normalize();
+
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            //transformerFactory.setAttribute("indent-number", 2);
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new File(getFilePath()));
+            transformer.transform(source, result);
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+
+        /*DOMSource source = new DOMSource(document);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer;
         try {
             transformer = transformerFactory.newTransformer();
+
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
             StreamResult result = new StreamResult(getFilePath());
             transformer.transform(source, result);
         } catch (TransformerException e) {
             e.printStackTrace();
             throw new IOException("There was an error during xml saving");
-        }
+        }*/
     }
 
     public void saveXMLDocument() throws IOException {
@@ -88,6 +108,12 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
      * @return {@link Document} object
      */
     public Document getXMLDocument(){
-        return getMainObject();
+        Document document = getMainObject();
+        /*
+        optional, but recommended.
+        read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+         */
+        document.getDocumentElement().normalize();
+        return document;
     }
 }

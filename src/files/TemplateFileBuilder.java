@@ -22,7 +22,7 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
     /**
      * The object of predefined type that we construct from external file
      */
-    protected T mainObj = null;
+    private T mainObj = null;
 
 
     /**

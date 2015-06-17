@@ -97,4 +97,17 @@ public class NodeManager {
             }
         }
     }
+
+    /**
+     * Creates node like: <b>&lt;nodeName&gt; text &lt;/nodeName&gt;</b>
+     * @param document org.w3c.dom {@link Document} object.
+     * @param nodeName A name to be given to the node
+     * @param text A text to be inserted in the node
+     * @return Constructed {@link Element} object
+     */
+    public Node createSimpleElementNode(Document document, String nodeName, String text) {
+        Element node = document.createElement(nodeName);
+        node.setTextContent(text);
+        return node;
+    }
 }

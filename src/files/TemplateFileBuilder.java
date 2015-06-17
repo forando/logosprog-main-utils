@@ -44,6 +44,7 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
             boolean created = generateDefaultFile(element);
             if (created){
                 mainObj = getObjectFromExternalFile();
+                if (listener != null) listener.onFileGenereted();
             }else {
                 ConsoleMessage.printErrorMessage("An error occurred during " + getFileName() + " file creation.");
             }
@@ -123,5 +124,19 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
             }
         }
         return result;
+    }
+
+    TemplateFileBuilderListener listener;
+
+    public void addTemplateFileBuilderListener(TemplateFileBuilderListener listener){
+        this.listener = listener;
+    }
+
+
+    public interface TemplateFileBuilderListener{
+        /**
+         * Notifies when the desired file has been just generated from the default template file.
+         */
+        void onFileGenereted();
     }
 }

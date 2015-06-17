@@ -40,9 +40,25 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
      * @throws IOException If either <b>fileName</b> or <b>rootDir</b> or <b>is</b> is null
      */
     public TemplateXMLBuilder(String fileName, String rootDir, String subDir, InputStream is) throws IOException {
+        this(fileName, rootDir, subDir, is, true);
+    }
+
+    /**
+     *
+     * @param fileName A file name that will be used to construct {@link Document} object from
+     * @param rootDir Application root directory
+     * @param subDir Optional. A subdirectory name the file will be located
+     * @param is A {@link InputStream} object of an internal template .xml file that will be
+     *           used to generate default file from. Can be NULL if <b>build = false</b>
+     * @param build indicates if {@link #build(InputStream)} method has to be invoked in the constructor.
+     * @throws IOException If either <b>fileName</b> or <b>rootDir</b> or <b>is</b> is null
+     */
+    public TemplateXMLBuilder(String fileName, String rootDir, String subDir, InputStream is, boolean build) throws IOException {
         super(fileName, rootDir, subDir);
-        if (is == null) throw new IOException("InputStreame of an internal .xml template file is NULL!");
-        this.build(is);
+        if (build){
+            if (is == null) throw new IOException("InputStreame of an internal .xml template file is NULL!");
+            this.build(is);
+        }
     }
 
     @Override

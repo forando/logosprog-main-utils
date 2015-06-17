@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
 public class NodeManager {
 
     /**
-     * This method is used to get a list of matched by tag name xml nodes.<br>
+     * This method is used to get a list of matched by tag name xml nodes <b>from the entire Document</b>.<br>
      * @param document org.w3c.dom {@link Document} object.
      * @param nodeNames An array of node names, <b>nested each one in another</b>,
      *                 including the final one the returned nodes are named with.<br>
@@ -30,6 +30,31 @@ public class NodeManager {
     public NodeList getNodeList(Document document, String... nodeNames)throws NullPointerException{
         if (nodeNames == null || nodeNames.length <1) throw new NullPointerException("String[] nodeNames");
         NodeList list = document.getDocumentElement().getElementsByTagName(nodeNames[0]);
+        int i = 1;
+        while (i < nodeNames.length){
+            Element element = (Element)list.item(0);
+            list = element.getElementsByTagName(nodeNames[i]);
+            ++i;
+        }
+        return list;
+    }
+
+    /**
+     * This method is used to get a list of matched by tag name xml nodes <b>from the defined Node</b>.<br>
+     * @param node org.w3c.dom {@link Node} object.
+     * @param nodeNames An array of node names, <b>nested each one in another</b>,
+     *                 including the final one the returned nodes are named with.<br>
+     *                 <b>IMPORTANT:</b> All parent nodes, the desired <b>nodeList</b> is nested in,
+     *                 must have <b>only one representative of itself</b> in the xml node.
+     *                 <br>Otherwise the first instance of each parent node will be picked
+     *                 up for the further searching.
+     * @return A list of org.w3c.dom nodes.
+     * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
+     */
+    public NodeList getNodeList(Node node, String... nodeNames)throws NullPointerException{
+        if (nodeNames == null || nodeNames.length <1) throw new NullPointerException("String[] nodeNames");
+        Element nodeElement = (Element)node;
+        NodeList list = nodeElement.getElementsByTagName(nodeNames[0]);
         int i = 1;
         while (i < nodeNames.length){
             Element element = (Element)list.item(0);

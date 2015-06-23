@@ -48,13 +48,11 @@ public class ConsoleMessage {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     /**
-     * This method wraps an input message with ANSI escape code
-     * that allows to print that message to console in <b>RED</b> color.<br>
-     * This formatting doesn't work on Windows console.
+     * Prints the message to console in <b>RED</b> color.
      * @param message A message to be printed to a console.
      */
     public static void printErrorMessage(String message){
-        System.out.println(ANSI_RED + message + ANSI_RESET);
+        System.err.println(message);
     }
 
     /**

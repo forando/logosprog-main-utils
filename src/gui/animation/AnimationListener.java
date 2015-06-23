@@ -11,4 +11,5 @@ package gui.animation;
 public interface AnimationListener<T> {
     void onAnimationStart(T obj);
     void onAnimationEnd(T obj);
+    void reDraw();
 }

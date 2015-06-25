@@ -40,7 +40,9 @@ public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder<Prop
 
     @Override
     protected void setMainObject() throws IOException {
-        //next: implement it later
+        /*
+        At this moment these files are read only.
+         */
     }
 
     /**

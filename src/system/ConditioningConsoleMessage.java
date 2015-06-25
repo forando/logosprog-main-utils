@@ -10,6 +10,9 @@ package system;
  */
 public class ConditioningConsoleMessage {
 
+    /**
+     * Permission flag to print messages that are only needed for debugging.
+     */
     private boolean printDebugMessages;
 
     public ConditioningConsoleMessage(boolean printDebugMessages){

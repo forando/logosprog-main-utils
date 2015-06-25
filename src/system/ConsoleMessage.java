@@ -68,10 +68,10 @@ public class ConsoleMessage {
     /**
      * This method wraps an input message with ANSI escape code
      * that allows to print that message to console in <b>GREEN</b> color.<br>
-     * @param print If TRUE - the message will be printed, else - not.
+     * This formatting doesn't work on Windows console.
      * @param message The message to be printed to a console.
      */
-    public static void printDebugMessage(boolean print, String message){
-        if (print) System.out.println(ANSI_GREEN + message + ANSI_RESET);
+    public static void printDebugMessage(String message){
+        System.out.println(ANSI_GREEN + message + ANSI_RESET);
     }
 }

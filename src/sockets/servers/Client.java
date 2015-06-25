@@ -47,10 +47,6 @@ public class Client {
         new ClientServer(APP.IP, APP.PORT, SocketMessage.DISPLAY, 0).startClient();
     }*/
 
-    public void removeClientListener(ClientListener listener){
-        listeners.remove(listener);
-    }
-
     public Client(String hostName, int port, int type, int id){
         this.hostName = hostName;
         this.port = port;
@@ -229,6 +225,9 @@ public class Client {
 
     public void addClientListener(ClientListener listener){
         listeners.add(listener);
+    }
+    public void removeClientListener(ClientListener listener){
+        listeners.remove(listener);
     }
 
     public interface ClientListener {

@@ -15,10 +15,22 @@ import java.util.Properties;
  * Builds {@link Properties} object from resource file.
  */
 public class PropertiesBuilder implements ObjectFromFileBuilder<Properties, InputStream> {
+
+    private Properties properties;
+
+    public PropertiesBuilder(InputStream is) throws IOException {
+        this.properties = this.build(is);
+    }
+
     @Override
     public Properties build(InputStream is) throws IOException {
         Properties properties = new Properties();
         properties.load(is);
+        return properties;
+    }
+
+
+    public Properties getProperties(){
         return properties;
     }
 }

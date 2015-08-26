@@ -34,6 +34,7 @@ public class Client {
     private ObjectOutputStream out;
     InPut inPut;
     OutPut output;
+    private final Object lock;
 
     int counter = 0;
 
@@ -48,6 +49,7 @@ public class Client {
     }*/
 
     public Client(String hostName, int port, int type, int id){
+        lock = new Object();
         this.hostName = hostName;
         this.port = port;
         this.type = type;
@@ -205,20 +207,26 @@ public class Client {
         }
     }
 
-    private synchronized void transferMessage(Object object){
+    private void transferMessage(Object object){
 
         for (ClientListener l : listeners){
             l.onInputMessage(object);
         }
     }
 
-    public synchronized void send(Object messageObject){
-        if (output != null){
-            output.stopThread();
-            output = null;
+    public void send(Object messageObject){
+        /*
+        Not sure if we need this lock here.
+        Did it just to have 100% guarantee
+         */
+        synchronized (lock) {
+            if (output != null) {
+                output.stopThread();
+                output = null;
+            }
+            output = new OutPut(out, id, messageObject);
+            output.start();
         }
-        output = new OutPut(out, id, messageObject);
-        output.start();
     }
 
     private List<ClientListener> listeners;

@@ -61,6 +61,7 @@ public class Server<E extends SocketManager> {
         }
 
         public void run() {
+
             if (myThread == null) {
                 return; // stopped before started.
             }

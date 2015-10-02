@@ -15,6 +15,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by forando on 15.06.15.<br>
@@ -44,6 +46,8 @@ public class Client {
 
     private boolean registered = false;
 
+    ExecutorService executor;
+
     /*public static void main(String[] args) {
         new ClientServer(APP.IP, APP.PORT, SocketMessage.DISPLAY, 0).startClient();
     }*/
@@ -56,6 +60,7 @@ public class Client {
         this.id = id;
         listeners = new ArrayList<>();
         validator = new Validator();
+        executor = Executors.newFixedThreadPool(5);
     }
 
     // Runs a client handler to connect to a server
@@ -130,6 +135,7 @@ public class Client {
                 @Override
                 public void onClose() {
                     close();
+                    executor.shutdown();
                 }
             });
             inPut.start();
@@ -242,5 +248,19 @@ public class Client {
         void onRegister(int id);
         void onInputMessage(Object object);
         void onCloseSocket();
+    }
+
+    class MessageTransmitter implements  Runnable{
+
+        private Object messageObject;
+
+        public MessageTransmitter(Object messageObject){
+            this.messageObject = messageObject;
+        }
+
+        @Override
+        public void run() {
+            transferMessage(messageObject);
+        }
     }
 }

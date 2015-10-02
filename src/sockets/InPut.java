@@ -24,7 +24,7 @@ public class InPut extends Thread {
     private ObjectInputStream in;
     private int id;
 
-    ExecutorService executor;
+    ExecutorService executor = Executors.newSingleThreadExecutor();
 
     List<InputListener> listeners;
 
@@ -34,7 +34,6 @@ public class InPut extends Thread {
         this.socket = socket;
         this.id = id;
         listeners = new ArrayList<>();
-        executor = Executors.newSingleThreadExecutor();
     }
 
     public void stopThread() {
@@ -57,6 +56,9 @@ public class InPut extends Thread {
             while (true) {
                 //get object from server, will block until object arrives.
                 Object messageObject = in.readObject();
+                /*for (InputListener l : listeners){
+                    l.onMessage(messageObject);
+                }*/
                 executor.submit(new MessageTransmitter(messageObject));
 
                 Thread.yield(); // let another thread have some time perhaps to stop this one.

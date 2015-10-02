@@ -77,7 +77,7 @@ public class Server<E extends SocketManager> {
                     // this blocks, waiting for a Socket to the client
                     socket = serverSocket.accept();
                     System.out.println("server: got client");
-
+                    //socketManager.accept(socket);
                     executor.submit(new SocketRunner(socket));
 
                     Thread.yield(); // let another thread have some time perhaps to stop this one.

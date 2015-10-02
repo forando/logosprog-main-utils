@@ -121,7 +121,9 @@ public class Server<E extends SocketManager> {
 
 
     class SocketRunner implements Runnable{
-        Socket socket = null;
+
+        private Socket socket = null;
+
         public SocketRunner(Socket socket){
             this.socket = socket;
         }

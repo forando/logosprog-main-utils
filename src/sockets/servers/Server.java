@@ -8,6 +8,8 @@ import sockets.servers.server.SocketManager;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by forando on 15.06.15.<br>
@@ -46,6 +48,9 @@ public class Server<E extends SocketManager> {
         public static final String THREAD_NAME = "ServerAcceptor";
         int port;
         private volatile Thread myThread;
+
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
         ServerAcceptor(int port) {
             this.setName(THREAD_NAME);
             this.port = port;
@@ -73,10 +78,11 @@ public class Server<E extends SocketManager> {
                     socket = serverSocket.accept();
                     System.out.println("server: got client");
 
-                    socketManager.accept(socket);
+                    executor.submit(new SocketRunner(socket));
 
                     Thread.yield(); // let another thread have some time perhaps to stop this one.
                     if (Thread.currentThread().isInterrupted()) {
+                        executor.shutdown();
                         throw new InterruptedException("Stopped by ifInterruptedStop()");
                     }
                 }
@@ -109,7 +115,20 @@ public class Server<E extends SocketManager> {
      * @return The object of generalized, during this class
      * construction, type
      */
-    public E getGenerelizidObject(){
+    public E getGeneralizedObject(){
         return socketManager;
+    }
+
+
+    class SocketRunner implements Runnable{
+        Socket socket = null;
+        public SocketRunner(Socket socket){
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            socketManager.accept(socket);
+        }
     }
 }

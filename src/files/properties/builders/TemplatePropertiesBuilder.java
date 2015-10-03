@@ -8,9 +8,7 @@ import files.TemplateFileBuilder;
 import org.w3c.dom.Document;
 import system.ConsoleMessage;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -33,8 +31,27 @@ public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder<Prop
 
     @Override
     protected Properties getObjectFromExternalFile() throws IOException {
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(getFilePath()));
+
+        //bug: we have to do like this cause cyrylic will not work on windows
+        Properties properties;
+        InputStream stream = null;
+        InputStreamReader reader = null;
+        try {
+            stream = new FileInputStream(getFilePath());
+            reader = new InputStreamReader(stream,"UTF-8");
+            properties = new Properties();
+            properties.load(reader);
+
+        } finally {
+            stream.close();
+            if (reader != null) {
+                reader.close();
+            }
+        }
+
+
+        /*Properties properties = new Properties();
+        properties.load(new FileInputStream(getFilePath()));*/
         return properties;
     }
 

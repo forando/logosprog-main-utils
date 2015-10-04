@@ -232,6 +232,13 @@ public class Client {
             }
             output = new OutPut(out, id, messageObject);
             output.start();
+
+            //waiting until the message is sent
+            try {
+                output.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

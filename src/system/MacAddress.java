@@ -10,10 +10,15 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
- * Created by forando on 14.10.15.
+ * Created by forando on 14.10.15.<br/>
+ * Gets a mac address of the machine
  */
 public class MacAddress {
 
+    /**
+     *
+     * @return A mac address of the adapter
+     */
     public static String getMacAddress(){
         String macAdd = null;
 
@@ -21,13 +26,13 @@ public class MacAddress {
         try {
 
             ip = InetAddress.getLocalHost();
-            System.out.println("Current IP address : " + ip.getHostAddress());
+//            System.out.println("Current IP address : " + ip.getHostAddress());
 
             NetworkInterface network = NetworkInterface.getByInetAddress(ip);
 
             byte[] mac = network.getHardwareAddress();
 
-            System.out.print("Current MAC address : ");
+//            System.out.print("Current MAC address : ");
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < mac.length; i++) {

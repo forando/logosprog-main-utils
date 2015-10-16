@@ -7,6 +7,8 @@ package files.audio;
 import files.ResourceInputStreamBuilder;
 
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -35,7 +37,7 @@ public class Audio {
         if (playbackFinished) {
 
             try {
-                this.audioInputStream = AudioSystem.getAudioInputStream(streamBuilder.build(audioFileName));
+                this.audioInputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(streamBuilder.build(audioFileName)));
                 this.audioFormat = audioInputStream.getFormat();
                 System.out.println(audioFormat);
                 this.dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);

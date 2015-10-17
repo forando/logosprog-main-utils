@@ -93,6 +93,23 @@ public class SystemFileManager {
         }
         return result;
     }
+
+
+    public boolean deleteDefaultFile(){
+        boolean result = false;
+
+        File f = new File(getFilePath());
+        try{
+            if (f.delete()){
+                result = true;
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return result;
+    }
+
     /**
      * This method copies default file from internal app folders to specific
      * project folder.

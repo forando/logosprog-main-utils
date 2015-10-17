@@ -56,7 +56,7 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
     public TemplateXMLBuilder(String fileName, String rootDir, String subDir, InputStream is, boolean build) throws IOException {
         super(fileName, rootDir, subDir);
         if (build){
-            if (is == null) throw new IOException("InputStreame of an internal .xml template file is NULL!");
+            if (is == null) throw new IOException("InputStream of an internal .xml template file is NULL!");
             this.build(is);
         }
     }
@@ -72,7 +72,7 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
             doc = builder.parse(new File(getFilePath()));
         } catch (ParserConfigurationException | SAXException e) {
             e.printStackTrace();
-            throw new IOException("File: " + getFilePath() + " not found");
+            throw new IOException("File: " + getFilePath() + " is BROKEN");
         }
         return doc;
     }

@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Properties;
 
 /**
  * Created by forando on 14.06.15.<br>
@@ -44,7 +43,7 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
             boolean created = generateDefaultFile(element);
             if (created){
                 mainObj = getObjectFromExternalFile();
-                if (listener != null) listener.onFileGenereted();
+                if (listener != null) listener.onFileGenerated();
             }else {
                 ConsoleMessage.printErrorMessage("An error occurred during " + getFileName() + " file creation.");
             }
@@ -137,6 +136,6 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
         /**
          * Notifies when the desired file has been just generated from the default template file.
          */
-        void onFileGenereted();
+        void onFileGenerated();
     }
 }

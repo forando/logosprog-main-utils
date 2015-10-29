@@ -95,8 +95,8 @@ public class Client {
 
     private void close(){
         if (registered) {
-            inPut.stopThread();
-            output.stopThread();
+            if (inPut != null) inPut.stopThread();
+            if (output != null)output.stopThread();
         }else{
             validator.stopThread();
         }
@@ -125,6 +125,7 @@ public class Client {
         try {
             /*ReadableByteChannel channel = Channels.newChannel(this.socket.getInputStream());
             this.in = new ObjectInputStream(Channels.newInputStream(channel));*/
+            out = new ObjectOutputStream(socket.getOutputStream());
             inPut = new InPut(socket, id);
             inPut.addInputListener(new InPut.InputListener() {
                 @Override
@@ -139,7 +140,6 @@ public class Client {
                 }
             });
             inPut.start();
-            out = new ObjectOutputStream(socket.getOutputStream());
             for (ClientListener l : listeners) {
                 l.onRegister(id);
             }
@@ -176,7 +176,7 @@ public class Client {
                 Socket socket = new Socket(hostIP, port);*/
                 Socket socket = new Socket(hostName, port);
 
-                System.out.println("client: connected!");
+                System.out.println("Client: connected!");
 
                 /*
                 outBuffer[0]: 1 - this client talks using serializable Objects, 0 - talks with bytes only
@@ -197,11 +197,11 @@ public class Client {
                 inputBuffer[1]: type of a client (printer, terminal, display etc.)
                 inputBuffer[2]: client id
                  */
-                byte[] inputBuffer = new byte[2];
+                byte[] inputBuffer = new byte[3];
                 int val = input.read(inputBuffer);
-                if (val > 0 && inputBuffer[0]==0x01 && inputBuffer[1]>=0){
-                    register(inputBuffer[1]);
-                    System.out.println("Validator: client registered with ID = " + inputBuffer[1]);
+                if (val > 0 && inputBuffer[0]==0x01 && inputBuffer[2]>=0){
+                    register(inputBuffer[2]);
+                    System.out.println("Validator: client registered with ID = " + inputBuffer[2]);
                     validate(socket);
                 }else{
                     close();

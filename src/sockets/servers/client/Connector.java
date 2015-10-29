@@ -95,7 +95,7 @@ public class Connector implements Client.ClientListener {
     }
 
     @Override
-    public void onRegister(int id) {
+    public void onValidate(int id) {
         client.removeClientListener(thisThreadClientListener);
         client.addClientListener(clientListener);
         this.listener.onClientConnected(client);

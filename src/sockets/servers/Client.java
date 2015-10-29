@@ -141,7 +141,7 @@ public class Client {
             });
             inPut.start();
             for (ClientListener l : listeners) {
-                l.onRegister(id);
+                l.onValidate(id);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -252,7 +252,7 @@ public class Client {
     }
 
     public interface ClientListener {
-        void onRegister(int id);
+        void onValidate(int id);
         void onInputMessage(Object object);
         void onCloseSocket();
     }

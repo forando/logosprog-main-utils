@@ -4,6 +4,7 @@
 
 package sockets;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.nio.channels.Channels;
@@ -22,6 +23,7 @@ public class InPut extends Thread {
     private volatile Thread myThread;
     private Socket socket;
     private int id;
+    ObjectInputStream in;
 
 //    ExecutorService executor = Executors.newFixedThreadPool(5);
 
@@ -33,6 +35,7 @@ public class InPut extends Thread {
         this.socket = socket;
         this.id = id;
         listeners = new ArrayList<>();
+        this.in = null;
     }
 
     public void stopThread() {
@@ -68,11 +71,18 @@ public class InPut extends Thread {
             }
         }catch (Exception ex){
             ex.printStackTrace();
+
             for (InputListener l : listeners){
                 l.onClose();
             }
 
-        }
+        }/*finally {
+            if (in != null) try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
     }
 
     public void addInputListener(InputListener listener){

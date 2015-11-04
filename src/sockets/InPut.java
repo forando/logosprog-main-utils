@@ -21,7 +21,6 @@ public class InPut extends Thread {
     public static final String THREAD_NAME = "SocketInPut";
     private volatile Thread myThread;
     private Socket socket;
-    private ObjectInputStream in;
     private int id;
 
 //    ExecutorService executor = Executors.newFixedThreadPool(5);
@@ -52,7 +51,7 @@ public class InPut extends Thread {
         try {
             //this.in = new ObjectInputStream(this.socket.getInputStream());
             ReadableByteChannel channel = Channels.newChannel(socket.getInputStream());
-            this.in = new ObjectInputStream(Channels.newInputStream(channel));
+            ObjectInputStream in = new ObjectInputStream(Channels.newInputStream(channel));
             while (true) {
                 //get object from server, will block until object arrives.
                 Object messageObject = in.readObject();

@@ -54,7 +54,7 @@ public class InPut extends Thread {
         try {
             //this.in = new ObjectInputStream(this.socket.getInputStream());
             ReadableByteChannel channel = Channels.newChannel(socket.getInputStream());
-            ObjectInputStream in = new ObjectInputStream(Channels.newInputStream(channel));
+            in = new ObjectInputStream(Channels.newInputStream(channel));
             while (true) {
                 //get object from server, will block until object arrives.
                 Object messageObject = in.readObject();
@@ -66,23 +66,27 @@ public class InPut extends Thread {
                 Thread.yield(); // let another thread have some time perhaps to stop this one.
                 if (Thread.currentThread().isInterrupted()) {
 //                    executor.shutdown();
+                    if (in != null) try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     throw new InterruptedException("Socket: Stopped by ifInterruptedStop()");
                 }
             }
         }catch (Exception ex){
             ex.printStackTrace();
 
-            for (InputListener l : listeners){
-                l.onClose();
-            }
-
-        }/*finally {
             if (in != null) try {
                 in.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }*/
+
+            for (InputListener l : listeners){
+                l.onClose();
+            }
+        }
     }
 
     public void addInputListener(InputListener listener){

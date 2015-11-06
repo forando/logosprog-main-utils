@@ -6,6 +6,8 @@ package sockets.servers.client;
 
 import sockets.servers.Client;
 
+import java.io.IOException;
+
 /**
  * Created by forando on 15.06.15.<br>
  *     This class provides an app with a {@link Client} object to be able to talk to HostServer
@@ -23,6 +25,8 @@ public class Connector implements Client.ClientListener {
     int type;
     int id;
     ConnectorListener listener;
+
+    private static Connector connector = null;
 
 
     /**
@@ -62,6 +66,22 @@ public class Connector implements Client.ClientListener {
         this.thisThreadClientListener = this;
         startClient();
         restartsQuant++;
+    }
+
+    public static Connector getConnector(Client.ClientListener clientListener, int type, int id, String ip, int port){
+        if (connector == null){
+            connector = new Connector(clientListener, type, id, ip, port);
+        }
+
+        return connector;
+    }
+
+    public static Connector getConnector(Client.ClientListener clientListener, int type, int id){
+        if (connector == null){
+            connector = new Connector(clientListener, type, id, "localhost", 1337);
+        }
+
+        return connector;
     }
 
     private void startClient(){

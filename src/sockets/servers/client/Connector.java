@@ -7,18 +7,22 @@ package sockets.servers.client;
 import sockets.servers.Client;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by forando on 15.06.15.<br>
  *     This class provides an app with a {@link Client} object to be able to talk to HostServer
  */
-public class Connector implements Client.ClientListener {
+public class Connector {
+
+    private final String TAG;
 
     Client client;
 
     private volatile Thread myThread;
 
-    Client.ClientListener thisThreadClientListener;
+//    Client.ClientListener thisThreadClientListener;
     Client.ClientListener clientListener;
     String IP;
     int PORT;
@@ -58,16 +62,28 @@ public class Connector implements Client.ClientListener {
      * @param port The server PORT
      */
     public Connector(Client.ClientListener clientListener, int type, int id, String ip, int port) {
+
+        TAG = this.getClass().getSimpleName();
+
         this.clientListener = clientListener;
         this.type = type;
         this.id = id;
         this.IP = ip;
         this.PORT = port;
-        this.thisThreadClientListener = this;
+//        this.thisThreadClientListener = this;
         startClient();
         restartsQuant++;
     }
 
+    /**
+     * This method must be used in <b>production</b>.
+     * @param clientListener The listener to notify about general server events.
+     * @param type The type of a client that wants to be connected to the server
+     * @param id The clients id
+     * @param ip The server IP
+     * @param port The server PORT
+     * @return A new instance of the class
+     */
     public static Connector getConnector(Client.ClientListener clientListener, int type, int id, String ip, int port){
         if (connector == null){
             connector = new Connector(clientListener, type, id, ip, port);
@@ -76,6 +92,13 @@ public class Connector implements Client.ClientListener {
         return connector;
     }
 
+    /**
+     * This method is just for <b>testing</b>. Here we use predefined IP an PORT
+     * @param clientListener The listener to notify about general server events.
+     * @param type The type of a client that wants to be connected to the server
+     * @param id The clients id
+     * @return A new instance of the class
+     */
     public static Connector getConnector(Client.ClientListener clientListener, int type, int id){
         if (connector == null){
             connector = new Connector(clientListener, type, id, "localhost", 1337);
@@ -86,14 +109,21 @@ public class Connector implements Client.ClientListener {
 
     private void startClient(){
         System.out.println(restartsQuant + " Attempt to get connected to the Server!!!");
-        client = new Client(IP, PORT, type, id);
-        client.addClientListener(thisThreadClientListener);
-        client.startClient();
+        client = Client.getInstance(IP, PORT, type, id);
+        client.addClientListener(clientListener);
+
+        boolean success;
+
+        do {
+            success = client.startClient();
+        }while (!success);
+
+        listener.onClientConnected(client);
     }
 
     private void restartClient(){
         restartsQuant++;
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -103,7 +133,15 @@ public class Connector implements Client.ClientListener {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }).start();*/
+        if (!Thread.currentThread().isInterrupted()) {
+            try {
+                Thread.sleep(delay);
+                startClient();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void stopThread() {
@@ -114,7 +152,7 @@ public class Connector implements Client.ClientListener {
         }
     }
 
-    @Override
+    /*@Override
     public void onValidate(int id) {
         client.removeClientListener(thisThreadClientListener);
         client.addClientListener(clientListener);
@@ -129,7 +167,7 @@ public class Connector implements Client.ClientListener {
     @Override
     public void onCloseSocket() {
         restartClient();
-    }
+    }*/
 
     public void addConnectorListener(ConnectorListener listener) throws Exception {
         if (this.listener != null) {

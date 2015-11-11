@@ -6,9 +6,7 @@ package sockets.servers.client;
 
 import sockets.servers.Client;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 /**
  * Created by forando on 15.06.15.<br>
@@ -42,51 +40,54 @@ public class Connector {
      */
     private int delay = 2000;
 
+    private ExecutorService executorClientStarter;
+    private Future<Boolean> futureClientStarter;
+
 
     /**
      * This constructor is just for <b>testing</b>. Here we use predefined IP an PORT
-     * @param clientListener The listener to notify about general server events.
      * @param type The type of a client that wants to be connected to the server
      * @param id The clients id
      */
-    public Connector(Client.ClientListener clientListener, int type, int id) {
-        this(clientListener, type, id, "localhost", 1337);
+    public Connector(int type, int id) {
+        this(type, id, "localhost", 1337);
     }
 
     /**
      * This constructor must be used in <b>production</b>.
-     * @param clientListener The listener to notify about general server events.
      * @param type The type of a client that wants to be connected to the server
      * @param id The clients id
      * @param ip The server IP address
      * @param port The server PORT
      */
-    public Connector(Client.ClientListener clientListener, int type, int id, String ip, int port) {
+    public Connector(int type, int id, String ip, int port) {
 
         TAG = this.getClass().getSimpleName();
 
-        this.clientListener = clientListener;
+
         this.type = type;
         this.id = id;
         this.IP = ip;
         this.PORT = port;
+
+        executorClientStarter = Executors.newSingleThreadExecutor();
+
 //        this.thisThreadClientListener = this;
-        startClient();
-        restartsQuant++;
+//        startConnection();
+//        restartsQuant++;
     }
 
     /**
      * This method must be used in <b>production</b>.
-     * @param clientListener The listener to notify about general server events.
      * @param type The type of a client that wants to be connected to the server
      * @param id The clients id
      * @param ip The server IP
      * @param port The server PORT
      * @return A new instance of the class
      */
-    public static Connector getConnector(Client.ClientListener clientListener, int type, int id, String ip, int port){
+    public static Connector getConnector(int type, int id, String ip, int port){
         if (connector == null){
-            connector = new Connector(clientListener, type, id, ip, port);
+            connector = new Connector(type, id, ip, port);
         }
 
         return connector;
@@ -94,31 +95,36 @@ public class Connector {
 
     /**
      * This method is just for <b>testing</b>. Here we use predefined IP an PORT
-     * @param clientListener The listener to notify about general server events.
      * @param type The type of a client that wants to be connected to the server
      * @param id The clients id
      * @return A new instance of the class
      */
-    public static Connector getConnector(Client.ClientListener clientListener, int type, int id){
+    public static Connector getConnector(int type, int id){
         if (connector == null){
-            connector = new Connector(clientListener, type, id, "localhost", 1337);
+            connector = new Connector(type, id, "localhost", 1337);
         }
 
         return connector;
     }
 
-    private void startClient(){
+    /**
+     *
+     * @param clientListener The listener to notify about general server events.
+     */
+    public void startConnection(Client.ClientListener clientListener){
+        restartsQuant++;
+        this.clientListener = clientListener;
         System.out.println(restartsQuant + " Attempt to get connected to the Server!!!");
         client = Client.getInstance(IP, PORT, type, id);
-        client.addClientListener(clientListener);
-
         boolean success;
 
-        do {
-            success = client.startClient();
-        }while (!success);
+        futureClientStarter = executorClientStarter.submit(new ClientStarter());
 
         listener.onClientConnected(client);
+    }
+
+    public void stopConnection(){
+        futureClientStarter.cancel(true);
     }
 
     private void restartClient(){
@@ -128,7 +134,7 @@ public class Connector {
             public void run() {
                 try {
                     Thread.sleep(delay);
-                    startClient();
+                    startInDifferentThread();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -137,7 +143,7 @@ public class Connector {
         if (!Thread.currentThread().isInterrupted()) {
             try {
                 Thread.sleep(delay);
-                startClient();
+                startConnection(clientListener);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -178,5 +184,30 @@ public class Connector {
 
     public interface ConnectorListener{
         void onClientConnected(Client client);
+    }
+
+    private class ClientStarter implements Callable<Boolean>{
+
+        @Override
+        public Boolean call() throws Exception {
+
+            if (Thread.currentThread().isInterrupted()) {
+                return null;
+            }
+
+            boolean success;
+            do {
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (Thread.currentThread().isInterrupted()) {
+                    return null;
+                }
+                success = client.startInTheSameThread();
+            }while (!success);
+            return true;
+        }
     }
 }

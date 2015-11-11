@@ -56,13 +56,16 @@ public class Client {
 
     private boolean registered = false;
 
+    private List<ClientListener> clientListeners;
+    private List<ClientValidatorListener> validatorListeners;
+
+
     ExecutorService executor;
-    Future<Socket> future = null;
 
     private static Client client = null;
 
     /*public static void main(String[] args) {
-        new ClientServer(APP.IP, APP.PORT, SocketMessage.DISPLAY, 0).startClient();
+        new ClientServer(APP.IP, APP.PORT, SocketMessage.DISPLAY, 0).startInDifferentThread();
     }*/
 
     protected Client(String hostName, int port, int type, int id){
@@ -73,7 +76,7 @@ public class Client {
         this.port = port;
         this.type = type;
         this.id = id;
-        listeners = new ArrayList<>();
+        clientListeners = new ArrayList<>();
 //        validator = new Validator();
         executor = Executors.newSingleThreadExecutor();
     }
@@ -86,24 +89,35 @@ public class Client {
     }
 
     // Runs a client handler to connect to a server
-    public boolean startClient() {
-//        validator.start();
+    public void startInDifferentThread(ClientValidatorListener listener) {
         if (isReady && socket != null) {
-            ConsoleMessage.printDebugMessage(TAG + ".startClient(): The client has already been started. This start is ignored");
-            return true;
+            ConsoleMessage.printDebugMessage(TAG + ".startInDifferentThread(): The client has already been started. This start is ignored");
+        }else{
+            executor.submit(new Validator(listener));
         }
-        this.future = executor.submit(new Validator());
-        try {
-            /*
-            here the thread is going for sleep:
-             */
-            this.socket = future.get(TIME, TimeUnit.SECONDS);
-            if (socket == null) return false;
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            e.printStackTrace();
+    }
+
+    public boolean startInTheSameThread(){
+        if (isReady && socket != null) {
+            ConsoleMessage.printDebugMessage(TAG + ".startInDifferentThread(): The client has already been started. This start is ignored");
+            return true;
+        }else{
+            return validate(getSocket());
+        }
+    }
+
+    public boolean validate(Socket soc) {
+        this.socket = soc;
+        if (socket == null){
             isReady = false;
             return false;
+        }else {
+            isReady = true;
+            return true;
         }
+    }
+
+    public boolean openInoutOutputStreams(ClientListener listener) {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
@@ -111,6 +125,9 @@ public class Client {
             isReady = false;
             return false;
         }
+
+        addClientListener(listener);
+
         inPut = new InPut(socket, id);
         inPut.addInputListener(new InPut.InputListener() {
             @Override
@@ -124,7 +141,6 @@ public class Client {
             }
         });
         inPut.start();
-        isReady = true;
         return true;
     }
 
@@ -150,7 +166,7 @@ public class Client {
 
     void closeServer(){
         System.out.println("Socket with ID = " + id + " has been closed");
-        for (ClientListener l : listeners) {
+        for (ClientListener l : clientListeners) {
             l.onCloseSocket();
         }
     }
@@ -161,7 +177,6 @@ public class Client {
             if (output != null)output.stopThread();
         }else{
 //            validator.stopThread();
-            if (future != null)future.cancel(true);
             if (executor != null)executor.shutdownNow();
         }
         try {
@@ -177,43 +192,13 @@ public class Client {
         }
     }
 
+    private class Validator implements Callable<Void>{
 
-    public void register(int id){
-        registered = true;
-        if (this.id != id){
-            this.id = id;
+        ClientValidatorListener listener;
+
+        public Validator(ClientValidatorListener listener){
+            this.listener = listener;
         }
-    }
-
-    public void validate(Socket soc) {
-        this.socket = soc;
-        /*ReadableByteChannel channel = Channels.newChannel(this.socket.getInputStream());
-        this.in = new ObjectInputStream(Channels.newInputStream(channel));*/
-        try {
-            out = new ObjectOutputStream(socket.getOutputStream());
-            inPut = new InPut(socket, id);
-            inPut.addInputListener(new InPut.InputListener() {
-                @Override
-                public void onMessage(Object messageObject) {
-                    transferMessage(messageObject);
-                }
-
-                @Override
-                public void onClose() {
-                    close();
-                    executor.shutdown();
-                }
-            });
-            inPut.start();
-            /*for (ClientListener l : listeners) {
-                l.onValidate(id);
-            }*/
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private class Validator implements Callable<Socket>{
         /*public static final String THREAD_NAME = "ClientValidator";
         private volatile Thread myThread;
 
@@ -278,26 +263,34 @@ public class Client {
             }
         }*/
         @Override
-        public Socket call() throws Exception {
+        public Void call() throws Exception {
             //interruption check:
             if (Thread.currentThread().isInterrupted()) {
                 return null;
             }
 
+            if(validate(getSocket())) listener.onValidate(id);
+
+            return null;
+        }
+    }
+
+    private Socket getSocket() {
+        synchronized (lock) {
             try {
                 // make connection to the server hostName/port
-                /*InetAddress hostIP = APP.getHostIP(hostName);
-                Socket socket = new Socket(hostIP, port);*/
+            /*InetAddress hostIP = APP.getHostIP(hostName);
+            Socket socket = new Socket(hostIP, port);*/
                 Socket socket = new Socket(hostName, port);
 
                 System.out.println("Client: connected!");
 
-                /*
-                outBuffer[0]: 1 - this client talks using serializable Objects, 0 - talks with bytes only
-                outBuffer[1]: type of a client (printer, terminal, display etc.)
-                outBuffer[2]: client id
-                 */
-                byte[] outBuffer = {0x01, (byte)type, (byte) id};
+            /*
+            outBuffer[0]: 1 - this client talks using serializable Objects, 0 - talks with bytes only
+            outBuffer[1]: type of a client (printer, terminal, display etc.)
+            outBuffer[2]: client id
+             */
+                byte[] outBuffer = {0x01, (byte) type, (byte) id};
 
                 ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
                 output.write(outBuffer);
@@ -311,23 +304,23 @@ public class Client {
                     return null;
                 }
 
-                /*
-                inputBuffer[0]: 1 - this client talks using serializable Objects, 0 - talks with bytes only
-                inputBuffer[1]: type of a client (printer, terminal, display etc.)
-                inputBuffer[2]: client id
-                 */
+            /*
+            inputBuffer[0]: 1 - this client talks using serializable Objects, 0 - talks with bytes only
+            inputBuffer[1]: type of a client (printer, terminal, display etc.)
+            inputBuffer[2]: client id
+             */
                 byte[] inputBuffer = new byte[3];
                 int val = input.read(inputBuffer);
-                if (val > 0 && inputBuffer[0]==0x01 && inputBuffer[2]>=0){
+                if (val > 0 && inputBuffer[0] == 0x01 && inputBuffer[2] >= 0) {
                     register(inputBuffer[2]);
                     System.out.println("Validator: client registered with ID = " + inputBuffer[2]);
 //                    validate(socket);
                     return socket;
-                }else{
+                } else {
                     close();
                     return null;
                 }
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 closeServer();
                 return null;
@@ -335,9 +328,16 @@ public class Client {
         }
     }
 
+    public void register(int id){
+        registered = true;
+        if (this.id != id){
+            this.id = id;
+        }
+    }
+
     private void transferMessage(Object object){
 
-        for (ClientListener l : listeners){
+        for (ClientListener l : clientListeners){
             l.onInputMessage(object);
         }
     }
@@ -364,18 +364,20 @@ public class Client {
         }
     }
 
-    private List<ClientListener> listeners;
-
-    public void addClientListener(ClientListener listener){
-        listeners.add(listener);
+    private void addClientListener(ClientListener listener){
+        clientListeners.add(listener);
     }
     public void removeClientListener(ClientListener listener){
-        listeners.remove(listener);
+        clientListeners.remove(listener);
     }
 
     public interface ClientListener {
         void onInputMessage(Object object);
         void onCloseSocket();
+    }
+
+    public interface ClientValidatorListener {
+        void onValidate(int id);
     }
 
     class MessageTransmitter implements  Runnable{

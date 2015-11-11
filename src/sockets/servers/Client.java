@@ -93,6 +93,8 @@ public class Client {
         if (isReady && socket != null) {
             ConsoleMessage.printDebugMessage(TAG + ".startInDifferentThread(): The client has already been started. This start is ignored");
         }else{
+            if (executor != null && executor.isShutdown())
+            executor = Executors.newSingleThreadExecutor();
             executor.submit(new Validator(listener));
         }
     }

@@ -85,7 +85,7 @@ public class Connector {
      * @param port The server PORT
      * @return A new instance of the class
      */
-    public static Connector getConnector(int type, int id, String ip, int port){
+    public static Connector getInstance(int type, int id, String ip, int port){
         if (connector == null){
             connector = new Connector(type, id, ip, port);
         }
@@ -99,7 +99,7 @@ public class Connector {
      * @param id The clients id
      * @return A new instance of the class
      */
-    public static Connector getConnector(int type, int id){
+    public static Connector getInstance(int type, int id){
         if (connector == null){
             connector = new Connector(type, id, "localhost", 1337);
         }
@@ -107,56 +107,32 @@ public class Connector {
         return connector;
     }
 
-    /**
-     *
-     * @param clientListener The listener to notify about general server events.
-     */
-    public void startConnection(Client.ClientListener clientListener){
-        restartsQuant++;
-        this.clientListener = clientListener;
-        System.out.println(restartsQuant + " Attempt to get connected to the Server!!!");
+
+    public void startConnection(){
+//        if (Thread.currentThread().isInterrupted()) return;
         client = Client.getInstance(IP, PORT, type, id);
-        boolean success;
 
         futureClientStarter = executorClientStarter.submit(new ClientStarter());
-
-        listener.onClientConnected(client);
     }
 
     public void stopConnection(){
+//        if (Thread.currentThread().isInterrupted()) return;
         futureClientStarter.cancel(true);
     }
 
     private void restartClient(){
-        restartsQuant++;
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(delay);
-                    startInDifferentThread();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();*/
-        if (!Thread.currentThread().isInterrupted()) {
-            try {
-                Thread.sleep(delay);
-                startConnection(clientListener);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (Thread.currentThread().isInterrupted()) return;
+        stopConnection();
+        startConnection();
     }
 
-    public void stopThread() {
+    /*public void stopThread() {
         Thread tmpThread = myThread;
         myThread = null;
         if (tmpThread != null) {
             tmpThread.interrupt();
         }
-    }
+    }*/
 
     /*@Override
     public void onValidate(int id) {
@@ -175,10 +151,10 @@ public class Connector {
         restartClient();
     }*/
 
-    public void addConnectorListener(ConnectorListener listener) throws Exception {
-        if (this.listener != null) {
+    public void addConnectorListener(ConnectorListener listener) {
+        /*if (this.listener != null) {
             throw new Exception("The ConnectorListener is already assigned!");
-        }
+        }*/
         this.listener = listener;
     }
 
@@ -191,22 +167,24 @@ public class Connector {
         @Override
         public Boolean call() throws Exception {
 
-            if (Thread.currentThread().isInterrupted()) {
-                return null;
-            }
-
             boolean success;
             do {
+                if (Thread.currentThread().isInterrupted()) {
+                    return false;
+                }
                 try {
                     Thread.sleep(delay);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 if (Thread.currentThread().isInterrupted()) {
-                    return null;
+                    return false;
                 }
+                restartsQuant++;
+                System.out.println(restartsQuant + " Attempt to get connected to the Server!!!");
                 success = client.startInTheSameThread();
             }while (!success);
+            listener.onClientConnected(client);
             return true;
         }
     }

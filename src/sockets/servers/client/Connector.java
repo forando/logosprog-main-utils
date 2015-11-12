@@ -5,6 +5,7 @@
 package sockets.servers.client;
 
 import sockets.servers.Client;
+import system.ConsoleMessage;
 
 import java.util.concurrent.*;
 
@@ -181,7 +182,8 @@ public class Connector {
                     return false;
                 }
                 restartsQuant++;
-                System.out.println(restartsQuant + " Attempt to get connected to the Server!!!");
+                ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call(): " + restartsQuant +
+                        " Attempt to get connected to the Server!!!");
                 success = client.startInTheSameThread();
             }while (!success);
             listener.onClientConnected(client);

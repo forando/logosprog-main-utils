@@ -56,7 +56,7 @@ public class Client {
 
     private boolean registered = false;
 
-    private List<ClientListener> clientListeners;
+    private ClientListener clientListener;
     private List<ClientValidatorListener> validatorListeners;
 
 
@@ -76,7 +76,6 @@ public class Client {
         this.port = port;
         this.type = type;
         this.id = id;
-        clientListeners = new ArrayList<>();
 //        validator = new Validator();
         executor = Executors.newSingleThreadExecutor();
     }
@@ -91,7 +90,8 @@ public class Client {
     // Runs a client handler to connect to a server
     public void startInDifferentThread(ClientValidatorListener listener) {
         if (isReady && socket != null) {
-            ConsoleMessage.printDebugMessage(TAG + ".startInDifferentThread(): The client has already been started. This start is ignored");
+            ConsoleMessage.printDebugMessage(TAG + ".startInDifferentThread(): The client has already " +
+                    "been started. This start is ignored");
         }else{
             if (executor != null && executor.isShutdown())
             executor = Executors.newSingleThreadExecutor();
@@ -101,7 +101,8 @@ public class Client {
 
     public boolean startInTheSameThread(){
         if (isReady && socket != null) {
-            ConsoleMessage.printDebugMessage(TAG + ".startInDifferentThread(): The client has already been started. This start is ignored");
+            ConsoleMessage.printDebugMessage(TAG + ".startInTheSameThread(): The client has already" +
+                    " been started. This start is ignored");
             return true;
         }else{
             return validate(getSocket());
@@ -167,9 +168,14 @@ public class Client {
     }
 
     void closeServer(){
-        System.out.println("Socket with ID = " + id + " has been closed");
-        for (ClientListener l : clientListeners) {
-            l.onCloseSocket();
+        ConsoleMessage.printErrorMessage(TAG + ".closeServer(): Socket with ID = " + id + " has been closed");
+        if (clientListener != null){
+            clientListener.onCloseSocket();
+            /*
+            After onCloseSocket() event is fired, we have to remove this listener.
+            This listener has to be reassigned again after the client is reconnected.
+             */
+            removeClientListener();
         }
     }
 
@@ -285,7 +291,7 @@ public class Client {
             Socket socket = new Socket(hostIP, port);*/
                 Socket socket = new Socket(hostName, port);
 
-                System.out.println("Client: connected!");
+                ConsoleMessage.printInfoMessage(TAG + ".getSocket(): Got new socket.");
 
             /*
             outBuffer[0]: 1 - this client talks using serializable Objects, 0 - talks with bytes only
@@ -315,7 +321,6 @@ public class Client {
                 int val = input.read(inputBuffer);
                 if (val > 0 && inputBuffer[0] == 0x01 && inputBuffer[2] >= 0) {
                     register(inputBuffer[2]);
-                    System.out.println("Validator: client registered with ID = " + inputBuffer[2]);
 //                    validate(socket);
                     return socket;
                 } else {
@@ -335,13 +340,12 @@ public class Client {
         if (this.id != id){
             this.id = id;
         }
+        ConsoleMessage.printInfoMessage(TAG + ".register(): Client registered with ID = " + id);
     }
 
     private void transferMessage(Object object){
 
-        for (ClientListener l : clientListeners){
-            l.onInputMessage(object);
-        }
+        if (clientListener != null) clientListener.onInputMessage(object);
     }
 
     public void send(Object messageObject){
@@ -367,10 +371,10 @@ public class Client {
     }
 
     private void addClientListener(ClientListener listener){
-        clientListeners.add(listener);
+        clientListener = listener;
     }
-    public void removeClientListener(ClientListener listener){
-        clientListeners.remove(listener);
+    public void removeClientListener(){
+        clientListener = null;
     }
 
     public interface ClientListener {

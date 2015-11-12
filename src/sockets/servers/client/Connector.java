@@ -19,10 +19,6 @@ public class Connector {
 
     Client client;
 
-    private volatile Thread myThread;
-
-//    Client.ClientListener thisThreadClientListener;
-    Client.ClientListener clientListener;
     String IP;
     int PORT;
     int type;
@@ -73,9 +69,6 @@ public class Connector {
 
         executorClientStarter = Executors.newSingleThreadExecutor();
 
-//        this.thisThreadClientListener = this;
-//        startConnection();
-//        restartsQuant++;
     }
 
     /**
@@ -90,7 +83,6 @@ public class Connector {
         if (connector == null){
             connector = new Connector(type, id, ip, port);
         }
-
         return connector;
     }
 
@@ -104,58 +96,25 @@ public class Connector {
         if (connector == null){
             connector = new Connector(type, id, "localhost", 1337);
         }
-
         return connector;
     }
 
 
     public void startConnection(){
-//        if (Thread.currentThread().isInterrupted()) return;
         client = Client.getInstance(IP, PORT, type, id);
-
         futureClientStarter = executorClientStarter.submit(new ClientStarter());
     }
 
     public void stopConnection(){
-//        if (Thread.currentThread().isInterrupted()) return;
         futureClientStarter.cancel(true);
     }
 
     private void restartClient(){
-//        if (Thread.currentThread().isInterrupted()) return;
         stopConnection();
         startConnection();
     }
 
-    /*public void stopThread() {
-        Thread tmpThread = myThread;
-        myThread = null;
-        if (tmpThread != null) {
-            tmpThread.interrupt();
-        }
-    }*/
-
-    /*@Override
-    public void onValidate(int id) {
-        client.removeClientListener(thisThreadClientListener);
-        client.addClientListener(clientListener);
-        this.listener.onClientConnected(client);
-    }
-
-    @Override
-    public void onInputMessage(Object object) {
-        //dummy
-    }
-
-    @Override
-    public void onCloseSocket() {
-        restartClient();
-    }*/
-
     public void addConnectorListener(ConnectorListener listener) {
-        /*if (this.listener != null) {
-            throw new Exception("The ConnectorListener is already assigned!");
-        }*/
         this.listener = listener;
     }
 
@@ -169,7 +128,14 @@ public class Connector {
         public Boolean call() throws Exception {
 
             boolean success;
-            do {
+            if (Thread.currentThread().isInterrupted()) {
+                return false;
+            }
+            restartsQuant++;
+            ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call(): " + restartsQuant +
+                    " Attempt to get connected to the Server!!!");
+            success = client.startInTheSameThread();
+            while (!success){
                 if (Thread.currentThread().isInterrupted()) {
                     return false;
                 }
@@ -178,6 +144,7 @@ public class Connector {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
                 if (Thread.currentThread().isInterrupted()) {
                     return false;
                 }
@@ -185,7 +152,7 @@ public class Connector {
                 ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call(): " + restartsQuant +
                         " Attempt to get connected to the Server!!!");
                 success = client.startInTheSameThread();
-            }while (!success);
+            }
             listener.onClientConnected(client);
             return true;
         }

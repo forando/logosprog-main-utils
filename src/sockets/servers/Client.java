@@ -27,7 +27,7 @@ public class Client {
 
     public int id;
 
-    private boolean isReady = false;
+    private volatile boolean isReady = false;
 
     private final String hostName;
     private final int port;

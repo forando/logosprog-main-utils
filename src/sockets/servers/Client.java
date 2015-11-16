@@ -37,7 +37,7 @@ public class Client {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     InPut inPut;
-    OutPut output;
+//    OutPut output;
     private final Object lock;
 
     private boolean registered = false;
@@ -45,6 +45,8 @@ public class Client {
     private ClientListener clientListener;
 
     ExecutorService executor;
+    private ExecutorService outputExecutor;
+    private Future<Void> outputFuture;
 
     private static Client client = null;
 
@@ -62,6 +64,7 @@ public class Client {
         this.id = id;
 //        validator = new Validator();
         executor = Executors.newSingleThreadExecutor();
+        outputExecutor = Executors.newSingleThreadExecutor();
     }
 
     public static Client getInstance(String hostName, int port, int type, int id){
@@ -131,6 +134,7 @@ public class Client {
     }
 
     public void stopClient(){
+        removeClientListener();
         close();
     }
 
@@ -166,7 +170,8 @@ public class Client {
     private void close(){
         if (registered) {
             if (inPut != null) inPut.stopThread();
-            if (output != null)output.stopThread();
+            if (outputFuture != null) outputFuture.cancel(true);
+//            if (output != null)output.stopThread();
         }else{
             if (executor != null)executor.shutdownNow();
         }
@@ -271,7 +276,7 @@ public class Client {
         Did it just to have 100% guarantee
          */
         synchronized (lock) {
-            if (output != null) {
+            /*if (output != null) {
                 output.stopThread();
                 output = null;
             }
@@ -283,13 +288,16 @@ public class Client {
                 output.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
+
+            outputFuture = outputExecutor.submit(new OutPut(out, id, messageObject));
         }
     }
 
     private void addClientListener(ClientListener listener){
         clientListener = listener;
     }
+
     public void removeClientListener(){
         clientListener = null;
     }

@@ -5,39 +5,40 @@ package sockets;/*
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.Callable;
 
 /**
  * Created by forando on 01.10.14.<br>
  *     This class uses socket to send messages.
  */
-public class OutPut  extends Thread {
+public class OutPut  implements Callable<Void> {
     public static final String THREAD_NAME = "SocketOutPut";
-    private volatile Thread myThread;
+//    private volatile Thread myThread;
     ObjectOutputStream out;
     private int id;
     private Object messageObject;
 
     public OutPut(ObjectOutputStream out, int id, Object messageObject){
-        this.setName(THREAD_NAME);
-        myThread = this;
+//        this.setName(THREAD_NAME);
+//        myThread = this;
         this.out = out;
         this.id = id;
         this.messageObject = messageObject;
     }
 
-    public void stopThread() {
+    /*public void stopThread() {
         Thread tmpThread = myThread;
         myThread = null;
         if (tmpThread != null) {
             tmpThread.interrupt();
         }
-    }
+    }*/
 
     @Override
-    public void run() {
-        if (myThread == null) {
-            return; // stopped before started.
-        }
+    public Void call() {
+        /*if (!Thread.currentThread().isInterrupted()){
+            return null; // stopped before started.
+        }*/
         try {
             /*
             If you are writing multiple objects to the same ObjectOutputStream
@@ -75,5 +76,6 @@ public class OutPut  extends Thread {
         }catch (Exception ex){
             ex.printStackTrace();
         }
+        return null;
     }
 }

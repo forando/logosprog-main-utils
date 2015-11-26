@@ -46,7 +46,6 @@ public class Client {
 
     ExecutorService executor;
     private ExecutorService outputExecutor;
-    private Future<Void> outputFuture;
 
     private static Client client = null;
 
@@ -68,15 +67,26 @@ public class Client {
     }
 
     public static Client getInstance(String hostName, int port, int type, int id){
-        if (client == null){
+        /*if (client == null){
             client = new Client(hostName, port, type, id);
+        }else{
+            ConsoleMessage.printDebugMessage("Client.getInstance(): The client has already " +
+                    "been created. Returning the existing one.");
+        }*/
+
+        if (client != null && client.clientReady()){
+            ConsoleMessage.printInfoMessage("Client.getInstance(): The client has already " +
+                    "been created. Returning the existing one.");
+            return client;
+        }else{
+            client = new Client(hostName, port, type, id);
+            return client;
         }
-        return client;
     }
 
     public void startInDifferentThread(ClientValidatorListener listener) {
-        if (isReady && socket != null) {
-            ConsoleMessage.printDebugMessage(TAG + ".startInDifferentThread(): The client has already " +
+        if (clientReady()) {
+            ConsoleMessage.printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
                     "been started. This start is ignored");
         }else{
             if (executor != null && executor.isShutdown())
@@ -86,13 +96,17 @@ public class Client {
     }
 
     public boolean startInTheSameThread(){
-        if (isReady && socket != null) {
-            ConsoleMessage.printDebugMessage(TAG + ".startInTheSameThread(): The client has already" +
+        if (clientReady()) {
+            ConsoleMessage.printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
                     " been started. This start is ignored");
             return true;
         }else{
             return validate(getSocket());
         }
+    }
+
+    protected boolean clientReady(){
+        return isReady && socket != null;
     }
 
     public boolean validate(Socket soc) {
@@ -168,13 +182,15 @@ public class Client {
     }
 
     private void close(){
-        if (registered) {
+        /*if (registered) {
             if (inPut != null) inPut.stopThread();
             if (outputFuture != null) outputFuture.cancel(true);
-//            if (output != null)output.stopThread();
         }else{
             if (executor != null)executor.shutdownNow();
-        }
+        }*/
+
+        if (inPut != null) inPut.stopThread();
+        if (executor != null)executor.shutdownNow();
         try {
             //bug: if this block kicks out a NullPointer exception this shuts down android app
             if (in != null) in.close();
@@ -290,7 +306,7 @@ public class Client {
                 e.printStackTrace();
             }*/
 
-            outputFuture = outputExecutor.submit(new OutPut(out, id, messageObject));
+            outputExecutor.submit(new OutPut(out, id, messageObject));
         }
     }
 

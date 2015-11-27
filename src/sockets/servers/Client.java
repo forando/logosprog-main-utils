@@ -188,19 +188,23 @@ public class Client {
         }else{
             if (executor != null)executor.shutdownNow();
         }*/
-
-        if (inPut != null) inPut.stopThread();
-        if (executor != null)executor.shutdownNow();
-        try {
-            //bug: if this block kicks out a NullPointer exception this shuts down android app
-            if (in != null) in.close();
-            if (out != null) out.close();
-            if (socket != null) socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            isReady = false;
-            closeServer();
+        /*
+        * We need the lock here to be sure that next Client.getInstance() will
+        * return a new Client object*/
+        synchronized (lock) {
+            if (inPut != null) inPut.stopThread();
+            if (executor != null) executor.shutdownNow();
+            try {
+                //bug: if this block kicks out a NullPointer exception this shuts down android app
+                if (in != null) in.close();
+                if (out != null) out.close();
+                if (socket != null) socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                isReady = false;
+                closeServer();
+            }
         }
     }
 

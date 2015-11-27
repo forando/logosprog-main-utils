@@ -101,12 +101,13 @@ public class Connector {
 
 
     public void startConnection(){
+        stopConnection();
         client = Client.getInstance(IP, PORT, type, id);
         futureClientStarter = executorClientStarter.submit(new ClientStarter());
     }
 
     public void stopConnection(){
-        futureClientStarter.cancel(true);
+        if (futureClientStarter != null) futureClientStarter.cancel(true);
     }
 
     private void restartClient(){

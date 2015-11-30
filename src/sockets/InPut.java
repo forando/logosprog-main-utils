@@ -22,7 +22,7 @@ public class InPut extends Thread {
     public static final String THREAD_NAME = "SocketInPut";
     private volatile Thread myThread;
     private Socket socket;
-    private int id;
+//    private int id;
     ObjectInputStream in;
 
 //    ExecutorService executor = Executors.newFixedThreadPool(5);
@@ -33,7 +33,7 @@ public class InPut extends Thread {
         this.setName(THREAD_NAME);
         myThread = this;
         this.socket = socket;
-        this.id = id;
+//        this.id = id;
         listeners = new ArrayList<>();
         this.in = null;
     }

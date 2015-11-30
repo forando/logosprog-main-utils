@@ -26,7 +26,10 @@ public class Client {
     private final String TAG;
 
     public int id;
-
+    /**
+     * Defines if this client is connected to the server and ready to
+     * communicate with it.
+     */
     private volatile boolean isReady = false;
 
     private final String hostName;
@@ -34,25 +37,40 @@ public class Client {
     private int type;
 
     private Socket socket = null;
-    private ObjectInputStream in;
+//    private ObjectInputStream in;
     private ObjectOutputStream out;
     InPut inPut;
 //    OutPut output;
     private final Object lock;
 
+    /**
+     * Defines if this client has been registered by the server with an id.
+     */
     private boolean registered = false;
 
     private ClientListener clientListener;
+    /**
+     * Serves this client validation process.
+     */
+    private ExecutorService validatorExecutor;
+    /**
+     * Serves output messages sending.
+     */
+    private ExecutorService outputMessagesExecutor;
 
-    ExecutorService executor;
-    private ExecutorService outputExecutor;
-
+    /**
+     * An instance of this class. Singleton pattern.
+     */
     private static Client client = null;
 
-    /*public static void main(String[] args) {
-        new ClientServer(APP.IP, APP.PORT, SocketMessage.DISPLAY, 0).startInDifferentThread();
-    }*/
-
+    /**
+     * This class realizes singleton pattern. That's why we have the Constructor
+     * protected.
+     * @param hostName An IP address of the server host.
+     * @param port A port to communicate with the server.
+     * @param type A Client TYPE to be registered with.
+     * @param id An ID to be registered with.
+     */
     protected Client(String hostName, int port, int type, int id){
         TAG = this.getClass().getSimpleName();
 
@@ -61,19 +79,19 @@ public class Client {
         this.port = port;
         this.type = type;
         this.id = id;
-//        validator = new Validator();
-        executor = Executors.newSingleThreadExecutor();
-        outputExecutor = Executors.newSingleThreadExecutor();
+        validatorExecutor = Executors.newSingleThreadExecutor();
+        outputMessagesExecutor = Executors.newSingleThreadExecutor();
     }
 
+    /**
+     * Realizes singlton pattern.
+     * @param hostName An IP address of the server host.
+     * @param port A port to communicate with the server.
+     * @param type A Client TYPE to be registered with.
+     * @param id An ID to be registered with.
+     * @return An instance of {@link Client} class.
+     */
     public static Client getInstance(String hostName, int port, int type, int id){
-        /*if (client == null){
-            client = new Client(hostName, port, type, id);
-        }else{
-            ConsoleMessage.printDebugMessage("Client.getInstance(): The client has already " +
-                    "been created. Returning the existing one.");
-        }*/
-
         if (client != null && client.clientReady()){
             ConsoleMessage.printInfoMessage("Client.getInstance(): The client has already " +
                     "been created. Returning the existing one.");
@@ -84,17 +102,25 @@ public class Client {
         }
     }
 
+    /**
+     * Starts validation process in a new thread.
+     * @param listener A listener to notify about validation.
+     */
     public void startInDifferentThread(ClientValidatorListener listener) {
         if (clientReady()) {
             ConsoleMessage.printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
                     "been started. This start is ignored");
         }else{
-            if (executor != null && executor.isShutdown())
-            executor = Executors.newSingleThreadExecutor();
-            executor.submit(new Validator(listener));
+            if (validatorExecutor != null && validatorExecutor.isShutdown())
+            validatorExecutor = Executors.newSingleThreadExecutor();
+            validatorExecutor.submit(new Validator(listener));
         }
     }
 
+    /**
+     * Starts validation process in the same thread.
+     * @return TRUE - if validation is successful, and FALSE - if not.
+     */
     public boolean startInTheSameThread(){
         if (clientReady()) {
             ConsoleMessage.printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
@@ -105,10 +131,22 @@ public class Client {
         }
     }
 
+    /**
+     * Checks if the client is ready for use.
+     * @return TRUE - if ready, FALSE - if not.
+     */
     protected boolean clientReady(){
         return isReady && socket != null;
     }
 
+    /**
+     * During validation process some exceptions might occur.
+     * In this case NULL will be returned.<br/>
+     * This method ensures that we've received the real object.
+     * If it's true, it also sets the {@link #isReady} flag to TRUE.
+     * @param soc A socket to be checked for NULL.
+     * @return TRUE - if the socket is not NULL and FALSE - otherwise.
+     */
     public boolean validate(Socket soc) {
         this.socket = soc;
         if (socket == null){
@@ -120,7 +158,12 @@ public class Client {
         }
     }
 
-    public boolean openInoutOutputStreams(ClientListener listener) {
+    /**
+     * Opens the socket streams in order to communicate with the server.
+     * @param listener A listener to notify about received messages.
+     * @return TRUE - if all streams have been opened successfully.
+     */
+    public boolean openInputOutputStreams(ClientListener listener) {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
@@ -147,6 +190,9 @@ public class Client {
         return true;
     }
 
+    /**
+     * Breaks the communication with server.
+     */
     public void stopClient(){
         removeClientListener();
         close();
@@ -155,12 +201,17 @@ public class Client {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
+        /*
+        IMPORTANT!!!
+        We have to remove this listener.
+        This listener will be reassigned again after the client is reconnected.
+         */
         closeSocketStreams();
     }
 
-    void closeSocketStreams(){
+    private void closeSocketStreams(){
         try {
-            if (in != null) in.close();
+//            if (in != null) in.close();
             if (out != null) out.close();
             if (socket != null) socket.close();
         } catch (IOException e) {
@@ -168,35 +219,32 @@ public class Client {
         }
     }
 
-    void closeServer(){
+    private void closeServer(){
         ConsoleMessage.printErrorMessage(TAG + ".closeServer(): Socket with ID = " + id + " has been closed");
         if (clientListener != null){
             clientListener.onCloseSocket();
             /*
             IMPORTANT!!!
             After onCloseSocket() event is fired, we have to remove this listener.
-            This listener has to be reassigned again after the client is reconnected.
+            This listener will be reassigned again after the client is reconnected.
              */
             removeClientListener();
         }
     }
 
     private void close(){
-        /*if (registered) {
-            if (inPut != null) inPut.stopThread();
-            if (outputFuture != null) outputFuture.cancel(true);
-        }else{
-            if (executor != null)executor.shutdownNow();
-        }*/
         /*
-        * We need the lock here to be sure that next Client.getInstance() will
-        * return a new Client object*/
+        * We need the lock here to be sure that the next Client.getInstance() will
+        * return a new Client object.
+        * That's why we have to guarantee that this
+        * method is finished before the next Client.getInstance() call.
+        * */
         synchronized (lock) {
             if (inPut != null) inPut.stopThread();
-            if (executor != null) executor.shutdownNow();
+            if (validatorExecutor != null) validatorExecutor.shutdownNow();
             try {
                 //bug: if this block kicks out a NullPointer exception this shuts down android app
-                if (in != null) in.close();
+//                if (in != null) in.close();
                 if (out != null) out.close();
                 if (socket != null) socket.close();
             } catch (IOException e) {
@@ -208,6 +256,9 @@ public class Client {
         }
     }
 
+    /**
+     * Is used by {@link #validatorExecutor}
+     */
     private class Validator implements Callable<Void>{
 
         ClientValidatorListener listener;
@@ -229,6 +280,11 @@ public class Client {
         }
     }
 
+    /**
+     * Tries to connect to the server.<br/>
+     * If it fails - NULL is returned.
+     * @return Socket or NULL.
+     */
     private Socket getSocket() {
         synchronized (lock) {
             try {
@@ -277,6 +333,10 @@ public class Client {
         }
     }
 
+    /**
+     * Registers this client with a given id.
+     * @param id An id to be registered with.
+     */
     public void register(int id){
         registered = true;
         if (this.id != id){
@@ -310,7 +370,7 @@ public class Client {
                 e.printStackTrace();
             }*/
 
-            outputExecutor.submit(new OutPut(out, id, messageObject));
+            outputMessagesExecutor.submit(new OutPut(out, id, messageObject));
         }
     }
 
@@ -323,25 +383,27 @@ public class Client {
     }
 
     public interface ClientListener {
+        /**
+         * Notifies that the client has received a message from the server
+         * @param object A message from the server. Before use, this message
+         *               must be cast to a client specific message type.
+         */
         void onInputMessage(Object object);
+
+        /**
+         * Notifies tha communication with the server has been broken.
+         */
         void onCloseSocket();
     }
 
+    /**
+     * See {@link ClientValidatorListener#onValidate(int)}
+     */
     public interface ClientValidatorListener {
+        /**
+         * Notifies that validation has been done successfully.
+         * @param id The id this client has been registered with.
+         */
         void onValidate(int id);
-    }
-
-    class MessageTransmitter implements  Runnable{
-
-        private Object messageObject;
-
-        public MessageTransmitter(Object messageObject){
-            this.messageObject = messageObject;
-        }
-
-        @Override
-        public void run() {
-            transferMessage(messageObject);
-        }
     }
 }

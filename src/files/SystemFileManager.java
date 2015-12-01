@@ -19,7 +19,7 @@ public class SystemFileManager {
      */
     protected String fileName;
     /**
-     * The complete path to root directory.
+     * The complete path to a root directory.
      */
     protected String rootDir;
     /**
@@ -72,7 +72,7 @@ public class SystemFileManager {
     /**
      * Creates parent DIR if it does not exist and than creates
      * an empty file
-     * @return True - if operation is successful
+     * @return True - if operation was successful.
      */
     public boolean createEmptyFile(){
 
@@ -94,7 +94,10 @@ public class SystemFileManager {
         return result;
     }
 
-
+    /**
+     * Deletes the predefined file.
+     * @return True - if operation was successful.
+     */
     public boolean deleteDefaultFile(){
         boolean result = false;
 
@@ -113,7 +116,7 @@ public class SystemFileManager {
     /**
      * This method copies default file from internal app folders to specific
      * project folder.
-     * @return True - if operation is successful.
+     * @return True - if operation was successful.
      */
     public boolean generateDefaultFile(){
 

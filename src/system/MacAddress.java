@@ -25,7 +25,7 @@ public class MacAddress {
         InetAddress ip;
         try {
 
-            ip = InetAddress.getLocalHost();
+//            ip = InetAddress.getLocalHost();
             ip = InetAddress.getByName("127.0.0.1");
 //            System.out.println("Current IP address : " + ip.getHostAddress());
 

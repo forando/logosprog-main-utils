@@ -18,6 +18,8 @@ import java.io.OutputStream;
  */
 public abstract class TemplateFileBuilder<T> extends SystemFileManager implements ObjectFromFileBuilder<T, InputStream> {
 
+    private final String TAG;
+
     /**
      * The object of predefined type that we construct from external file
      */
@@ -33,6 +35,7 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
      */
     public TemplateFileBuilder(String fileName, String rootDir, String subDir) throws IOException {
         super(fileName, rootDir, subDir);
+        TAG = this.getClass().getSimpleName();
     }
 
     @Override
@@ -45,7 +48,7 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
                 mainObj = getObjectFromExternalFile();
                 if (listener != null) listener.onFileGenerated();
             }else {
-                ConsoleMessage.printErrorMessage("An error occurred during " + getFileName() + " file creation.");
+                ConsoleMessage.printErrorMessage(TAG + ".build: An error occurred during " + getFileName() + " file creation.");
             }
         }
         return mainObj;
@@ -84,13 +87,7 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
         boolean result = false;
 
         OutputStream os = null;
-        String path;
-
-        if (null != subDir) {
-            path = getFilePath();
-        }else{
-            path = getFilePath();
-        }
+        String path = getFilePath();
 
         if (!createEmptyFile()) return false;
 

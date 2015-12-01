@@ -276,6 +276,8 @@ public class Client {
 
         @Override
         public Void call() throws Exception {
+            // let another thread have some time perhaps to stop this one:
+            Thread.yield();
             //interruption check:
             if (Thread.currentThread().isInterrupted()) {
                 return null;

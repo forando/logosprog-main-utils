@@ -21,10 +21,17 @@ public class Connector {
 
     String IP;
     int PORT;
+    /**
+     * A TYPE of the client.<br/>
+     * Defined by project that uses this class
+     */
     int type;
     int id;
     ConnectorListener listener;
 
+    /**
+     * An instance of this class. Realizes singleton pattern.
+     */
     private static Connector connector = null;
 
 
@@ -35,7 +42,7 @@ public class Connector {
     /**
      * delay between two separate attempts to to obtain {@link Client} object
      */
-    private int delay = 2000;
+    private static final int delay = 2000;
 
     private ExecutorService executorClientStarter;
     private Future<Boolean> futureClientStarter;
@@ -77,7 +84,7 @@ public class Connector {
      * @param id The clients id
      * @param ip The server IP
      * @param port The server PORT
-     * @return A new instance of the class
+     * @return A new instance of the class. Realizes singleton pattern.
      */
     public static Connector getInstance(int type, int id, String ip, int port){
         if (connector == null){
@@ -90,7 +97,7 @@ public class Connector {
      * This method is just for <b>testing</b>. Here we use predefined IP an PORT
      * @param type The type of a client that wants to be connected to the server
      * @param id The clients id
-     * @return A new instance of the class
+     * @return A new instance of the class. Realizes singleton pattern.
      */
     public static Connector getInstance(int type, int id){
         if (connector == null){
@@ -129,6 +136,8 @@ public class Connector {
         public Boolean call() throws Exception {
 
             boolean success;
+            // let another thread have some time perhaps to stop this one:
+            Thread.yield();
             if (Thread.currentThread().isInterrupted()) {
                 return false;
             }
@@ -137,6 +146,8 @@ public class Connector {
                     " Attempt to get connected to the Server!!!");
             success = client.startInTheSameThread();
             while (!success){
+                // let another thread have some time perhaps to stop this one:
+                Thread.yield();
                 if (Thread.currentThread().isInterrupted()) {
                     return false;
                 }
@@ -146,6 +157,8 @@ public class Connector {
                     e.printStackTrace();
                 }
 
+                // let another thread have some time perhaps to stop this one:
+                Thread.yield();
                 if (Thread.currentThread().isInterrupted()) {
                     return false;
                 }

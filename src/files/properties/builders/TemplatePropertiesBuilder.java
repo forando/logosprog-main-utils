@@ -25,14 +25,14 @@ public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder<Prop
      */
     public TemplatePropertiesBuilder(String fileName, String rootDir, String subDir, InputStream is) throws IOException {
         super(fileName, rootDir, subDir);
-        if (is == null) throw new IOException("InputStreame of an internal .txt template file is NULL!");
+        if (is == null) throw new IOException("InputStream of an internal .txt template file is NULL!");
         this.build(is);
     }
 
     @Override
     protected Properties getObjectFromExternalFile() throws IOException {
 
-        //bug: we have to do like this cause cyrylic will not work on windows
+        //bug: we have to do like this cause cyrillic will not work on windows
         Properties properties;
         InputStream stream = null;
         InputStreamReader reader = null;
@@ -43,15 +43,11 @@ public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder<Prop
             properties.load(reader);
 
         } finally {
-            stream.close();
+            if (stream != null) stream.close();
             if (reader != null) {
                 reader.close();
             }
         }
-
-
-        /*Properties properties = new Properties();
-        properties.load(new FileInputStream(getFilePath()));*/
         return properties;
     }
 

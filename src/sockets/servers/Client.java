@@ -34,13 +34,16 @@ public class Client {
 
     private final String hostName;
     private final int port;
+    /**
+     * A TYPE of the client.<br/>
+     * Defined by project that uses this class
+     */
     private int type;
 
     private Socket socket = null;
 //    private ObjectInputStream in;
     private ObjectOutputStream out;
     InPut inPut;
-//    OutPut output;
     private final Object lock;
 
     /**
@@ -159,11 +162,12 @@ public class Client {
     }
 
     /**
-     * Opens the socket streams in order to communicate with the server.
+     * Opens the sockets input and output streams in order to
+     * communicate with the server.
      * @param listener A listener to notify about received messages.
      * @return TRUE - if all streams have been opened successfully.
      */
-    public boolean openInputOutputStreams(ClientListener listener) {
+    public boolean openSocketStreams(ClientListener listener) {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
@@ -191,6 +195,19 @@ public class Client {
     }
 
     /**
+     * Closes the sockets input and output streams.
+     */
+    private void closeSocketStreams(){
+        try {
+            if (inPut != null) inPut.stopThread();
+            if (out != null) out.close();
+            if (socket != null) socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Breaks the communication with server.
      */
     public void stopClient(){
@@ -207,16 +224,6 @@ public class Client {
         This listener will be reassigned again after the client is reconnected.
          */
         closeSocketStreams();
-    }
-
-    private void closeSocketStreams(){
-        try {
-//            if (in != null) in.close();
-            if (out != null) out.close();
-            if (socket != null) socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void closeServer(){
@@ -306,6 +313,8 @@ public class Client {
                 ReadableByteChannel channel = Channels.newChannel(socket.getInputStream());
                 ObjectInputStream input = new ObjectInputStream(Channels.newInputStream(channel));
 
+                // let another thread have some time perhaps to stop this one:
+                Thread.yield();
                 //interruption check:
                 if (Thread.currentThread().isInterrupted()) {
                     return null;

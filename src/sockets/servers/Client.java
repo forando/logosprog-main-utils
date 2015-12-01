@@ -381,7 +381,13 @@ public class Client {
                 e.printStackTrace();
             }*/
 
-            outputMessagesExecutor.submit(new OutPut(out, id, messageObject));
+            //bug: Sometimes display availability message is sent when printer socket outPut = NULL
+            try {
+                OutPut outPut = new OutPut(out, id, messageObject);
+                outputMessagesExecutor.submit(outPut);
+            }catch (NullPointerException ex){
+                ex.printStackTrace();
+            }
         }
     }
 

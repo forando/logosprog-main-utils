@@ -426,13 +426,17 @@ public class Client {
     }
 
     /**
-     * See {@link ClientValidatorListener#onValidate(int)}
+     * See {@link ClientValidatorListener#onValidate(int, byte...)}
      */
     public interface ClientValidatorListener {
         /**
          * Notifies that validation has been done successfully.
          * @param id The id this client has been registered with.
+         * @param clientTalksWithObject Optional. Necessary only on the server side.
+         *                              Can be <b>1</b> - if a client talks to this
+         *                              socket using JAVA Objects object,
+         *                              or <b>0</b> - if it doesn't.
          */
-        void onValidate(int id);
+        void onValidate(int id, byte... clientTalksWithObject);
     }
 }

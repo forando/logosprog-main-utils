@@ -5,6 +5,7 @@
 package sockets.servers;
 
 import sockets.InPut;
+import sockets.OutPut;
 import sockets.servers.server.CommunicationNodeListener;
 import sockets.servers.server.CommunicationNodeValidatorListener;
 import system.ConsoleMessage;
@@ -21,15 +22,8 @@ import java.util.concurrent.Executors;
  * Provides communication between two TCP/IP sockets.
  */
 public abstract class CommunicationNode<B, L extends CommunicationNodeListener, V extends CommunicationNodeValidatorListener<B>> {
+
     private final String TAG;
-
-    protected int id;
-
-    /**
-     * A TYPE of the client.<br/>
-     * Defined by project that uses this class
-     */
-    protected final int type;
 
     /**
      * Defines if this client is connected to the server and ready to
@@ -37,20 +31,11 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      */
     private volatile boolean isReady = false;
 
-    private final String hostName;
-    private final int port;
-
-    protected Socket socket = null;
     protected ObjectOutputStream out;
     protected InPut inPut;
     protected final Object lock;
 
-    /**
-     * Defines if this client has been registered by the server with an id.
-     */
-    protected boolean registered = false;
-
-    private L clientListener;
+    private L socketListener;
     /**
      * Serves this client validation process.
      */
@@ -60,48 +45,12 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      */
     private ExecutorService outputMessagesExecutor;
 
-    /**
-     * An instance of this class. Singleton pattern.
-     */
-    private static Client client = null;
-
-    /**
-     *
-     * @param hostName An IP address of the server host.
-     * @param port A port to communicate with the server.
-     * @param type A Client TYPE to be registered with.
-     * @param id An ID to be registered with.
-     */
-    public CommunicationNode(String hostName, int port, int type, int id){
+    public CommunicationNode(){
         TAG = this.getClass().getSimpleName();
 
         lock = new Object();
-        this.hostName = hostName;
-        this.port = port;
-        this.type = type;
-        this.id = id;
         validatorExecutor = Executors.newSingleThreadExecutor();
         outputMessagesExecutor = Executors.newSingleThreadExecutor();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Registers this client with a given id.
-     * @param id An id to be registered with.
-     */
-    public void setId(int id){
-        registered = true;
-        if (this.id != id){
-            this.id = id;
-        }
-        ConsoleMessage.printInfoMessage(TAG + ".setId(): Client registered with ID = " + id);
-    }
-
-    public int getType() {
-        return type;
     }
 
     /**
@@ -109,7 +58,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      * @param listener A listener to notify about validation.
      */
     public void startInDifferentThread(V listener) {
-        if (clientReady()) {
+        if (nodeReady()) {
             ConsoleMessage.printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
                     "been started. This start is ignored");
         }else{
@@ -121,15 +70,18 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
 
     /**
      * Starts validation process in the same thread.
-     * @return TRUE - if validation is successful, and FALSE - if not.
+     * @return data BEAN - if validation is successful, and NULL - if not.
      */
-    public boolean startInTheSameThread(){
-        if (clientReady()) {
+    public B startInTheSameThread(){
+        if (nodeReady()) {
             ConsoleMessage.printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
                     " been started. This start is ignored");
-            return true;
+            return null;
         }else{
-            return validate(getSocket());
+            B bean = getBean();
+            if (beanIsValid(bean))
+            return bean;
+            return null;
         }
     }
 
@@ -142,8 +94,12 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         synchronized (lock) {
             try {
                 Socket socket = getSocket();
-                ConsoleMessage.printInfoMessage(TAG + ".getSocket(): Got new socket.");
-                return makeBean();
+                if (null != socket) {
+                    ConsoleMessage.printInfoMessage(TAG + ".getSocket(): Got new socket.");
+                    return makeBean();
+                }else {
+                    return null;
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 notifyClose();
@@ -157,27 +113,23 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
     protected abstract Socket getSocket();
 
     /**
-     * Checks if the client is ready for use.
+     * Checks if the node is ready for use.
      * @return TRUE - if ready, FALSE - if not.
      */
-    protected boolean clientReady(){
-        return isReady && socket != null;
+    protected boolean nodeReady(){
+        return isReady;
     }
 
     /**
      * During validation process some exceptions might occur.
      * In this case NULL will be returned.<br/>
-     * This method ensures that we've received the real object.
-     * If it's true, it also sets the {@link #isReady} flag to TRUE.
-     * @param soc A socket to be checked for NULL.
-     * @return TRUE - if the socket is not NULL and FALSE - otherwise.
+     * This method ensures that we've received the valid results.<br/>
+     * It, also, can init some additional objects that are necessary
+     * for communication between sockets.
+     * @param bean A data bean (specific for each project).
+     * @return TRUE - if it's valid or FALSE - if not.
      */
-    /**
-     *
-     * @param bean
-     * @return
-     */
-    public abstract boolean validate(B bean);
+    public abstract boolean beanIsValid(B bean);
 
     /**
      * Opens the sockets input and output streams in order to
@@ -185,7 +137,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      * @param listener A listener to notify about received messages.
      * @return TRUE - if all streams have been opened successfully.
      */
-    public boolean openSocketStreams(ClientListener listener) {
+    public boolean openSocketStreams(L listener, Socket socket, int id) {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
@@ -204,8 +156,8 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
             }
 
             @Override
-            public void onClose() {
-                close();
+            public void onClose(Socket socket) {
+                close(socket);
             }
         });
         inPut.start();
@@ -215,7 +167,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
     /**
      * Closes the sockets input and output streams.
      */
-    private void closeSocketStreams(){
+    private void closeSocketStreams(Socket socket){
         try {
             if (inPut != null) inPut.stopThread();
             if (out != null) out.close();
@@ -226,31 +178,26 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
     }
 
     /**
-     * Breaks the communication with server.
+     * Breaks the communication with remote socket.
+     * @param socket Local socket.
      */
-    public void stopClient(){
-        removeClientListener();
-        close();
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
+    public void shutDownNode(Socket socket){
         /*
         IMPORTANT!!!
-        We have to remove this listener.
+        After onCloseSocket() event is fired, we have to remove this listener.
         This listener will be reassigned again after the client is reconnected.
          */
-        closeSocketStreams();
+        removeClientListener();
+        close(socket);
     }
 
     /**
      * Notifies listener about socket close event.
      */
     protected void notifyClose(){
-        ConsoleMessage.printErrorMessage(TAG + ".notifyClose(): Socket with ID = " + id + " has been closed");
-        if (clientListener != null){
-            clientListener.onCloseSocket();
+//        ConsoleMessage.printErrorMessage(TAG + ".notifyClose(): Socket with ID = " + id + " has been closed");
+        if (socketListener != null){
+            socketListener.onCloseSocket();
             /*
             IMPORTANT!!!
             After onCloseSocket() event is fired, we have to remove this listener.
@@ -260,7 +207,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         }
     }
 
-    private void close(){
+    private void close(Socket socket){
         /*
         * We need the lock here to be sure that the next Client.getInstance() will
         * return a new Client object.
@@ -272,7 +219,6 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
             if (validatorExecutor != null) validatorExecutor.shutdownNow();
             try {
                 //bug: if this block kicks out a NullPointer exception this shuts down android app
-//                if (in != null) in.close();
                 if (out != null) out.close();
                 if (socket != null) socket.close();
             } catch (IOException e) {
@@ -282,6 +228,49 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
                 notifyClose();
             }
         }
+    }
+
+    private void transferMessage(Object object){
+
+        if (socketListener != null) socketListener.onInputMessage(object);
+    }
+
+    public void send(Object messageObject){
+        /*
+        Not sure if we need this lock here.
+        Did it just to have 100% guarantee
+         */
+        synchronized (lock) {
+            /*if (output != null) {
+                output.stopThread();
+                output = null;
+            }
+            output = new OutPut(out, id, messageObject);
+            output.start();
+
+            //waiting until the message is sent
+            try {
+                output.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+
+            //bug: Sometimes display availability message is sent when printer socket outPut = NULL
+            try {
+                OutPut outPut = new OutPut(out, messageObject);
+                outputMessagesExecutor.submit(outPut);
+            }catch (NullPointerException ex){
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void addClientListener(L listener){
+        socketListener = listener;
+    }
+
+    public void removeClientListener(){
+        socketListener = null;
     }
 
     /**
@@ -303,8 +292,8 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
             if (Thread.currentThread().isInterrupted()) {
                 return null;
             }
-
-            if(validate(getSocket())) listener.onValidate(id);
+            B bean = getBean();
+            if(beanIsValid(bean)) listener.onValidate(bean);
 
             return null;
         }

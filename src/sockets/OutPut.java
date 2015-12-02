@@ -11,15 +11,13 @@ import java.util.concurrent.Callable;
  */
 public class OutPut  implements Callable<Void> {
     ObjectOutputStream out;
-    private int id;
     private Object messageObject;
 
-    public OutPut(ObjectOutputStream out, int id, Object messageObject) throws NullPointerException{
+    public OutPut(ObjectOutputStream out, Object messageObject) throws NullPointerException{
         //Sometimes out == NULL:
         if (out == null) throw new NullPointerException("ObjectOutputStream cannot be NULL.");
         if (messageObject == null) throw new NullPointerException("messageObject cannot be NULL.");
         this.out = out;
-        this.id = id;
         this.messageObject = messageObject;
     }
 

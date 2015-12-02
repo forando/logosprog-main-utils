@@ -84,7 +84,7 @@ public class InPut extends Thread {
             }
 
             for (InputListener l : listeners){
-                l.onClose();
+                l.onClose(socket);
             }
         }
     }
@@ -95,7 +95,7 @@ public class InPut extends Thread {
 
     public interface InputListener{
         void onMessage(Object messageObject);
-        void onClose();
+        void onClose(Socket socket);
     }
 
 

@@ -25,7 +25,14 @@ public class Client {
 
     private final String TAG;
 
-    public int id;
+    protected int id;
+
+    /**
+     * A TYPE of the client.<br/>
+     * Defined by project that uses this class
+     */
+    protected final int type;
+
     /**
      * Defines if this client is connected to the server and ready to
      * communicate with it.
@@ -34,22 +41,16 @@ public class Client {
 
     private final String hostName;
     private final int port;
-    /**
-     * A TYPE of the client.<br/>
-     * Defined by project that uses this class
-     */
-    private int type;
 
-    private Socket socket = null;
-//    private ObjectInputStream in;
-    private ObjectOutputStream out;
-    InPut inPut;
-    private final Object lock;
+    protected Socket socket = null;
+    protected ObjectOutputStream out;
+    protected InPut inPut;
+    protected final Object lock;
 
     /**
      * Defines if this client has been registered by the server with an id.
      */
-    private boolean registered = false;
+    protected boolean registered = false;
 
     private ClientListener clientListener;
     /**
@@ -103,6 +104,26 @@ public class Client {
             client = new Client(hostName, port, type, id);
             return client;
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Registers this client with a given id.
+     * @param id An id to be registered with.
+     */
+    public void setId(int id){
+        registered = true;
+        if (this.id != id){
+            this.id = id;
+        }
+        ConsoleMessage.printInfoMessage(TAG + ".setId(): Client registered with ID = " + id);
+    }
+
+    public int getType() {
+        return type;
     }
 
     /**
@@ -226,8 +247,11 @@ public class Client {
         closeSocketStreams();
     }
 
-    private void closeServer(){
-        ConsoleMessage.printErrorMessage(TAG + ".closeServer(): Socket with ID = " + id + " has been closed");
+    /**
+     * Notifies listener about socket close event.
+     */
+    protected void notifyClose(){
+        ConsoleMessage.printErrorMessage(TAG + ".notifyClose(): Socket with ID = " + id + " has been closed");
         if (clientListener != null){
             clientListener.onCloseSocket();
             /*
@@ -258,7 +282,7 @@ public class Client {
                 e.printStackTrace();
             } finally {
                 isReady = false;
-                closeServer();
+                notifyClose();
             }
         }
     }
@@ -294,7 +318,7 @@ public class Client {
      * If it fails - NULL is returned.
      * @return Socket or NULL.
      */
-    private Socket getSocket() {
+    protected Socket getSocket() {
         synchronized (lock) {
             try {
                 Socket socket = new Socket(hostName, port);
@@ -330,7 +354,7 @@ public class Client {
                 byte[] inputBuffer = new byte[3];
                 int val = input.read(inputBuffer);
                 if (val > 0 && inputBuffer[0] == 0x01 && inputBuffer[2] >= 0) {
-                    register(inputBuffer[2]);
+                    setId(inputBuffer[2]);
                     return socket;
                 } else {
                     close();
@@ -338,22 +362,10 @@ public class Client {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                closeServer();
+                notifyClose();
                 return null;
             }
         }
-    }
-
-    /**
-     * Registers this client with a given id.
-     * @param id An id to be registered with.
-     */
-    public void register(int id){
-        registered = true;
-        if (this.id != id){
-            this.id = id;
-        }
-        ConsoleMessage.printInfoMessage(TAG + ".register(): Client registered with ID = " + id);
     }
 
     private void transferMessage(Object object){

@@ -29,7 +29,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      * Defines if this client is connected to the server and ready to
      * communicate with it.
      */
-    private volatile boolean isReady = false;
+    protected volatile boolean isReady = false;
 
     protected ObjectOutputStream out;
     protected InPut inPut;
@@ -58,11 +58,11 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      * @param listener A listener to notify about validation.
      */
     public void startInDifferentThread(V listener) {
-        if (nodeReady()) {
+        if (ready()) {
             ConsoleMessage.printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
                     "been started. This start is ignored");
         }else{
-            if (validatorExecutor != null && validatorExecutor.isShutdown())
+            if (validatorExecutor == null || validatorExecutor.isShutdown())
                 validatorExecutor = Executors.newSingleThreadExecutor();
             validatorExecutor.submit(new Validator(listener));
         }
@@ -73,7 +73,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      * @return data BEAN - if validation is successful, and NULL - if not.
      */
     public B startInTheSameThread(){
-        if (nodeReady()) {
+        if (ready()) {
             ConsoleMessage.printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
                     " been started. This start is ignored");
             return null;
@@ -93,10 +93,10 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
     protected B getBean() {
         synchronized (lock) {
             try {
-                Socket socket = getSocket();
+                Socket socket = makeSocket();
                 if (null != socket) {
                     ConsoleMessage.printInfoMessage(TAG + ".getSocket(): Got new socket.");
-                    return makeBean();
+                    return makeBean(socket);
                 }else {
                     return null;
                 }
@@ -108,15 +108,20 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         }
     }
 
-    protected abstract B makeBean();
+    /**
+     * Tries to connect to the remote socket.<br/>
+     * If it fails - NULL is returned.
+     * @return Bean or NULL.
+     */
+    protected abstract B makeBean(Socket socket) throws IOException;
 
-    protected abstract Socket getSocket();
+    protected abstract Socket makeSocket() throws IOException;
 
     /**
      * Checks if the node is ready for use.
      * @return TRUE - if ready, FALSE - if not.
      */
-    protected boolean nodeReady(){
+    protected boolean ready(){
         return isReady;
     }
 
@@ -167,7 +172,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
     /**
      * Closes the sockets input and output streams.
      */
-    private void closeSocketStreams(Socket socket){
+    protected void closeSocketStreams(Socket socket){
         try {
             if (inPut != null) inPut.stopThread();
             if (out != null) out.close();
@@ -207,7 +212,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         }
     }
 
-    private void close(Socket socket){
+    protected void close(Socket socket){
         /*
         * We need the lock here to be sure that the next Client.getInstance() will
         * return a new Client object.

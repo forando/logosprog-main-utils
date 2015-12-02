@@ -191,7 +191,7 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
         void onValidate(int id, byte... clientTalksWithObject);
     }*/
 
-    class ClientBean{
+    private class ClientBean{
         private Socket socket;
 
         public ClientBean(Socket socket) {

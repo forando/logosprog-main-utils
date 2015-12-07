@@ -97,11 +97,11 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
      * @param id An id to be registered with.
      */
     public void setId(int id){
+        registered = true;
         if (this.id != id){
-            registered = true;
             this.id = id;
-            ConsoleMessage.printInfoMessage(TAG + ".setId(): Client registered with ID = " + id);
         }
+        ConsoleMessage.printInfoMessage(TAG + ".setId(): Client registered with ID = " + id);
     }
 
     public int getType() {
@@ -157,7 +157,7 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
     }
 
     @Override
-    protected boolean ready() {
+    public boolean ready() {
         return isReady && socket != null;
     }
 

@@ -121,7 +121,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      * Checks if the node is ready for use.
      * @return TRUE - if ready, FALSE - if not.
      */
-    protected boolean ready(){
+    public boolean ready(){
         return isReady;
     }
 

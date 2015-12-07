@@ -212,7 +212,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         }
     }
 
-    protected void close(Socket socket){
+    public void close(Socket socket){
         /*
         * We need the lock here to be sure that the next Client.getInstance() will
         * return a new Client object.

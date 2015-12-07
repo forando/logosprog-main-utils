@@ -135,7 +135,7 @@ public class Connector {
         @Override
         public Boolean call() throws Exception {
 
-            boolean success;
+            Client.ClientBean bean;
             // let another thread have some time perhaps to stop this one:
             Thread.yield();
             if (Thread.currentThread().isInterrupted()) {
@@ -144,8 +144,8 @@ public class Connector {
             restartsQuant++;
             ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call(): " + restartsQuant +
                     " Attempt to get connected to the Server!!!");
-            success = client.startInTheSameThread();
-            while (!success){
+            bean = client.startInTheSameThread();
+            while (null != bean){
                 // let another thread have some time perhaps to stop this one:
                 Thread.yield();
                 if (Thread.currentThread().isInterrupted()) {
@@ -165,7 +165,7 @@ public class Connector {
                 restartsQuant++;
                 ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call(): " + restartsQuant +
                         " Attempt to get connected to the Server!!!");
-                success = client.startInTheSameThread();
+                bean = client.startInTheSameThread();
             }
             listener.onClientConnected(client);
             return true;

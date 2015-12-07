@@ -176,7 +176,8 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        closeSocketStreams(socket);
+//        closeSocketStreams(socket);
+        close(socket);
     }
 
     /*public interface ClientValidatorListener {

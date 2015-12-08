@@ -95,7 +95,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
             try {
                 Socket socket = makeSocket();
                 if (null != socket) {
-                    ConsoleMessage.printInfoMessage(TAG + ".getSocket(): Got new socket.");
+                    ConsoleMessage.printInfoMessage(TAG + ".getBean: Got new socket.");
                     return makeBean(socket);
                 }else {
                     return null;
@@ -145,6 +145,10 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
     public boolean openSocketStreams(L listener, Socket socket, int id) {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
+            /*if (out == null){
+                isReady = false;
+                return false;
+            }*/
         } catch (IOException e) {
             e.printStackTrace();
             isReady = false;

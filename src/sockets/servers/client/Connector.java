@@ -142,10 +142,10 @@ public class Connector {
                 return false;
             }
             restartsQuant++;
-            ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call(): " + restartsQuant +
+            ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
                     " Attempt to get connected to the Server!!!");
             bean = client.startInTheSameThread();
-            while (null != bean){
+            while (null == bean){
                 // let another thread have some time perhaps to stop this one:
                 Thread.yield();
                 if (Thread.currentThread().isInterrupted()) {
@@ -163,7 +163,7 @@ public class Connector {
                     return false;
                 }
                 restartsQuant++;
-                ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call(): " + restartsQuant +
+                ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
                         " Attempt to get connected to the Server!!!");
                 bean = client.startInTheSameThread();
             }

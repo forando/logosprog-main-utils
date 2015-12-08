@@ -163,13 +163,21 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
 
     @Override
     public boolean beanIsValid(ClientBean bean) {
-        this.socket = bean.getSocket();
-        if (socket == null){
+        /*if (bean == null){
             isReady = false;
             return false;
         }else {
+            this.socket = bean.getSocket();
             isReady = true;
             return true;
+        }*/
+
+        if (null != bean && null != bean.getSocket()){
+            isReady = true;
+            return true;
+        }else{
+            isReady = false;
+            return false;
         }
     }
 

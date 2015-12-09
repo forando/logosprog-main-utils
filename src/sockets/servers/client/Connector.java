@@ -79,7 +79,8 @@ public class Connector {
     }
 
     /**
-     * This method must be used in <b>production</b>.
+     * This method must be used in <b>production</b>.<br/>
+     * Realizes singleton pattern.
      * @param type The type of a client that wants to be connected to the server
      * @param id The clients id
      * @param ip The server IP

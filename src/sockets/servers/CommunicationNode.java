@@ -204,7 +204,6 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      * Notifies listener about socket close event.
      */
     protected void notifyClose(){
-//        ConsoleMessage.printErrorMessage(TAG + ".notifyClose(): Socket with ID = " + id + " has been closed");
         if (socketListener != null){
             socketListener.onCloseSocket();
             /*
@@ -250,20 +249,6 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         Did it just to have 100% guarantee
          */
         synchronized (lock) {
-            /*if (output != null) {
-                output.stopThread();
-                output = null;
-            }
-            output = new OutPut(out, id, messageObject);
-            output.start();
-
-            //waiting until the message is sent
-            try {
-                output.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-
             //bug: Sometimes display availability message is sent when printer socket outPut = NULL
             try {
                 OutPut outPut = new OutPut(out, messageObject);

@@ -1,6 +1,8 @@
-package sockets;/*
+/*
  * Copyright (c) 2014. This code is a LogosProg property. All Rights Reserved.
  */
+
+package sockets;
 
 import java.io.ObjectOutputStream;
 import java.util.concurrent.Callable;
@@ -23,9 +25,6 @@ public class OutPut  implements Callable<Void> {
 
     @Override
     public Void call() {
-        /*if (!Thread.currentThread().isInterrupted()){
-            return null; // stopped before started.
-        }*/
         try {
             /*
             If you are writing multiple objects to the same ObjectOutputStream

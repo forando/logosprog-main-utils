@@ -4,8 +4,6 @@
 
 package sockets.servers;
 
-import sockets.InPut;
-import sockets.OutPut;
 import sockets.servers.server.CommunicationNodeListener;
 import sockets.servers.server.CommunicationNodeValidatorListener;
 import system.ConsoleMessage;
@@ -16,7 +14,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.concurrent.*;
 
 /**
  * Created by forando on 15.06.15.<br>
@@ -163,14 +160,6 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
 
     @Override
     public boolean beanIsValid(ClientBean bean) {
-        /*if (bean == null){
-            isReady = false;
-            return false;
-        }else {
-            this.socket = bean.getSocket();
-            isReady = true;
-            return true;
-        }*/
         if (null != bean && null != bean.getSocket()){
             this.socket = bean.getSocket();
             isReady = true;
@@ -184,7 +173,6 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-//        closeSocketStreams(socket);
         close(socket);
     }
 

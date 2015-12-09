@@ -171,8 +171,8 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
             isReady = true;
             return true;
         }*/
-
         if (null != bean && null != bean.getSocket()){
+            this.socket = bean.getSocket();
             isReady = true;
             return true;
         }else{

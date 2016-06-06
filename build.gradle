@@ -1,0 +1,11 @@
+group 'com.logosprog.mainutils'
+version '0.0.1'
+
+apply plugin: 'java'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+

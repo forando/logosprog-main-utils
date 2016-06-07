@@ -8,7 +8,7 @@ import java.net.*;
 import java.util.Enumeration;
 
 /**
- * Created by forando on 20.10.15.<br/>
+ * Created by forando on 20.10.15.<br>
  * Gets an address of the machine
  */
 public class NetworkAddress {

@@ -18,11 +18,14 @@ import java.util.Properties;
  * template files</b>.
  */
 public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder<Properties> {
+
     /**
+     *
      * @param fileName A file name that will be used to construct {@link Properties} object from
-     * @param rootDir  Application root directory
-     * @param subDir   Optional. A subdirectory name the file will be located
-     * @throws IOException If either <b>fileName</b> or <b>rootDir</b> or <b>is</b> is null
+     * @param rootDir Application root directory
+     * @param subDir Optional. A subdirectory name the file will be located
+     * @param is An input stream to read a file from.
+     * @throws IOException If input stream is NULL
      */
     public TemplatePropertiesBuilder(String fileName, String rootDir, String subDir, InputStream is) throws IOException {
         super(fileName, rootDir, subDir);

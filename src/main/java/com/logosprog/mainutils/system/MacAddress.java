@@ -10,7 +10,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
- * Created by forando on 14.10.15.<br/>
+ * Created by forando on 14.10.15.<br>
  * Gets a mac address of the machine
  */
 public class MacAddress {

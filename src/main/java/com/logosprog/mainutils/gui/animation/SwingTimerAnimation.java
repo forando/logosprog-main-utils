@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 
 /**
- * Created by forando on 23.06.15.<br/>
+ * Created by forando on 23.06.15.<br>
  * Performs GUI animation on a basis of {@link Timer} events.
  */
 public abstract class SwingTimerAnimation<T> {

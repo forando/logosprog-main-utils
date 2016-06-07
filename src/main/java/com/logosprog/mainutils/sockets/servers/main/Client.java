@@ -27,7 +27,7 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
     protected int id;
 
     /**
-     * A TYPE of the client.<br/>
+     * A TYPE of the client.<br>
      * Defined by project that uses this class
      */
     protected final int type;

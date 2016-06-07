@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Created by forando on 25.06.15.<br/>
+ * Created by forando on 25.06.15.<br>
  * Builds {@link Properties} object from resource file.
  */
 public class PropertiesBuilder implements ObjectFromFileBuilder<Properties, InputStream> {

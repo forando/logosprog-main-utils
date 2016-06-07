@@ -5,7 +5,7 @@
 package com.logosprog.mainutils.system;
 
 /**
- * Created by forando on 25.06.15.<br/>
+ * Created by forando on 25.06.15.<br>
  * This class adds some conditions to {@link ConsoleMessage} class functionality.
  */
 public class ConditioningConsoleMessage {
@@ -20,7 +20,7 @@ public class ConditioningConsoleMessage {
     }
 
     /**
-     * Prints debug message only if {@link #printDebugMessages} = TRUE.<br/><br/>
+     * Prints debug message only if {@link #printDebugMessages} = TRUE.<br><br>
      * This method wraps an input message with ANSI escape code
      * that allows to print that message to console in <b>GREEN</b> color.<br>
      * This formatting doesn't work on Windows console.

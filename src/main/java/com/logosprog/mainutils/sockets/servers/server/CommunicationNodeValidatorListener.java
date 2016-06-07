@@ -5,7 +5,7 @@
 package com.logosprog.mainutils.sockets.servers.server;
 
 /**
- * Created by forando on 02.12.15.<br/>
+ * Created by forando on 02.12.15.<br>
  * Defines basic steps to be made during validation
  * process between two TCP/IP sockets.
  */

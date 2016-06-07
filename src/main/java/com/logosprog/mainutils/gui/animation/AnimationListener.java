@@ -5,7 +5,7 @@
 package com.logosprog.mainutils.gui.animation;
 
 /**
- * Created by forando on 23.06.15.<br/>
+ * Created by forando on 23.06.15.<br>
  * Specifies basic animation events.
  */
 public interface AnimationListener<T> {

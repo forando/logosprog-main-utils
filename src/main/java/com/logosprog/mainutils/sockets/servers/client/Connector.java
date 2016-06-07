@@ -22,7 +22,7 @@ public class Connector {
     String IP;
     int PORT;
     /**
-     * A TYPE of the client.<br/>
+     * A TYPE of the client.<br>
      * Defined by project that uses this class
      */
     int type;
@@ -79,7 +79,7 @@ public class Connector {
     }
 
     /**
-     * This method must be used in <b>production</b>.<br/>
+     * This method must be used in <b>production</b>.<br>
      * Realizes singleton pattern.
      * @param type The type of a client that wants to be connected to the server
      * @param id The clients id

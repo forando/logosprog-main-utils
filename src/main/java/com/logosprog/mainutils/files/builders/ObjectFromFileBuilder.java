@@ -18,7 +18,7 @@ public interface ObjectFromFileBuilder<T,E> {
      * @param element Any element that may be needed to construct a {@link T} object.
      *                If no element needed, NULL can be passed.
      * @return An object of desired type
-     * @throws IOException
+     * @throws IOException If the element cannot be accessed.
      */
     T build(E element)throws IOException;
 }

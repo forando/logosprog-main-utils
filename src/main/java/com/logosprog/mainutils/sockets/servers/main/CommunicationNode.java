@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by forando on 02.12.15.<br/>
+ * Created by forando on 02.12.15.<br>
  * Provides communication between two TCP/IP sockets.
  */
 public abstract class CommunicationNode<B, L extends CommunicationNodeListener, V extends CommunicationNodeValidatorListener<B>> {
@@ -86,7 +86,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
     }
 
     /**
-     * Tries to connect to the remote socket.<br/>
+     * Tries to connect to the remote socket.<br>
      * If it fails - NULL is returned.
      * @return data bean or NULL.
      */
@@ -108,10 +108,13 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         }
     }
 
+
     /**
-     * Tries to connect to the remote socket.<br/>
+     * Tries to connect to the remote socket.<br>
      * If it fails - NULL is returned.
+     * @param socket A socket to make a bean
      * @return Bean or NULL.
+     * @throws IOException If the operation was not successful
      */
     protected abstract B makeBean(Socket socket) throws IOException;
 
@@ -127,8 +130,8 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
 
     /**
      * During validation process some exceptions might occur.
-     * In this case NULL will be returned.<br/>
-     * This method ensures that we've received the valid results.<br/>
+     * In this case NULL will be returned.<br>
+     * This method ensures that we've received the valid results.<br>
      * It, also, can init some additional objects that are necessary
      * for communication between sockets.
      * @param bean A data bean (specific for each project).
@@ -136,10 +139,13 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      */
     public abstract boolean beanIsValid(B bean);
 
+
     /**
      * Opens the sockets input and output streams in order to
      * communicate with the server.
      * @param listener A listener to notify about received messages.
+     * @param socket A socket to open stream from
+     * @param id An id to be assigned for a new connection
      * @return TRUE - if all streams have been opened successfully.
      */
     public boolean openSocketStreams(L listener, Socket socket, int id) {
@@ -173,8 +179,10 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         return true;
     }
 
+
     /**
      * Closes the sockets input and output streams.
+     * @param socket A socket to be closed
      */
     protected void closeSocketStreams(Socket socket){
         try {

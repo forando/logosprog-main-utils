@@ -78,9 +78,11 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
      */
     protected abstract void setMainObject()throws IOException;
 
+
     /**
      * This method copies default file from internal app folders to specific
      * project folder.
+     * @param is Input stream to generate the file from
      * @return True - if operation is successful.
      */
     protected boolean generateDefaultFile(InputStream is){

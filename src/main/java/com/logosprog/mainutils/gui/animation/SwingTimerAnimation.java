@@ -9,13 +9,13 @@ import java.awt.event.ActionListener;
 
 /**
  * Created by forando on 23.06.15.<br>
- * Performs GUI animation on a basis of {@link Timer} events.
+ * Performs GUI com.logosprog.display.animation on a basis of {@link Timer} events.
  */
 public abstract class SwingTimerAnimation<T> {
     protected Timer timer;
 
     /**
-     * The object (normally GUI object) on which animation is performed.
+     * The object (normally GUI object) on which com.logosprog.display.animation is performed.
      */
     protected T mainObject;
 
@@ -24,7 +24,7 @@ public abstract class SwingTimerAnimation<T> {
     /**
      * <b>Attention!</b> {@link #createTimer(int, ActionListener)} must be called right
      * after this constructor invocation.
-     * @param obj The object (normally GUI object) on which animation is performed.
+     * @param obj The object (normally GUI object) on which com.logosprog.display.animation is performed.
      */
     protected SwingTimerAnimation(T obj){
         this.mainObject = obj;
@@ -34,7 +34,7 @@ public abstract class SwingTimerAnimation<T> {
      * Initialize the {@link Timer} object.
      * @param interval Interval at which the timer <b>actionPerformed</b> events will be fired up.
      * @param actionListener The listener interface for receiving <b>actionPerformed</b> events
-     *                       and providing some animation with {@link #mainObject}.
+     *                       and providing some com.logosprog.display.animation with {@link #mainObject}.
      */
     protected void createTimer(int interval, ActionListener actionListener){
         timer = new Timer(interval, actionListener);

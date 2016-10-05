@@ -6,7 +6,7 @@ package com.logosprog.mainutils.gui.animation;
 
 /**
  * Created by forando on 23.06.15.<br>
- * Specifies basic animation events.
+ * Specifies basic com.logosprog.display.animation events.
  */
 public interface AnimationListener<T> {
     void onAnimationStart(T obj);

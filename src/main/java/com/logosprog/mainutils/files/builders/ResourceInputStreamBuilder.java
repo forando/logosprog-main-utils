@@ -16,8 +16,9 @@ public abstract class ResourceInputStreamBuilder implements ObjectFromFileBuilde
     @Override
     public InputStream build(String fileName) throws IOException {
         try {
-            return getObjectClass().getResourceAsStream(fileName);
-        }catch (NullPointerException ex){
+            InputStream is = getObjectClass().getClassLoader().getResourceAsStream(fileName);
+            return is;
+        }catch (Exception ex){
             ex.printStackTrace();
             throw new IOException("Cannot build InputStream from " + fileName + " resource");
         }

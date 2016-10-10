@@ -2,6 +2,7 @@ group 'com.logosprog.mainutils'
 version '0.0.1'
 
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
 repositories {
     mavenLocal()
@@ -9,5 +10,20 @@ repositories {
 }
 
 sourceCompatibility = 1.7
+buildscript {
+    ext.kotlin_version = '1.0.4'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
 
 

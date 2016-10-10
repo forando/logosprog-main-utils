@@ -8,14 +8,14 @@ package com.logosprog.mainutils.system;
  * Created by forando on 25.06.15.<br>
  * This class adds some conditions to {@link ConsoleMessage} class functionality.
  */
-public class ConditioningConsoleMessage {
+public class ConditioningConsoleMessage1 {
 
     /**
      * Permission flag to print messages that are only needed for debugging.
      */
     private boolean printDebugMessages;
 
-    public ConditioningConsoleMessage(boolean printDebugMessages){
+    public ConditioningConsoleMessage1(boolean printDebugMessages){
         this.printDebugMessages = printDebugMessages;
     }
 

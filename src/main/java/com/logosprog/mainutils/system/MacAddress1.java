@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
  * Created by forando on 14.10.15.<br>
  * Gets a mac address of the machine
  */
-public class MacAddress {
+public class MacAddress1 {
 
     /**
      *

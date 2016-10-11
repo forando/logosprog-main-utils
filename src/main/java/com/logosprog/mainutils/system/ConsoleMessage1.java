@@ -8,7 +8,7 @@ package com.logosprog.mainutils.system;
  * Created by forando on 14.06.15.<br>
  *     Provides different static methods to print messages to console
  */
-public class ConsoleMessage {
+public class ConsoleMessage1 {
     /**
      * ANSI escape code to reset everything that goes
      * after it to defaults

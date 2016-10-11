@@ -6,7 +6,7 @@ package com.logosprog.mainutils.sockets.servers.main;
 
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener;
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener;
-import com.logosprog.mainutils.system.ConsoleMessage;
+import com.logosprog.mainutils.system.ConsoleMessage1;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -76,7 +76,7 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
      */
     public static Client getInstance(String hostName, int port, int type, int id){
         if (client != null && client.ready()){
-            ConsoleMessage.printInfoMessage("Client.getInstance(): The client has already " +
+            ConsoleMessage1.printInfoMessage("Client.getInstance(): The client has already " +
                     "been created. Returning the existing one.");
             return client;
         }else{
@@ -98,7 +98,7 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
         if (this.id != id){
             this.id = id;
         }
-        ConsoleMessage.printInfoMessage(TAG + ".setId(): Client registered with ID = " + id);
+        ConsoleMessage1.printInfoMessage(TAG + ".setId(): Client registered with ID = " + id);
     }
 
     public int getType() {

@@ -6,7 +6,7 @@ package com.logosprog.mainutils.system;
 
 /**
  * Created by forando on 25.06.15.<br>
- * This class adds some conditions to {@link ConsoleMessage} class functionality.
+ * This class adds some conditions to {@link ConsoleMessage1} class functionality.
  */
 public class ConditioningConsoleMessage1 {
 
@@ -27,6 +27,6 @@ public class ConditioningConsoleMessage1 {
      * @param message The message to be printed to a console.
      */
     public void printDebugMessage(String message){
-        if (printDebugMessages)ConsoleMessage.printDebugMessage(message);
+        if (printDebugMessages) ConsoleMessage1.printDebugMessage(message);
     }
 }

@@ -5,7 +5,7 @@
 package com.logosprog.mainutils.sockets.servers.client;
 
 import com.logosprog.mainutils.sockets.servers.main.Client;
-import com.logosprog.mainutils.system.ConsoleMessage;
+import com.logosprog.mainutils.system.ConsoleMessage1;
 
 import java.util.concurrent.*;
 
@@ -143,7 +143,7 @@ public class Connector {
                 return false;
             }
             restartsQuant++;
-            ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
+            ConsoleMessage1.printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
                     " Attempt to get connected to the Server!!!");
             bean = client.startInTheSameThread();
             while (null == bean){
@@ -164,7 +164,7 @@ public class Connector {
                     return false;
                 }
                 restartsQuant++;
-                ConsoleMessage.printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
+                ConsoleMessage1.printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
                         " Attempt to get connected to the Server!!!");
                 bean = client.startInTheSameThread();
             }

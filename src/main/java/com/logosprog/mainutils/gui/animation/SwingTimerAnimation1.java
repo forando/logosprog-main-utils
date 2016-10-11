@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
  * Created by forando on 23.06.15.<br>
  * Performs GUI com.logosprog.display.animation on a basis of {@link Timer} events.
  */
-public abstract class SwingTimerAnimation<T> {
+public abstract class SwingTimerAnimation1<T> {
     protected Timer timer;
 
     /**
@@ -26,7 +26,7 @@ public abstract class SwingTimerAnimation<T> {
      * after this constructor invocation.
      * @param obj The object (normally GUI object) on which com.logosprog.display.animation is performed.
      */
-    protected SwingTimerAnimation(T obj){
+    protected SwingTimerAnimation1(T obj){
         this.mainObject = obj;
     }
 

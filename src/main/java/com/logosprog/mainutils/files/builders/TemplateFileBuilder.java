@@ -5,7 +5,7 @@
 package com.logosprog.mainutils.files.builders;
 
 import com.logosprog.mainutils.files.managers.SystemFileManager;
-import com.logosprog.mainutils.system.ConsoleMessage;
+import com.logosprog.mainutils.system.ConsoleMessage1;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public abstract class TemplateFileBuilder<T> extends SystemFileManager implement
                 mainObj = getObjectFromExternalFile();
                 if (listener != null) listener.onFileGenerated();
             }else {
-                ConsoleMessage.printErrorMessage(TAG + ".build: An error occurred during " + getFileName() + " file creation.");
+                ConsoleMessage1.printErrorMessage(TAG + ".build: An error occurred during " + getFileName() + " file creation.");
             }
         }
         return mainObj;

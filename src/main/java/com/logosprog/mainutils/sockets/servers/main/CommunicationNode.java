@@ -8,7 +8,7 @@ import com.logosprog.mainutils.sockets.main.InPut;
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener;
 import com.logosprog.mainutils.sockets.main.OutPut;
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener;
-import com.logosprog.mainutils.system.ConsoleMessage;
+import com.logosprog.mainutils.system.ConsoleMessage1;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -59,7 +59,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      */
     public void startInDifferentThread(V listener) {
         if (ready()) {
-            ConsoleMessage.printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
+            ConsoleMessage1.printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
                     "been started. This start is ignored");
         }else{
             if (validatorExecutor == null || validatorExecutor.isShutdown())
@@ -74,7 +74,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      */
     public B startInTheSameThread(){
         if (ready()) {
-            ConsoleMessage.printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
+            ConsoleMessage1.printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
                     " been started. This start is ignored");
             return null;
         }else{
@@ -95,7 +95,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
             try {
                 Socket socket = makeSocket();
                 if (null != socket) {
-                    ConsoleMessage.printInfoMessage(TAG + ".getBean: Got new socket.");
+                    ConsoleMessage1.printInfoMessage(TAG + ".getBean: Got new socket.");
                     return makeBean(socket);
                 }else {
                     return null;

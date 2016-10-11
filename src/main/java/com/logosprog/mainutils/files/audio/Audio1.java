@@ -14,7 +14,7 @@ import java.io.IOException;
  * Created by forando on 15.06.15.<br>
  *     This Class operates audio stream (Play, Stop etc.)
  */
-public class Audio {
+public class Audio1 {
 
     AudioFormat audioFormat;
     AudioInputStream audioInputStream;
@@ -25,7 +25,7 @@ public class Audio {
     ResourceInputStreamBuilder streamBuilder;
     String audioFileName;
 
-    public Audio(ResourceInputStreamBuilder streamBuilder, String fileName) throws IOException {
+    public Audio1(ResourceInputStreamBuilder streamBuilder, String fileName) throws IOException {
         streamBuilder.build(fileName);
         this.streamBuilder = streamBuilder;
         this.audioFileName = fileName;

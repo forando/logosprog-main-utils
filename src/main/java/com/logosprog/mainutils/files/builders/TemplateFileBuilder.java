@@ -4,7 +4,7 @@
 
 package com.logosprog.mainutils.files.builders;
 
-import com.logosprog.mainutils.files.managers.SystemFileManager;
+import com.logosprog.mainutils.files.managers.SystemFileManager1;
 import com.logosprog.mainutils.system.ConsoleMessage1;
 
 import java.io.FileOutputStream;
@@ -17,7 +17,7 @@ import java.io.OutputStream;
  * This class constructs external system files <b>from default
  * template files</b>.
  */
-public abstract class TemplateFileBuilder<T> extends SystemFileManager implements ObjectFromFileBuilder<T, InputStream> {
+public abstract class TemplateFileBuilder<T> extends SystemFileManager1 implements ObjectFromFileBuilder<T, InputStream> {
 
     private final String TAG;
 

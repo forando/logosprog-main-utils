@@ -12,7 +12,7 @@ import java.io.*;
  * used by each module/application. That's why they are called
  * system files.
  */
-public class SystemFileManager {
+public class SystemFileManager1 {
 
     /**
      * A name to be given to a new file
@@ -28,7 +28,7 @@ public class SystemFileManager {
      */
     protected String subDir;
 
-    public SystemFileManager(String fileName, String rootDir, String... subDir) throws IOException{
+    public SystemFileManager1(String fileName, String rootDir, String... subDir) throws IOException{
         if (fileName == null || rootDir == null || rootDir.isEmpty() || fileName.isEmpty())
             throw new IOException("You must pass in fileName and rootDir");
         this.fileName = fileName;
@@ -136,7 +136,7 @@ public class SystemFileManager {
 
         try {
 
-            is = SystemFileManager.class.getResourceAsStream(fileName);
+            is = SystemFileManager1.class.getResourceAsStream(fileName);
             os = new FileOutputStream(path);
             byte[] buffer = new byte[1024];
             int length;

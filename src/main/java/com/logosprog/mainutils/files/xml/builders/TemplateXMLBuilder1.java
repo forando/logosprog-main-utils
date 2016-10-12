@@ -4,7 +4,7 @@
 
 package com.logosprog.mainutils.files.xml.builders;
 
-import com.logosprog.mainutils.files.builders.TemplateFileBuilder1;
+import com.logosprog.mainutils.files.builders.TemplateFileBuilder;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -26,7 +26,7 @@ import java.io.InputStream;
  * This class constructs external data.xml files <b>from default
  * template.xml files</b>.
  */
-public abstract class TemplateXMLBuilder extends TemplateFileBuilder1<Document> {
+public abstract class TemplateXMLBuilder1 extends TemplateFileBuilder<Document> {
 
     //Document document = null;
 
@@ -41,7 +41,7 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder1<Document> 
      *           used to generate default file from
      * @throws IOException If either <b>fileName</b> or <b>rootDir</b> or <b>is</b> is null
      */
-    public TemplateXMLBuilder(String fileName, String rootDir, String subDir, InputStream is) throws IOException {
+    public TemplateXMLBuilder1(String fileName, String rootDir, String subDir, InputStream is) throws IOException {
         this(fileName, rootDir, subDir, is, true);
     }
 
@@ -55,7 +55,7 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder1<Document> 
      * @param build indicates if {@link #build(InputStream)} method has to be invoked in the constructor.
      * @throws IOException If either <b>fileName</b> or <b>rootDir</b> or <b>is</b> is null
      */
-    public TemplateXMLBuilder(String fileName, String rootDir, String subDir, InputStream is, boolean build) throws IOException {
+    public TemplateXMLBuilder1(String fileName, String rootDir, String subDir, InputStream is, boolean build) throws IOException {
         super(fileName, rootDir, subDir);
         if (build){
             if (is == null) throw new IOException("InputStream of an internal .xml template file is NULL!");
@@ -64,7 +64,7 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder1<Document> 
     }
 
     @Override
-    protected Document getObjectFromExternalFile() throws IOException {
+    protected Document getObjectFromExternalFile() {
         Document doc = null;
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
         f.setValidating(false);
@@ -72,9 +72,9 @@ public abstract class TemplateXMLBuilder extends TemplateFileBuilder1<Document> 
         try {
             builder = f.newDocumentBuilder();
             doc = builder.parse(new File(getFilePath()));
-        } catch (ParserConfigurationException | SAXException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
-            throw new IOException("File: " + getFilePath() + " is BROKEN");
+//            throw new IOException("File: " + getFilePath() + " is BROKEN");
         }
         return doc;
     }

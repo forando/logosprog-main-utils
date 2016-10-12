@@ -69,7 +69,7 @@ constructor(fileName: String, rootDir: String, subDir: String) : SystemFileManag
      * *
      * @throws IOException If [T] object construction failed.
      */
-    protected abstract val objectFromExternalFile: T
+    protected abstract val objectFromExternalFile: T?
 
     /**
      * This method must be implemented in order to save a [T]

@@ -4,7 +4,7 @@
 
 package com.logosprog.mainutils.files.properties.builders;
 
-import com.logosprog.mainutils.files.builders.ObjectFromFileBuilder;
+import com.logosprog.mainutils.files.builders.ObjectFromFileBuilder1;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ import java.util.Properties;
  * Created by forando on 25.06.15.<br>
  * Builds {@link Properties} object from resource file.
  */
-public class PropertiesBuilder implements ObjectFromFileBuilder<Properties, InputStream> {
+public class PropertiesBuilder implements ObjectFromFileBuilder1<Properties, InputStream> {
 
     private Properties properties;
 

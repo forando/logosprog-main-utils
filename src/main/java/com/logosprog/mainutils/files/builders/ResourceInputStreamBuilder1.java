@@ -12,7 +12,7 @@ import java.io.InputStream;
  *     Provides method to create {@link java.io.InputStream} objects
  *     from resource files that are in the same package as provided class.
  */
-public abstract class ResourceInputStreamBuilder implements ObjectFromFileBuilder<InputStream, String> {
+public abstract class ResourceInputStreamBuilder1 implements ObjectFromFileBuilder<InputStream, String> {
     @Override
     public InputStream build(String fileName) throws IOException {
         try {

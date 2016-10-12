@@ -4,7 +4,7 @@
 
 package com.logosprog.mainutils.files.properties.builders;
 
-import com.logosprog.mainutils.files.builders.TemplateFileBuilder;
+import com.logosprog.mainutils.files.builders.TemplateFileBuilder1;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.util.Properties;
  * This class constructs external .txt files <b>from default
  * template files</b>.
  */
-public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder<Properties> {
+public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder1<Properties> {
 
     /**
      *

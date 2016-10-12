@@ -11,7 +11,7 @@ import java.io.IOException;
  *     This interface has to be implemented in order
  *     to construct an object from external file.
  */
-public interface ObjectFromFileBuilder<T,E> {
+public interface ObjectFromFileBuilder1<T,E> {
     /**
      * Factory method that constructs object of predefined type
      * from external file.

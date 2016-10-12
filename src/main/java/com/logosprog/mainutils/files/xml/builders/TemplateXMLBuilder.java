@@ -4,7 +4,7 @@
 
 package com.logosprog.mainutils.files.xml.builders;
 
-import com.logosprog.mainutils.files.builders.TemplateFileBuilder;
+import com.logosprog.mainutils.files.builders.TemplateFileBuilder1;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -26,7 +26,7 @@ import java.io.InputStream;
  * This class constructs external data.xml files <b>from default
  * template.xml files</b>.
  */
-public abstract class TemplateXMLBuilder extends TemplateFileBuilder<Document> {
+public abstract class TemplateXMLBuilder extends TemplateFileBuilder1<Document> {
 
     //Document document = null;
 

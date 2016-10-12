@@ -4,7 +4,7 @@
 
 package com.logosprog.mainutils.files.audio;
 
-import com.logosprog.mainutils.files.builders.ResourceInputStreamBuilder;
+import com.logosprog.mainutils.files.builders.ResourceInputStreamBuilder1;
 
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
@@ -22,10 +22,10 @@ public class Audio1 {
     DataLine.Info dataLineInfo;
     boolean stopPlayback = false;
     boolean playbackFinished = true;
-    ResourceInputStreamBuilder streamBuilder;
+    ResourceInputStreamBuilder1 streamBuilder;
     String audioFileName;
 
-    public Audio1(ResourceInputStreamBuilder streamBuilder, String fileName) throws IOException {
+    public Audio1(ResourceInputStreamBuilder1 streamBuilder, String fileName) throws IOException {
         streamBuilder.build(fileName);
         this.streamBuilder = streamBuilder;
         this.audioFileName = fileName;

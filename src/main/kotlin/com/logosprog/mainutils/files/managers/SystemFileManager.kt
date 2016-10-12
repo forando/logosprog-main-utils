@@ -68,7 +68,7 @@ open class SystemFileManager(val fileName: String, val rootDir: String, val subD
      * @return True - if operation was successful.
      */
     fun generateDefaultFile(): Boolean {
-        val path: String = getFilePath()
+        val path = getFilePath()
         val inputStream: InputStream = SystemFileManager::class.java.classLoader.getResourceAsStream(fileName) ?:
                 return false
         if (!createEmptyFile()){
@@ -78,12 +78,14 @@ open class SystemFileManager(val fileName: String, val rootDir: String, val subD
         val outputStream: OutputStream? = FileOutputStream(path)
         val buffer = ByteArray(1024)
         var length = 0
+
         while (inputStream.read(buffer).let{
             length = it
             it > 0
         }){
             outputStream?.write(buffer, 0, length)
         }
+
         return true
     }
 }

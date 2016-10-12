@@ -4,9 +4,9 @@
 
 package com.logosprog.mainutils.sockets.servers.main;
 
-import com.logosprog.mainutils.sockets.main.InPut;
+import com.logosprog.mainutils.sockets.main.InPut1;
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener;
-import com.logosprog.mainutils.sockets.main.OutPut;
+import com.logosprog.mainutils.sockets.main.OutPut1;
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener;
 import com.logosprog.mainutils.system.ConsoleMessage1;
 
@@ -32,7 +32,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
     protected volatile boolean isReady = false;
 
     protected ObjectOutputStream out;
-    protected InPut inPut;
+    protected InPut1 inPut;
     protected final Object lock;
 
     private L socketListener;
@@ -163,8 +163,8 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
 
         addClientListener(listener);
 
-        inPut = new InPut(socket, id);
-        inPut.addInputListener(new InPut.InputListener() {
+        inPut = new InPut1(socket, id);
+        inPut.addInputListener(new InPut1.InputListener() {
             @Override
             public void onMessage(Object messageObject) {
                 transferMessage(messageObject);
@@ -259,7 +259,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         synchronized (lock) {
             //bug: Sometimes display availability message is sent when printer socket outPut = NULL
             try {
-                OutPut outPut = new OutPut(out, messageObject);
+                OutPut1 outPut = new OutPut1(out, messageObject);
                 outputMessagesExecutor.submit(outPut);
             }catch (NullPointerException ex){
                 ex.printStackTrace();

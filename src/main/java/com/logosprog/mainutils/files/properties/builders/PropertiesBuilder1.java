@@ -14,11 +14,11 @@ import java.util.Properties;
  * Created by forando on 25.06.15.<br>
  * Builds {@link Properties} object from resource file.
  */
-public class PropertiesBuilder implements ObjectFromFileBuilder1<Properties, InputStream> {
+public class PropertiesBuilder1 implements ObjectFromFileBuilder1<Properties, InputStream> {
 
     private Properties properties;
 
-    public PropertiesBuilder(InputStream is) throws IOException {
+    public PropertiesBuilder1(InputStream is) throws IOException {
         this.properties = this.build(is);
     }
 

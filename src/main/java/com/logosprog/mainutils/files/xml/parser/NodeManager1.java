@@ -13,7 +13,7 @@ import org.w3c.dom.NodeList;
  * Created by forando on 16.06.15.<br>
  *     This class parses .xml using org.w3c.dom library
  */
-public class NodeManager {
+public class NodeManager1 {
 
     /**
      * This method is used to get a list of matched by tag name xml nodes <b>from the entire Document</b>.<br>

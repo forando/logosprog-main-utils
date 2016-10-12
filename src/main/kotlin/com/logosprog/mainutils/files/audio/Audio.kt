@@ -18,20 +18,21 @@ import javax.sound.sampled.*
 class Audio(val streamBuilder: ResourceInputStreamBuilder, val audioFileName: String){
     init {
         streamBuilder.build(audioFileName)
+
     }
 
-    internal var audioFormat: AudioFormat = null!!
-    internal var audioInputStream: AudioInputStream = null!!
-    internal var sourceDataLine: SourceDataLine = null!!
-    internal var dataLineInfo: DataLine.Info = null!!
+    internal var audioFormat: AudioFormat? = null
+    internal var audioInputStream: AudioInputStream? = null
+    internal var sourceDataLine: SourceDataLine? = null
+    internal var dataLineInfo: DataLine.Info? = null
     internal var stopPlayback = false
     internal var playbackFinished = true
 
-    fun Play(): Unit{
+    fun Play(): SourceDataLine?{
         if (playbackFinished) {
             this.audioInputStream = AudioSystem.getAudioInputStream(
                     BufferedInputStream(streamBuilder.build(audioFileName)))
-            this.audioFormat = audioInputStream.format
+            this.audioFormat = audioInputStream?.format
             println(audioFormat)
             this.dataLineInfo = DataLine.Info(SourceDataLine::class.java, audioFormat)
             this.sourceDataLine = AudioSystem.getLine(dataLineInfo) as SourceDataLine
@@ -46,7 +47,9 @@ class Audio(val streamBuilder: ResourceInputStreamBuilder, val audioFileName: St
              actual termination of playback.
              */
             PlayBackThread().start()
+            return this.sourceDataLine
         }
+        return null
     }
 
     fun Stop() {
@@ -64,7 +67,7 @@ class Audio(val streamBuilder: ResourceInputStreamBuilder, val audioFileName: St
         val THREAD_NAME = "PlayBackThread"
 
         var tempBuffer = ByteArray(10000)
-        var readFromInputStream: Int = 0
+        var readFromInputStream: Int? = 0
 
         init {
             this.name = THREAD_NAME
@@ -73,31 +76,31 @@ class Audio(val streamBuilder: ResourceInputStreamBuilder, val audioFileName: St
         override fun run() {
             playbackFinished = false
             try {
-                sourceDataLine.open(audioFormat)
-                sourceDataLine.start()
+                sourceDataLine?.open(audioFormat)
+                sourceDataLine?.start()
                 /*
                 Keep looping until the input read method returns -1 for empty
                 stream or the user clicks the Stop button causing stopPlayback
                 to switch from false to true.
                  */
                 while (!stopPlayback) {
-                    readFromInputStream = audioInputStream.read(tempBuffer, 0, tempBuffer.size)
+                    readFromInputStream = audioInputStream?.read(tempBuffer, 0, tempBuffer.size)
                     if (readFromInputStream == -1)
                         break
-                    if (readFromInputStream > 0) {
+                    if (readFromInputStream!! > 0) {
                         /*
                         Write variables to the internal buffer of the
                         variables line where it will be delivered to the speaker.
                          */
-                        sourceDataLine.write(tempBuffer, 0, readFromInputStream)
+                        sourceDataLine?.write(tempBuffer, 0, readFromInputStream as Int)
                     }
                 }
                 /*
                 Block and wait for internal buffer
                  of the variables line to empty.
                  */
-                sourceDataLine.drain()
-                sourceDataLine.close()
+                sourceDataLine?.drain()
+                sourceDataLine?.close()
 
             } catch (e: Exception) {
                 e.printStackTrace()

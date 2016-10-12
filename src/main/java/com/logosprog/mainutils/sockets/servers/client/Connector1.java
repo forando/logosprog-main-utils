@@ -4,20 +4,20 @@
 
 package com.logosprog.mainutils.sockets.servers.client;
 
-import com.logosprog.mainutils.sockets.servers.main.Client;
+import com.logosprog.mainutils.sockets.servers.main.Client1;
 import com.logosprog.mainutils.system.ConsoleMessage1;
 
 import java.util.concurrent.*;
 
 /**
  * Created by forando on 15.06.15.<br>
- *     This class provides an app with a {@link Client} object to be able to talk to HostServer
+ *     This class provides an app with a {@link Client1} object to be able to talk to HostServer
  */
-public class Connector {
+public class Connector1 {
 
     private final String TAG;
 
-    Client client;
+    Client1 client;
 
     String IP;
     int PORT;
@@ -32,7 +32,7 @@ public class Connector {
     /**
      * An instance of this class. Realizes singleton pattern.
      */
-    private static Connector connector = null;
+    private static Connector1 connector = null;
 
 
     /**
@@ -40,7 +40,7 @@ public class Connector {
      */
     private int restartsQuant = 0;
     /**
-     * delay between two separate attempts to to obtain {@link Client} object
+     * delay between two separate attempts to to obtain {@link Client1} object
      */
     private static final int delay = 2000;
 
@@ -53,7 +53,7 @@ public class Connector {
      * @param type The type of a client that wants to be connected to the server
      * @param id The clients id
      */
-    public Connector(int type, int id) {
+    public Connector1(int type, int id) {
         this(type, id, "localhost", 1337);
     }
 
@@ -64,7 +64,7 @@ public class Connector {
      * @param ip The server IP address
      * @param port The server PORT
      */
-    public Connector(int type, int id, String ip, int port) {
+    public Connector1(int type, int id, String ip, int port) {
 
         TAG = this.getClass().getSimpleName();
 
@@ -87,9 +87,9 @@ public class Connector {
      * @param port The server PORT
      * @return A new instance of the class. Realizes singleton pattern.
      */
-    public static Connector getInstance(int type, int id, String ip, int port){
+    public static Connector1 getInstance(int type, int id, String ip, int port){
         if (connector == null){
-            connector = new Connector(type, id, ip, port);
+            connector = new Connector1(type, id, ip, port);
         }
         return connector;
     }
@@ -100,9 +100,9 @@ public class Connector {
      * @param id The clients id
      * @return A new instance of the class. Realizes singleton pattern.
      */
-    public static Connector getInstance(int type, int id){
+    public static Connector1 getInstance(int type, int id){
         if (connector == null){
-            connector = new Connector(type, id, "localhost", 1337);
+            connector = new Connector1(type, id, "localhost", 1337);
         }
         return connector;
     }
@@ -110,7 +110,7 @@ public class Connector {
 
     public void startConnection(){
         stopConnection();
-        client = Client.getInstance(IP, PORT, type, id);
+        client = Client1.getInstance(IP, PORT, type, id);
         futureClientStarter = executorClientStarter.submit(new ClientStarter());
     }
 
@@ -128,7 +128,7 @@ public class Connector {
     }
 
     public interface ConnectorListener{
-        void onClientConnected(Client client);
+        void onClientConnected(Client1 client);
     }
 
     private class ClientStarter implements Callable<Boolean>{
@@ -136,7 +136,7 @@ public class Connector {
         @Override
         public Boolean call() throws Exception {
 
-            Client.ClientBean bean;
+            Client1.ClientBean bean;
             // let another thread have some time perhaps to stop this one:
             Thread.yield();
             if (Thread.currentThread().isInterrupted()) {

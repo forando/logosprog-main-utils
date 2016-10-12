@@ -17,7 +17,7 @@ import java.util.Properties;
  * This class constructs external .txt files <b>from default
  * template files</b>.
  */
-public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder1<Properties> {
+public abstract class TemplatePropertiesBuilder1 extends TemplateFileBuilder1<Properties> {
 
     /**
      *
@@ -27,7 +27,7 @@ public abstract class TemplatePropertiesBuilder extends TemplateFileBuilder1<Pro
      * @param is An input stream to read a file from.
      * @throws IOException If input stream is NULL
      */
-    public TemplatePropertiesBuilder(String fileName, String rootDir, String subDir, InputStream is) throws IOException {
+    public TemplatePropertiesBuilder1(String fileName, String rootDir, String subDir, InputStream is) throws IOException {
         super(fileName, rootDir, subDir);
         if (is == null) throw new IOException("InputStream of an internal .txt template file is NULL!");
         this.build(is);

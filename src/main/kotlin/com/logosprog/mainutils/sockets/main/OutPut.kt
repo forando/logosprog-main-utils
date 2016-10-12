@@ -1,30 +1,26 @@
 /*
- * Copyright (c) 2014. This code is a LogosProg property. All Rights Reserved.
+ * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
-package com.logosprog.mainutils.sockets.main;
+package com.logosprog.mainutils.sockets.main
 
-import java.io.ObjectOutputStream;
-import java.util.concurrent.Callable;
+import java.io.ObjectOutputStream
+import java.util.concurrent.Callable
 
 /**
- * Created by forando on 01.10.14.<br>
- *     This class uses socket output stream to send messages.
+ * Created by forando on 01.10.14.
+ * This class uses socket output stream to send messages.
  */
-public class OutPut  implements Callable<Void> {
-    ObjectOutputStream out;
-    private Object messageObject;
+class OutPut @Throws(NullPointerException::class)
+constructor(internal var output: ObjectOutputStream?, private val messageObject: Any?) : Callable<Void> {
 
-    public OutPut(ObjectOutputStream out, Object messageObject) throws NullPointerException{
+    init {
         //Sometimes out == NULL:
-        if (out == null) throw new NullPointerException("ObjectOutputStream cannot be NULL.");
-        if (messageObject == null) throw new NullPointerException("messageObject cannot be NULL.");
-        this.out = out;
-        this.messageObject = messageObject;
+        if (output == null) throw NullPointerException("ObjectOutputStream cannot be NULL.")
+        if (messageObject == null) throw NullPointerException("messageObject cannot be NULL.")
     }
 
-    @Override
-    public Void call() {
+    override fun call(): Void? {
         try {
             /*
             If you are writing multiple objects to the same ObjectOutputStream
@@ -51,17 +47,18 @@ public class OutPut  implements Callable<Void> {
             that are typically used to compress ObjectOutputStream data and
             avoid duplication.
              */
-            out.reset();
+            output?.reset()
             /*
             For some reason out.writeUnshared(messageObject) does not write
              the given object as a new, unique object in the stream.
              That's why we do before out.reset().
              */
-            out.writeUnshared(messageObject);
-            out.flush();
-        }catch (Exception ex){
-            ex.printStackTrace();
+            output?.writeUnshared(messageObject)
+            output?.flush()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
-        return null;
+
+        return null
     }
 }

@@ -20,7 +20,7 @@ import java.nio.channels.ReadableByteChannel;
  *     This class provides communication with Server for any client
  *     that uses it.
  */
-public class Client extends CommunicationNode<Client.ClientBean, CommunicationNodeListener, CommunicationNodeValidatorListener<Client.ClientBean>> {
+public class Client1 extends CommunicationNode<Client1.ClientBean, CommunicationNodeListener, CommunicationNodeValidatorListener<Client1.ClientBean>> {
 
     private final String TAG;
 
@@ -45,7 +45,7 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
     /**
      * An instance of this class. Singleton pattern.
      */
-    private static Client client = null;
+    private static Client1 client = null;
 
     /**
      * This class realizes singleton pattern. That's why we have the Constructor
@@ -55,7 +55,7 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
      * @param type A Client TYPE to be registered with.
      * @param id An ID to be registered with.
      */
-    protected Client(String hostName, int port, int type, int id){
+    protected Client1(String hostName, int port, int type, int id){
         super();
 
         TAG = this.getClass().getSimpleName();
@@ -72,15 +72,15 @@ public class Client extends CommunicationNode<Client.ClientBean, CommunicationNo
      * @param port A port to communicate with the server.
      * @param type A Client TYPE to be registered with.
      * @param id An ID to be registered with.
-     * @return An instance of {@link Client} class.
+     * @return An instance of {@link Client1} class.
      */
-    public static Client getInstance(String hostName, int port, int type, int id){
+    public static Client1 getInstance(String hostName, int port, int type, int id){
         if (client != null && client.ready()){
             ConsoleMessage1.printInfoMessage("Client.getInstance(): The client has already " +
                     "been created. Returning the existing one.");
             return client;
         }else{
-            client = new Client(hostName, port, type, id);
+            client = new Client1(hostName, port, type, id);
             return client;
         }
     }

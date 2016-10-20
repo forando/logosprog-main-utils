@@ -8,7 +8,7 @@ package com.logosprog.mainutils.sockets.servers.server;
  * Created by forando on 02.12.15.<br>
  * Defines basic communication functionality between two TCP/IP sockets.
  */
-public interface CommunicationNodeListener {
+public interface CommunicationNodeListener1 {
     /**
      * Notifies that this socket has received a message from another socket.
      * @param object A message from the server. Before use, this message

@@ -4,16 +4,16 @@
 
 package com.logosprog.mainutils.sockets.servers.server;
 
-import com.logosprog.mainutils.sockets.servers.main.Server;
+import com.logosprog.mainutils.sockets.servers.main.Server1;
 
 import java.net.Socket;
 
 /**
  * Created by forando on 15.06.15.<br>
  *     This interface must be implemented by any class that manages
- *     sockets received from {@link com.logosprog.mainutils.sockets.servers.main.Server.ServerAcceptor}
+ *     sockets received from {@link Server1.ServerAcceptor}
  */
-public interface SocketManager {
+public interface SocketManager1 {
     /**
      * Implement this method to use the given socket.
      * @param socket A socket to be accepted by the server

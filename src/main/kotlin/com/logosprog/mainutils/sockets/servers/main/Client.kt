@@ -5,7 +5,9 @@
 package com.logosprog.mainutils.sockets.servers.main
 
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener
+import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener1
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener
+import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener1
 import com.logosprog.mainutils.system.printInfoMessage
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -16,7 +18,11 @@ import java.nio.channels.Channels
  * Provides communication with Server for any client
  * that uses it.
  */
-object client: CommunicationNode<client.ClientBean, CommunicationNodeListener, CommunicationNodeValidatorListener<client.ClientBean>>(){
+object Client: CommunicationNode<ClientBean, CommunicationNodeListener, CommunicationNodeValidatorListener<ClientBean>>(){
+
+    init {
+        println("This ($this) is a singleton")
+    }
 
     /**
      * An IP address of the server host.
@@ -30,7 +36,7 @@ object client: CommunicationNode<client.ClientBean, CommunicationNodeListener, C
      * A Client TYPE to be registered with.
      */
     var type: Int = 0
-    var _id: Int = 0
+    private var _id: Int = 0
 
     private val TAG: String = "Client"
     var socket: Socket? = null
@@ -47,8 +53,6 @@ object client: CommunicationNode<client.ClientBean, CommunicationNodeListener, C
                 _id = value
             printInfoMessage(TAG + ".setId(): Client registered with ID = " + id)
         }
-
-    class ClientBean(val socket: Socket?)
 
     /**
      * Defines if this client has been registered by the server with an id.
@@ -98,16 +102,16 @@ object client: CommunicationNode<client.ClientBean, CommunicationNodeListener, C
     }
 
     override fun ready(): Boolean {
-        return isReady && socket != null
+        return ready && socket != null
     }
 
     override fun beanIsValid(bean: ClientBean?): Boolean {
         if (null != bean && null != bean.socket) {
             this.socket = bean.socket
-            isReady = true
+            ready = true
             return true
         } else {
-            isReady = false
+            ready = false
             return false
         }
     }
@@ -115,5 +119,10 @@ object client: CommunicationNode<client.ClientBean, CommunicationNodeListener, C
     fun finalize() {
         close(socket)
     }
+}
 
+class ClientBean(val socket: Socket?)
+
+fun main(args: Array<String>) {
+    val client = Client
 }

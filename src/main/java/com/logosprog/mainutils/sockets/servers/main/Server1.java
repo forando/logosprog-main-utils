@@ -4,7 +4,7 @@
 
 package com.logosprog.mainutils.sockets.servers.main;
 
-import com.logosprog.mainutils.sockets.servers.server.SocketManager;
+import com.logosprog.mainutils.sockets.servers.server.SocketManager1;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,9 +13,9 @@ import java.net.Socket;
  * Created by forando on 15.06.15.<br>
  *     This class provides basic server functionality.<br>
  *     It's generalized by a predefined object that must
- *     implement {@link SocketManager} interface.
+ *     implement {@link SocketManager1} interface.
  */
-public class Server<E extends SocketManager> {
+public class Server1<E extends SocketManager1> {
 
     private ServerAcceptor serverAcceptor;
 
@@ -25,18 +25,18 @@ public class Server<E extends SocketManager> {
 
     /**
      * This constructor is for test only.<br> Here server port is set to <b>1337</b>
-     * @param socketManager An object that implements {@link SocketManager} interface
+     * @param socketManager An object that implements {@link SocketManager1} interface
      */
-    public Server(E socketManager){
+    public Server1(E socketManager){
         this(socketManager, 1337);
     }
 
     /**
      * This constructor must be used in production
-     * @param socketManager An object that implements {@link SocketManager} interface
+     * @param socketManager An object that implements {@link SocketManager1} interface
      * @param port The port this server will be listening to.
      */
-    public Server(E socketManager, int port){
+    public Server1(E socketManager, int port){
         this.socketManager = socketManager;
         this.PORT = port;
     }

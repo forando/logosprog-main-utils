@@ -3,8 +3,8 @@
  */
 
 package com.logosprog.mainutils.sockets.servers.client
-
 import com.logosprog.mainutils.sockets.servers.main.Client
+import com.logosprog.mainutils.sockets.servers.main.ClientBean
 import com.logosprog.mainutils.system.printInfoMessage
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
@@ -37,7 +37,6 @@ class Connector
 
     private val TAG: String
 
-    internal var client: Client? = null
     internal var listener: ConnectorListener? = null
 
 
@@ -60,7 +59,11 @@ class Connector
 
     fun startConnection() {
         stopConnection()
-        client = Client.getInstance(IP, PORT, type, id)
+        Client.id = id
+        Client.hostName = IP
+        Client.port = PORT
+        Client.type = type
+//        client = Client.getInstance(IP, PORT, type, id)
         futureClientStarter = executorClientStarter.submit(ClientStarter())
     }
 
@@ -78,15 +81,14 @@ class Connector
     }
 
     interface ConnectorListener {
-        fun onClientConnected(client: Client?)
+        fun onClientConnected(serverClient: Client)
     }
 
     private inner class ClientStarter : Callable<Boolean> {
 
         @Throws(Exception::class)
         override fun call(): Boolean? {
-
-            var bean: Client.ClientBean?
+            var bean: ClientBean?
             // let another thread have some time perhaps to stop this one:
             Thread.`yield`()
             if (Thread.currentThread().isInterrupted) {
@@ -95,7 +97,7 @@ class Connector
             restartsQuant++
             printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
                     " Attempt to get connected to the Server!!!")
-            bean = client?.startInTheSameThread()
+            bean = Client.startInTheSameThread()
             while (null == bean) {
                 // let another thread have some time perhaps to stop this one:
                 Thread.`yield`()
@@ -116,9 +118,9 @@ class Connector
                 restartsQuant++
                 printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
                         " Attempt to get connected to the Server!!!")
-                bean = client?.startInTheSameThread()
+                bean = Client.startInTheSameThread()
             }
-            listener?.onClientConnected(client)
+            listener?.onClientConnected(Client)
             return true
         }
     }
@@ -170,9 +172,3 @@ class Connector
         }
     }
 }
-/**
- * This constructor is just for **testing**. Here we use predefined IP an PORT
- * @param type The type of a client that wants to be connected to the server
- * *
- * @param id The clients id
- */

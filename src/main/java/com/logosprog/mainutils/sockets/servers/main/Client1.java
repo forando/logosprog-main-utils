@@ -4,8 +4,8 @@
 
 package com.logosprog.mainutils.sockets.servers.main;
 
-import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener;
-import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener;
+import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener1;
+import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener1;
 import com.logosprog.mainutils.system.ConsoleMessage1;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.nio.channels.ReadableByteChannel;
  *     This class provides communication with Server for any client
  *     that uses it.
  */
-public class Client1 extends CommunicationNode<Client1.ClientBean, CommunicationNodeListener, CommunicationNodeValidatorListener<Client1.ClientBean>> {
+public class Client1 extends CommunicationNode1<Client1.ClientBean, CommunicationNodeListener1, CommunicationNodeValidatorListener1<Client1.ClientBean>> {
 
     private final String TAG;
 

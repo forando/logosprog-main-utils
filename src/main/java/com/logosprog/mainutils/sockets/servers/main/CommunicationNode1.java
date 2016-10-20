@@ -5,9 +5,9 @@
 package com.logosprog.mainutils.sockets.servers.main;
 
 import com.logosprog.mainutils.sockets.main.InPut1;
-import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener;
+import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener1;
 import com.logosprog.mainutils.sockets.main.OutPut1;
-import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener;
+import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener1;
 import com.logosprog.mainutils.system.ConsoleMessage1;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
  * Created by forando on 02.12.15.<br>
  * Provides communication between two TCP/IP sockets.
  */
-public abstract class CommunicationNode<B, L extends CommunicationNodeListener, V extends CommunicationNodeValidatorListener<B>> {
+public abstract class CommunicationNode1<B, L extends CommunicationNodeListener1, V extends CommunicationNodeValidatorListener1<B>> {
 
     private final String TAG;
 
@@ -45,7 +45,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
      */
     private ExecutorService outputMessagesExecutor;
 
-    public CommunicationNode(){
+    public CommunicationNode1(){
         TAG = this.getClass().getSimpleName();
 
         lock = new Object();
@@ -152,7 +152,7 @@ public abstract class CommunicationNode<B, L extends CommunicationNodeListener, 
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
             /*if (out == null){
-                isReady = false;
+                ready = false;
                 return false;
             }*/
         } catch (IOException e) {

@@ -9,7 +9,7 @@ package com.logosprog.mainutils.sockets.servers.server;
  * Defines basic steps to be made during validation
  * process between two TCP/IP sockets.
  */
-public interface CommunicationNodeValidatorListener<B> {
+public interface CommunicationNodeValidatorListener1<B> {
     /**
      * Notifies that communication validation has been done successfully.
      * @param bean A Bean that holds specific for each project data to be

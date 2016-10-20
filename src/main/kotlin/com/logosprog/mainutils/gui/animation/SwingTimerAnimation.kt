@@ -14,7 +14,7 @@ import javax.swing.Timer
  * @param mainObject The object (normally GUI object) on which com.logosprog.display.animation is performed.
  */
 abstract class SwingTimerAnimation<T> protected constructor(protected val mainObject: T) {
-    protected var timer: Timer = null!!
+    protected var timer: Timer? = null
 
     protected var listener: AnimationListener<T>? = null
 
@@ -34,7 +34,7 @@ abstract class SwingTimerAnimation<T> protected constructor(protected val mainOb
      */
     open fun start() {
         listener!!.onAnimationStart(mainObject)
-        timer.start()
+        timer?.start()
     }
 
     /**
@@ -42,7 +42,7 @@ abstract class SwingTimerAnimation<T> protected constructor(protected val mainOb
      */
     open fun stop() {
         listener!!.onAnimationEnd(mainObject)
-        timer.stop()
+        timer?.stop()
     }
 
     fun addListener(listener: AnimationListener<T>) {

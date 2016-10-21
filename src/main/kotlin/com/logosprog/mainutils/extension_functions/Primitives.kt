@@ -4,8 +4,11 @@
 
 package com.logosprog.mainutils.extension_functions
 
-operator fun Int.plusAssign(b: Int?) {
-    if (b != null){
-        this + b
+
+operator fun Int.plus(b: Int?): Int {
+    var a = this
+    if (b != null) {
+        a += b
     }
+    return a
 }

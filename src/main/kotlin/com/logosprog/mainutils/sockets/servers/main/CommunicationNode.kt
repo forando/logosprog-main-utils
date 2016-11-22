@@ -285,9 +285,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
     /**
      * Is used by [.validatorExecutor]
      */
-    private inner class Validator(internal var listener:
-
-                                  V) : Callable<Void> {
+    private inner class Validator(internal var listener: V) : Callable<Void> {
 
         @Throws(Exception::class)
         override fun call(): Void? {

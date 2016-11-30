@@ -15,13 +15,13 @@ import java.io.InputStream
 abstract class ResourceInputStreamBuilder : ObjectFromFileBuilder<InputStream, String> {
     @Throws(IOException::class)
     override fun build(fileName: String): InputStream {
-//        try {
+        try {
             val inputStream = objectClass.classLoader.getResourceAsStream(fileName)
             return inputStream
-        /*} catch (ex: Exception) {
+        } catch (ex: Exception) {
             ex.printStackTrace()
             throw IOException("Cannot build InputStream from $fileName resource")
-        }*/
+        }
 
     }
 

@@ -8,8 +8,8 @@
 
 package com.logosprog.mainutils.sockets.servers.main
 
-import com.logosprog.mainutils.sockets.main.InPut1
-import com.logosprog.mainutils.sockets.main.OutPut1
+import com.logosprog.mainutils.sockets.main.InPut
+import com.logosprog.mainutils.sockets.main.OutPut
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener
 import com.logosprog.mainutils.system.ConsoleMessage1
@@ -35,7 +35,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
     @Volatile protected var ready = false
 
     protected var out: ObjectOutputStream? = null
-    protected var inPut: InPut1? = null
+    protected var inPut: InPut? = null
     protected val lock: Any
 
     private var socketListener: L? = null
@@ -174,8 +174,8 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
 
         addClientListener(listener)
 
-        inPut = InPut1(socket, id)
-        inPut!!.addInputListener(object : InPut1.InputListener {
+        inPut = InPut(socket, id)
+        inPut!!.addInputListener(object : InPut.InputListener {
             override fun onMessage(messageObject: Any) {
                 transferMessage(messageObject)
             }
@@ -269,7 +269,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
         synchronized(lock) {
             //bug: Sometimes display availability message is sent when printer socket outPut = NULL
             try {
-                val outPut = OutPut1(out, messageObject)
+                val outPut = OutPut(out, messageObject)
                 outputMessagesExecutor.submit(outPut)
             } catch (ex: NullPointerException) {
                 ex.printStackTrace()

@@ -9,11 +9,11 @@ import javax.print.DocPrintJob
 import javax.print.attribute.standard.PrinterName
 
 
-class Printer(private val printerJob: PrinterJob, private val pageFormat: PageFormat){
+open class Printer(private val printerJob: PrinterJob, private val pageFormat: PageFormat){
     /**
      * @param printable An object that draws a picture to be printed
      */
-    fun print(printable: Printable){
+    open fun print(printable: Printable){
         printerJob.setPrintable(printable, pageFormat)
         try {
             printerJob.print()

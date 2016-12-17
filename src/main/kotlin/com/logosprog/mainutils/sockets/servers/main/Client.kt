@@ -9,9 +9,7 @@
 package com.logosprog.mainutils.sockets.servers.main
 
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener
-import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener1
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener
-import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener1
 import com.logosprog.mainutils.system.printInfoMessage
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream

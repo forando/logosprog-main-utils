@@ -13,7 +13,7 @@ import org.junit.Test
 
 class TestAudio{
     @Test fun testAudio(){
-        val audio = Audio1(AudioResourceInputStreamBuilder(), "notify.wav")
+        val audio = Audio(AudioResourceInputStreamBuilder(), "notify.wav")
         assertNotNull(audio)
         assertNotNull(audio.Play())
     }

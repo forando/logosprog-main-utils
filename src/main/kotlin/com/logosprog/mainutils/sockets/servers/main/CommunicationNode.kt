@@ -12,7 +12,7 @@ import com.logosprog.mainutils.sockets.main.InPut
 import com.logosprog.mainutils.sockets.main.OutPut
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeValidatorListener
-import com.logosprog.mainutils.system.ConsoleMessage1
+import com.logosprog.mainutils.system.printInfoMessage
 import java.io.IOException
 import java.io.ObjectOutputStream
 import java.net.Socket
@@ -62,7 +62,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
      */
     fun startInDifferentThread(listener: V) {
         if (ready()) {
-            ConsoleMessage1.printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
+            printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
                     "been started. This start is ignored")
         } else {
             if (validatorExecutor == null || validatorExecutor!!.isShutdown)
@@ -77,7 +77,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
      */
     open fun startInTheSameThread(): B? {
         if (ready()) {
-            ConsoleMessage1.printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
+            printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
                     " been started. This start is ignored")
             return null
         } else {
@@ -98,7 +98,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
             try {
                 val socket = makeSocket()
                 if (null != socket) {
-                    ConsoleMessage1.printInfoMessage(TAG + ".getBean: Got new socket.")
+                    printInfoMessage(TAG + ".getBean: Got new socket.")
                     return makeBean(socket)
                 } else {
                     return null

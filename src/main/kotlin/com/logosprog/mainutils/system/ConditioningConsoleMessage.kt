@@ -23,7 +23,7 @@ class ConditioningConsoleMessage(val printDebugMessages: Boolean){
      */
     fun printDebugMessage(message: String): String? {
         if (printDebugMessages) {
-            ConsoleMessage1.printDebugMessage(message)
+            printDebugMessage(message)
             return message
         }else
             return null

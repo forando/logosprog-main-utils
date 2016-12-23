@@ -25,7 +25,7 @@ class ConsoleMessages{
     }
 
     @Test fun testPrintDebugMessageWithFalseCondition(){
-        val message = ConditioningConsoleMessage(false)
+        val message = ConditioningConsoleMessage1(false)
         assertEquals(null, message.printDebugMessage("debug"))
     }
 

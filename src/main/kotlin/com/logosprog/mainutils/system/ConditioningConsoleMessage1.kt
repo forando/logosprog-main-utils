@@ -12,7 +12,7 @@ package com.logosprog.mainutils.system
  * This class adds some conditions to {@link ConsoleMessage} class functionality.
  * @param printDebugMessages Permission flag to print messages that are only needed for debugging.
  */
-class ConditioningConsoleMessage(val printDebugMessages: Boolean){
+class ConditioningConsoleMessage1(val printDebugMessages: Boolean){
 
     /**
      * Prints debug message only if [.printDebugMessages] = TRUE.

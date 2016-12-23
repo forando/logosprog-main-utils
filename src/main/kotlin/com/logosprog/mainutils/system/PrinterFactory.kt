@@ -29,39 +29,29 @@ open class Printer(private val printerJob: PrinterJob, private val pageFormat: P
 }
 
 /**
- * @throws [PrinterException] When it is impossible to create a printerJob
+ * @param printerName **OPTIONAL** The printer to be used. If NULL is passed, a default one will be used
+ * @throws [PrinterException] When [printerName] is defined and it is impossible to create a printerJob
  */
-fun getDefaultPrinter(printerName: PrinterName, paperWidth: Int, paperHeight: Int,
-               orientation: Int = PageFormat.PORTRAIT, paperMargin: Double):Printer{
-    val services = PrinterJob.lookupPrintServices()
-    var docPrintJob: DocPrintJob? = null
-
-    services.forEach {if (it.name.equals(printerName.name, true)) docPrintJob = it.createPrintJob()}
-
+fun getPrinter(paperWidth: Int, paperHeight: Int, printerName: String? = null):Printer{
+    val orientation: Int = PageFormat.PORTRAIT
     val printerJob = PrinterJob.getPrinterJob()
     printerJob.jobName = "another_print_job"
-    printerJob.printService = docPrintJob?.printService ?:
-            throw PrinterException("Printer ${printerName.name} was not found")
+    if (printerName != null){
+        val services = PrinterJob.lookupPrintServices()
+        var docPrintJob: DocPrintJob? = null
+        services.forEach {if (it.name.equals(printerName, true)) docPrintJob = it.createPrintJob()}
+        printerJob.printService = docPrintJob?.printService ?:
+                throw PrinterException("Printer $printerName was not found")
+    }
     val pageFormat = printerJob.defaultPage()
-    pageFormat.paper = getPaper(paperWidth, paperHeight, paperMargin)
+    pageFormat.paper = getPaper(paperWidth, paperHeight)
     pageFormat.orientation = orientation
     println("New printer created")
-    return Printer(printerJob, pageFormat, true)
+    return Printer(printerJob, pageFormat, printerName != null)
 }
 
-fun getPrinter(paperWidth: Int, paperHeight: Int,
-               orientation: Int = PageFormat.PORTRAIT, paperMargin: Double):Printer{
-
-    val printerJob = PrinterJob.getPrinterJob()
-    printerJob.jobName = "another_print_job"
-    val pageFormat = printerJob.defaultPage()
-    pageFormat.paper = getPaper(paperWidth, paperHeight, paperMargin)
-    pageFormat.orientation = orientation
-    println("New printer created")
-    return Printer(printerJob, pageFormat)
-}
-
-private fun getPaper(width: Int, height: Int, margin: Double): Paper{
+private fun getPaper(width: Int, height: Int): Paper{
+    val margin = 1.0
     val paper = Paper()
     paper.setSize(width.toDouble(), height.toDouble())
     paper.setImageableArea(margin, margin, width - margin * 2, height - margin * 2)

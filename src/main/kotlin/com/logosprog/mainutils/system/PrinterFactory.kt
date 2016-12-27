@@ -7,11 +7,13 @@ package com.logosprog.mainutils.system
 import java.awt.print.*
 import javax.print.DocPrintJob
 import javax.print.attribute.standard.PrinterName
+import javax.print.event.PrintJobAdapter
+import javax.print.event.PrintJobEvent
 
 
 open class Printer(private val printerJob: PrinterJob, private val pageFormat: PageFormat,
-                   val defaultPrinter: Boolean = false){
-
+                   val defaultPrinter: Boolean = false): PrintJobAdapter(){
+    var onCompleted = {}
     /**
      * @param printable An object that draws a picture to be printed
      */
@@ -25,6 +27,30 @@ open class Printer(private val printerJob: PrinterJob, private val pageFormat: P
         } catch (e: PrinterException) {
             e.printStackTrace()
         }
+    }
+
+    override fun printJobCanceled(pje: PrintJobEvent?) {
+        signalCompletion()
+    }
+
+    override fun printJobCompleted(pje: PrintJobEvent?) {
+        signalCompletion()
+    }
+
+    override fun printJobFailed(pje: PrintJobEvent?) {
+        signalCompletion()
+    }
+
+    override fun printJobNoMoreEvents(pje: PrintJobEvent?) {
+        signalCompletion()
+    }
+
+    private fun signalCompletion() {
+        onCompleted()
+    }
+
+    fun onPagePrinted(lambda: ()->Unit){
+        onCompleted = lambda
     }
 }
 

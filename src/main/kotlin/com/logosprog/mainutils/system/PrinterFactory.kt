@@ -12,8 +12,7 @@ import javax.print.event.PrintJobEvent
 
 
 open class Printer(private val printerJob: PrinterJob, private val pageFormat: PageFormat,
-                   val defaultPrinter: Boolean = false): PrintJobAdapter(){
-    var onCompleted = {}
+                   val defaultPrinter: Boolean = false){
     /**
      * @param printable An object that draws a picture to be printed
      */
@@ -28,29 +27,25 @@ open class Printer(private val printerJob: PrinterJob, private val pageFormat: P
             e.printStackTrace()
         }
     }
+}
+
+class PrinterJobFinish: PrintJobAdapter(){
+    var completed = false
 
     override fun printJobCanceled(pje: PrintJobEvent?) {
-        signalCompletion()
+        completed = true
     }
 
     override fun printJobCompleted(pje: PrintJobEvent?) {
-        signalCompletion()
+        completed = true
     }
 
     override fun printJobFailed(pje: PrintJobEvent?) {
-        signalCompletion()
+        completed = true
     }
 
     override fun printJobNoMoreEvents(pje: PrintJobEvent?) {
-        signalCompletion()
-    }
-
-    private fun signalCompletion() {
-        onCompleted()
-    }
-
-    fun onPagePrinted(lambda: ()->Unit){
-        onCompleted = lambda
+        completed = true
     }
 }
 

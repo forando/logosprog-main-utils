@@ -12,20 +12,15 @@ import javax.xml.parsers.DocumentBuilderFactory
  */
 class XmlBuilder(fileName: String, rootDir: String, subDir: String): SystemFileManager(fileName, rootDir, subDir){
 
-    private var _inputStream: InputStream? = null
-    private val inputStream: InputStream?
+    private var inputStream: InputStream? = null
 
-    constructor(inputStream: InputStream):this("", "", ""){
-
-        this._inputStream = inputStream
+    constructor(inputStream: InputStream):this("any.txt", "anyDir", ""){
+        this.inputStream = inputStream
     }
 
     init {
-        if (fileExists()){
+        if (fileExists())
             this.inputStream = File(getFilePath()).inputStream()
-        }else{
-            this.inputStream = this._inputStream ?: null
-        }
     }
 
     val xmlDocument: Document?

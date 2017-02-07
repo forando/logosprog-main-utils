@@ -18,7 +18,9 @@ class TestXmlBuilder{
     }
 
     @Test fun ConvertInputStreamIntoDocument(){
-        val xmlDocument = XmlBuilder(inputStreamBuilder.build("data.xml")).xmlDocument
+        var xmlDocument = XmlBuilder(inputStreamBuilder.build("data.xml")).xmlDocument
         assertNotNull("xmlDocument is NULL", xmlDocument)
+        xmlDocument = XmlBuilder(null).xmlDocument
+        assertNull("xmlDocument is NOT NULL", xmlDocument)
     }
 }

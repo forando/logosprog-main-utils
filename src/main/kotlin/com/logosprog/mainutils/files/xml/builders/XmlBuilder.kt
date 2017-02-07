@@ -10,11 +10,11 @@ import javax.xml.parsers.DocumentBuilderFactory
 /**
  * Loads .xml into a memory and converts it into [Document]
  */
-class XmlBuilder(fileName: String, rootDir: String, subDir: String): SystemFileManager(fileName, rootDir, subDir){
+open class XmlBuilder(fileName: String, rootDir: String, subDir: String): SystemFileManager(fileName, rootDir, subDir){
 
     private var inputStream: InputStream? = null
 
-    constructor(inputStream: InputStream):this("any.txt", "anyDir", ""){
+    constructor(inputStream: InputStream?):this("any.txt", "anyDir", ""){
         this.inputStream = inputStream
     }
 

@@ -49,25 +49,25 @@ class NodeManager {
     /**
      * This method is used to get a list of matched by tag name xml nodes **from the defined Node**.
      * @param node org.w3c.dom [Node] object.
-     * *
+     *
      * @param nodeNames An array of node names, **nested each one in another**,
-     * *                 including the final one the returned nodes are named with.
-     * *                 **IMPORTANT:** All parent nodes, the desired **nodeList** is nested in,
-     * *                 must have **only one representative of itself** in the xml node.
-     * *                 Otherwise the first instance of each parent node will be picked
-     * *                 up for the further searching.
-     * *
+     *                  including the final one the returned nodes are named with.
+     *                  **IMPORTANT:** All parent nodes, the desired **nodeList** is nested in,
+     *                  must have **only one representative of itself** in the xml node.
+     *                  Otherwise the first instance of each parent node will be picked
+     *                  up for the further searching.
+     *
      * @return A list of org.w3c.dom nodes.
-     * *
      * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
      */
     @Throws(NullPointerException::class)
-    fun getNodeList(node: Node, vararg nodeNames: String): NodeList {
+    fun getNodeList(node: Node, vararg nodeNames: String): NodeList? {
         if (nodeNames == null || nodeNames.size < 1) throw NullPointerException("String[] nodeNames")
         val nodeElement = node as Element
         var list = nodeElement.getElementsByTagName(nodeNames[0])
         var i = 1
         while (i < nodeNames.size) {
+            if (list.item(0) == null) return null
             val element = list.item(0) as Element
             list = element.getElementsByTagName(nodeNames[i])
             ++i
@@ -78,22 +78,20 @@ class NodeManager {
     /**
      * This method is used to get a matched by tag name xml node.
      * @param document org.w3c.dom [Document] object.
-     * *
      * @param nodeNames An array of node names, **nested each one in another**,
-     * *                 including the final one the returned node is named with.
-     * *                 **IMPORTANT:** All parent nodes, the desired **node** is nested in,
-     * *                 must have **only one representative of itself** in the xml document.
-     * *                 Otherwise the first instance of each parent node will be picked
-     * *                 up for the further searching.
-     * *
+     *                  including the final one the returned node is named with.
+     *                  **IMPORTANT:** All parent nodes, the desired **node** is nested in,
+     *                  must have **only one representative of itself** in the xml document.
+     *                  Otherwise the first instance of each parent node will be picked
+     *                  up for the further searching.
+     *
      * @return An [Element] object/node.
-     * *
      * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
      */
     @Throws(NullPointerException::class)
-    fun getNode(document: Document, vararg nodeNames: String): Element {
-
-        return this.getNodeList(document, *nodeNames).item(0) as Element
+    fun getNode(node: Node, vararg nodeNames: String): Element? {
+        val nodeElement = this.getNodeList(node, *nodeNames)?.item(0) ?: return null
+        return nodeElement as Element
     }
 
     /**
@@ -114,12 +112,12 @@ class NodeManager {
      * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
      */
     @Throws(NullPointerException::class)
-    fun removeAllInNode(document: Document, nodeNameToRemove: String, vararg nodeNames: String): Node {
+    fun removeAllInNode(document: Document, nodeNameToRemove: String, vararg nodeNames: String): Node? {
         val rootNode = getNode(document, *nodeNames)
         removeAll(rootNode, Node.ELEMENT_NODE, nodeNameToRemove)
         removeAll(rootNode, Node.TEXT_NODE, nodeNameToRemove)
         removeAll(rootNode, Node.COMMENT_NODE, nodeNameToRemove)
-        rootNode.textContent = ""
+        rootNode?.textContent = ""
         document.normalize()
         return rootNode
     }
@@ -134,7 +132,8 @@ class NodeManager {
      * *
      * @param name Only nodes of the given name will be removed from the Parent Node
      */
-    fun removeAll(node: Node, nodeType: Short, name: String?) {
+    fun removeAll(node: Node?, nodeType: Short, name: String?) {
+        if (node == null) return
         if (node.nodeType == nodeType && (name == null || node.nodeName == name)) {
             node.parentNode.removeChild(node)
         } else {

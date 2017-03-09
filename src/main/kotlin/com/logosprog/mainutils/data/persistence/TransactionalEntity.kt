@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull
  * The parent class for all transactional persistent entities.
  */
 @MappedSuperclass
-class TransactionalEntity{
+open class TransactionalEntity{
 
     /**
      * The default serial version UID.

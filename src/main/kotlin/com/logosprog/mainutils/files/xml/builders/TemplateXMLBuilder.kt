@@ -2,6 +2,10 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+/*
+ * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
+ */
+
 package com.logosprog.mainutils.files.xml.builders
 
 import com.logosprog.mainutils.files.builders.TemplateFileBuilder
@@ -23,18 +27,12 @@ import javax.xml.transform.stream.StreamResult
  */
 abstract class TemplateXMLBuilder
 /**
-
  * @param fileName A file name that will be used to construct [Document] object from
- * *
  * @param rootDir Application root directory
- * *
  * @param subDir Optional. A subdirectory name the file will be located
- * *
  * @param inputStream A [InputStream] object of an internal template .xml file that will be
- * *           used to generate default file from. Can be NULL if **build = false**
- * *
+ *            used to generate default file from. Can be NULL if **build = false**
  * @param build indicates if [.build] method has to be invoked in the constructor.
- * *
  * @throws IOException If either **fileName** or **rootDir** or **is** is null
  */
 @Throws(IOException::class)

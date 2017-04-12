@@ -2,10 +2,14 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+/*
+ * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
+ */
+
 package com.logosprog.mainutils.files.builders
 
 import com.logosprog.mainutils.files.managers.SystemFileManager
-import com.logosprog.mainutils.system.ConsoleMessage1
+import com.logosprog.mainutils.system.printErrorMessage
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -57,7 +61,7 @@ constructor(fileName: String, rootDir: String, subDir: String) : SystemFileManag
                 mainObject = objectFromExternalFile
                 if (listener != null) listener!!.onFileGenerated()
             } else {
-                ConsoleMessage1.printErrorMessage("$TAG.build: An error occurred during $fileName file creation.")
+                printErrorMessage("$TAG.build: An error occurred during $fileName file creation.")
             }
         }
         return mainObject as T

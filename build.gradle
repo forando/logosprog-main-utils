@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
+ */
+
 buildscript {
     ext.kotlin_version = '1.1.1'
     repositories {
@@ -23,8 +27,12 @@ sourceCompatibility = 1.7
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.16.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.24'
+    compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+    compile group: 'javax.validation', name: 'validation-api', version: '1.1.0.Final'
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
 }
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'

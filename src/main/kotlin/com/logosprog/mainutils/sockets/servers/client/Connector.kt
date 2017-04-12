@@ -2,6 +2,10 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+/*
+ * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
+ */
+
 package com.logosprog.mainutils.sockets.servers.client
 import com.logosprog.mainutils.sockets.servers.main.Client
 import com.logosprog.mainutils.sockets.servers.main.ClientBean

@@ -2,9 +2,13 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+/*
+ * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
+ */
+
 package com.logosprog.mainutils.files.properties.builders
 
-import com.logosprog.mainutils.files.builders.ObjectFromFileBuilder1
+import com.logosprog.mainutils.files.builders.ObjectFromFileBuilder
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
@@ -14,7 +18,7 @@ import java.util.*
  * Builds [Properties] object from resource file.
  */
 open class PropertiesBuilder @Throws(IOException::class)
-constructor(inputStream: InputStream) : ObjectFromFileBuilder1<Properties, InputStream> {
+constructor(inputStream: InputStream) : ObjectFromFileBuilder<Properties, InputStream> {
 
     val properties: Properties
 

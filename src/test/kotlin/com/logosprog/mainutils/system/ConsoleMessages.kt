@@ -2,6 +2,10 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+/*
+ * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
+ */
+
 package com.logosprog.mainutils.system
 
 import org.junit.Test
@@ -21,12 +25,11 @@ class ConsoleMessages{
     }
 
     @Test fun testPrintDebugMessageWithFalseCondition(){
-        val message = ConditioningConsoleMessage(false)
+        val message = ConditioningConsoleMessage1(false)
         assertEquals(null, message.printDebugMessage("debug"))
     }
 
     @Test fun testPrintDebugMessageWithTrueCondition(){
-        val message = ConditioningConsoleMessage(true)
-        assertEquals("debug", message.printDebugMessage("debug"))
+        assertEquals("debug", printDebugMessage("debug"))
     }
 }

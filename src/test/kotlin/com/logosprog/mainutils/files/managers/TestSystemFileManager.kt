@@ -8,53 +8,83 @@
 
 package com.logosprog.mainutils.files.managers
 
-import org.junit.Assert.*
-import org.junit.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.context
+import org.jetbrains.spek.api.dsl.describe
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
-class TestSystemFileManager{
+object SystemFileManagerTest: Spek({
 
     val testFileName = "test.txt"
     val rootDir = "C:\\Windows"
     val subDir = "System32"
 
-    @Test fun testSystemFileManagerInit(){
-        assertNotNull("Must be initialized with no third param passed", SystemFileManager("test", "versiya"))
+    describe("SystemFileManager"){
+        on("init without subDir parameter") {
+            val manager = SystemFileManager("test", "versiya")
+            it("should not be null") {
+                assertNotNull(manager)
+            }
+        }
+        on("init without subDir parameter for existing file") {
+            val manager = SystemFileManager("system.ini", rootDir)
+            val exist = manager.fileExists()
+            it("should confirm that file really exists") {
+                assertTrue(exist)
+            }
+        }
+        on("init without subDir parameter for non existing file") {
+            val manager = SystemFileManager("wrongFile.txt", rootDir)
+            val exist = manager.fileExists()
+            it("should confirm that file does not exist") {
+                assertFalse(exist)
+            }
+        }
+        on("init with subDir parameter for existing file") {
+            val manager = SystemFileManager("cmd.exe", rootDir, subDir)
+            val exist = manager.fileExists()
+            it("should confirm that file really exists") {
+                assertTrue(exist)
+            }
+        }
+        on("init with subDir parameter for non existing file") {
+            val manager = SystemFileManager(testFileName, rootDir, subDir)
+            val exist = manager.fileExists()
+            it("should confirm that file does not exist") {
+                assertFalse(exist)
+            }
+        }
+        context("init with a not existing Dir") {
+            val manager = SystemFileManager(testFileName, "notExistingDir")
+            on("creating default file") {
+                val created = manager.createEmptyFile()
+                it("should return false") {
+                    assertFalse(created)
+                }
+            }
+            /*on("deleting default file") {
+                val deleted = manager.deleteDefaultFile()
+                it("should return false") {
+                    assertFalse(deleted)
+                }
+            }*/
+            on("generating default file") {
+                val generated = manager.generateDefaultFile()
+                it("should return false") {
+                    assertFalse(generated)
+                }
+            }
+        }
+        on("generating default file with a wrong template") {
+            val manager = SystemFileManager("wrongTemplateFile.txt", rootDir)
+            val generated = manager.generateDefaultFile()
+            it("should return false") {
+                assertFalse(generated)
+            }
+        }
     }
-
-    @Test fun testFileExist(){
-        assertTrue(SystemFileManager("system.ini", rootDir).fileExists())
-        assertFalse(SystemFileManager("wrongFile.txt", rootDir).fileExists())
-    }
-
-    @Test fun testFileExistWithSubDir(){
-        assertTrue(SystemFileManager("cmd.exe", rootDir, subDir).fileExists())
-        assertFalse(SystemFileManager(testFileName, rootDir, subDir).fileExists())
-    }
-
-    @Test fun testCreateDeleteFile(){
-        val systemFileManager = SystemFileManager("someFile.txt", rootDir)
-        assertTrue(systemFileManager.createEmptyFile())
-        assertTrue(systemFileManager.deleteDefaultFile())
-    }
-
-    @Test fun testGenerateDefaultFile(){
-        val systemFileManager = SystemFileManager(testFileName, rootDir)
-        systemFileManager.deleteDefaultFile()
-        assertTrue(systemFileManager.generateDefaultFile())
-    }
-
-    @Test fun testCreateDeleteFileInNoTExistingDir(){
-        val systemFileManager = SystemFileManager(testFileName, "notExistingDir")
-        assertFalse(systemFileManager.createEmptyFile())
-    }
-
-    @Test fun testGenerateDefaultFileWithWrongTemplateFile(){
-        val systemFileManager = SystemFileManager("wrongTemplateFile.txt", rootDir)
-        assertFalse(systemFileManager.generateDefaultFile())
-    }
-
-    @Test fun testGenerateDefaultFileWithWrongRootDir(){
-        val systemFileManager = SystemFileManager(testFileName, "notExistingDir")
-        assertFalse(systemFileManager.generateDefaultFile())
-    }
-}
+})

@@ -8,28 +8,53 @@
 
 package com.logosprog.mainutils.system
 
-import org.junit.Test
-import org.junit.Assert.*
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.describe
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
-class ConsoleMessages{
-    @Test fun testPrintErrorMessage(){
-        assertEquals("error", printErrorMessage("error"))
+object ConsoleMessagesTest: Spek({
+    describe("ConsoleMessages class"){
+        on("printError") {
+            val value = printErrorMessage("test")
+            it("should return an argument value") {
+                assertEquals("test", value)
+            }
+        }
+        on("printInfo") {
+            val value = printInfoMessage("test")
+            it("should return an argument value") {
+                assertEquals("test", value)
+            }
+        }
+        on("printDebug") {
+            val value = printDebugMessage("test")
+            it("should return an argument value") {
+                assertEquals("test", value)
+            }
+        }
     }
-
-    @Test fun testPrintInfoMessage(){
-        assertEquals("info", printInfoMessage("info"))
+    describe("ConditioningConsoleMessage"){
+        given("An Instance with printDebugMessages = true") {
+            val consoleMessage = ConditioningConsoleMessage1(true)
+            on("printDebug") {
+                val value = consoleMessage.printDebugMsg("test")
+                it("should return an argument value") {
+                    assertEquals("test", value)
+                }
+            }
+        }
+        given("An Instance with printDebugMessages = false") {
+            val consoleMessage = ConditioningConsoleMessage1(false)
+            on("printDebug") {
+                val value = consoleMessage.printDebugMsg("test")
+                it("should return null") {
+                    assertNull(value)
+                }
+            }
+        }
     }
-
-    @Test fun testPrintDebugMessage(){
-        assertEquals("debug", printDebugMessage("debug"))
-    }
-
-    @Test fun testPrintDebugMessageWithFalseCondition(){
-        val message = ConditioningConsoleMessage1(false)
-        assertEquals(null, message.printDebugMessage("debug"))
-    }
-
-    @Test fun testPrintDebugMessageWithTrueCondition(){
-        assertEquals("debug", printDebugMessage("debug"))
-    }
-}
+})

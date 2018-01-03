@@ -8,13 +8,25 @@
 
 package com.logosprog.mainutils.files.audio
 
-import org.junit.Assert.*
-import org.junit.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.describe
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
+import kotlin.test.assertNotNull
 
-class TestAudio{
-    @Test fun testAudio(){
+object AudioTest: Spek({
+    describe("Audio class"){
         val audio = Audio(AudioResourceInputStreamBuilder(), "notify.wav")
-        assertNotNull(audio)
-        assertNotNull(audio.Play())
+        on("creating new instance") {
+            it("should not be null") {
+                assertNotNull(audio)
+            }
+        }
+        on("calling Play") {
+            val sourceDataLine = audio.Play()
+            it("should return SourceDataLine") {
+                assertNotNull(sourceDataLine)
+            }
+        }
     }
-}
+})

@@ -12,7 +12,7 @@ package com.logosprog.mainutils.system
  * This class adds some conditions to {@link ConsoleMessage} class functionality.
  * @param printDebugMessages Permission flag to print messages that are only needed for debugging.
  */
-class ConditioningConsoleMessage1(val printDebugMessages: Boolean){
+class ConditioningConsoleMessage1(private val printDebugMessages: Boolean){
 
     /**
      * Prints debug message only if [.printDebugMessages] = TRUE.
@@ -21,11 +21,11 @@ class ConditioningConsoleMessage1(val printDebugMessages: Boolean){
      * This formatting doesn't work on Windows console.
      * @param message The message to be printed to a console.
      */
-    fun printDebugMessage(message: String): String? {
-        if (printDebugMessages) {
+    fun printDebugMsg(message: String): String? {
+        return if (printDebugMessages) {
             printDebugMessage(message)
-            return message
+            message
         }else
-            return null
+            null
     }
 }

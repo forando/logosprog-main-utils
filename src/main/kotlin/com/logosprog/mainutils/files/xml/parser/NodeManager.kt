@@ -63,6 +63,8 @@ class NodeManager {
     @Throws(NullPointerException::class)
     fun getNodeList(node: Node, vararg nodeNames: String): NodeList? {
         if (nodeNames == null || nodeNames.size < 1) throw NullPointerException("String[] nodeNames")
+        //checking if node can be cast to Element
+        if (node.nodeType != Node.ELEMENT_NODE) return null
         val nodeElement = node as Element
         var list = nodeElement.getElementsByTagName(nodeNames[0])
         var i = 1
@@ -91,7 +93,11 @@ class NodeManager {
     @Throws(NullPointerException::class)
     fun getNode(node: Node, vararg nodeNames: String): Element? {
         val nodeElement = this.getNodeList(node, *nodeNames)?.item(0) ?: return null
-        return nodeElement as Element
+        //checking if node can be cast to Element
+        return if (nodeElement.nodeType == Node.ELEMENT_NODE)
+            nodeElement as Element
+        else
+            null
     }
 
     /**

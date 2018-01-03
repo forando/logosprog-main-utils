@@ -1,26 +1,46 @@
 package com.logosprog.mainutils.files.xml.builders
 
 import com.logosprog.mainutils.files.builders.ResourceInputStreamBuilder
-import org.junit.Assert.*
-import org.junit.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.describe
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
-class TestXmlBuilder{
+object inputStreamBuilder : ResourceInputStreamBuilder(){
+    override val objectClass: Class<*>
+        get() = this.javaClass
 
-    object inputStreamBuilder : ResourceInputStreamBuilder(){
-        override val objectClass: Class<*>
-            get() = this.javaClass
-
-    }
-
-    @Test fun CreateBuilderWithInputStream(){
-        val xmlBuilder = XmlBuilder(inputStreamBuilder.build("data.xml"))
-        assertNotNull("xmlBuilder class is NULL", xmlBuilder)
-    }
-
-    @Test fun ConvertInputStreamIntoDocument(){
-        var xmlDocument = XmlBuilder(inputStreamBuilder.build("data.xml")).xmlDocument
-        assertNotNull("xmlDocument is NULL", xmlDocument)
-        xmlDocument = XmlBuilder(null).xmlDocument
-        assertNull("xmlDocument is NOT NULL", xmlDocument)
-    }
 }
+
+object XmlBuilderTest: Spek({
+    describe("XmlBuilder") {
+        given("an instance with valid inputStream") {
+            val xmlBuilder = XmlBuilder(inputStreamBuilder.build("data.xml"))
+            it("should not be null") {
+                assertNotNull(xmlBuilder)
+            }
+            on("building XmlDocument") {
+                val doc = xmlBuilder.xmlDocument
+                it("should not be null") {
+                    assertNotNull(doc)
+                }
+            }
+        }
+        given("an instance with null inputStream") {
+            val xmlBuilder = XmlBuilder(null)
+            it("should not be null") {
+                assertNotNull(xmlBuilder)
+            }
+            on("building XmlDocument") {
+                val doc = xmlBuilder.xmlDocument
+                it("should be null") {
+                    assertNull(doc)
+                }
+            }
+        }
+    }
+
+})

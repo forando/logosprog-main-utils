@@ -2,13 +2,6 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
-/*
- * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
- */
-
-/*
- * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
- */
 
 package com.logosprog.mainutils.files.audio
 

@@ -44,6 +44,7 @@ dependencies {
     compile("javax.persistence:persistence-api:1.0.2")
     compile("javax.validation:validation-api:1.1.0.Final")
     compile("joda-time:joda-time:2.9.7")
+    compile("org.apache.commons:commons-lang3:3.7")
 
     testCompile("com.github.stefanbirkner:system-rules:1.16.0")
 

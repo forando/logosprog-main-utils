@@ -2,10 +2,6 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
-/*
- * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
- */
-
 package com.logosprog.mainutils.system
 
 import org.jetbrains.spek.api.Spek

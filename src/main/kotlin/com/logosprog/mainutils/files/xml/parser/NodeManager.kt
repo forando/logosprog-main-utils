@@ -21,16 +21,16 @@ class NodeManager {
     /**
      * This method is used to get a list of matched by tag name xml nodes **from the entire Document**.
      * @param document org.w3c.dom [Document] object.
-     * *
+     *
      * @param nodeNames An array of node names, **nested each one in another**,
-     * *                 including the final one the returned nodes are named with.
-     * *                 **IMPORTANT:** All parent nodes, the desired **nodeList** is nested in,
-     * *                 must have **only one representative of itself** in the xml document.
-     * *                 Otherwise the first instance of each parent node will be picked
-     * *                 up for the further searching.
-     * *
+     *                  including the final one the returned nodes are named with.
+     *                  **IMPORTANT:** All parent nodes, the desired **nodeList** is nested in,
+     *                  must have **only one representative of itself** in the xml document.
+     *                  Otherwise the first instance of each parent node will be picked
+     *                  up for the further searching.
+     *
      * @return A list of org.w3c.dom nodes.
-     * *
+     *
      * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
      */
     @Throws(NullPointerException::class)
@@ -103,18 +103,18 @@ class NodeManager {
     /**
      * Removes all Element Nodes of a given name from any given Node (lets call it **rootNode** for this method).
      * @param document org.w3c.dom [Document] object.
-     * *
+     *
      * @param nodeNameToRemove Only nodes of the given name will be removed from the rootNode
-     * *
+     *
      * @param nodeNames An array of node names, **nested each one in another**,
-     * *                 including the final, which is rootNode name.
-     * *                 **IMPORTANT:** All parent nodes, the desired **rootNode** is nested in,
-     * *                 must have **only one representative of itself** in the xml document.
-     * *                 Otherwise the first instance of each parent node will be picked
-     * *                 up for the further searching
-     * *
+     *                  including the final, which is rootNode name.
+     *                  **IMPORTANT:** All parent nodes, the desired **rootNode** is nested in,
+     *                  must have **only one representative of itself** in the xml document.
+     *                  Otherwise the first instance of each parent node will be picked
+     *                  up for the further searching
+     *
      * @return The empty **rootNode**
-     * *
+     *
      * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
      */
     @Throws(NullPointerException::class)
@@ -133,9 +133,9 @@ class NodeManager {
      * **It's recommended** to call **document.normalize()** right after this method invocation.
      * See: [Normalization in DOM parsing with java - how does it work?](http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work)
      * @param node The Parent Node all child nodes must be removed from
-     * *
+     *
      * @param nodeType Only nodes of this type will be removed from the Parent Node
-     * *
+     *
      * @param name Only nodes of the given name will be removed from the Parent Node
      */
     fun removeAll(node: Node?, nodeType: Short, name: String?) {
@@ -153,11 +153,11 @@ class NodeManager {
     /**
      * Creates node like: **&lt;nodeName&gt; text &lt;/nodeName&gt;**
      * @param document org.w3c.dom [Document] object.
-     * *
+     *
      * @param nodeName A name to be given to the node
-     * *
+     *
      * @param text A text to be inserted in the node
-     * *
+     *
      * @return Constructed [Element] object
      */
     fun createSimpleElementNode(document: Document, nodeName: String, text: String): Node {

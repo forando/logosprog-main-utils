@@ -26,30 +26,25 @@ object ImmutablePropertyTest: Spek({
                 private val immutableNumber = ImmutableProperty<Int>()
                 private val immutablePerson = ImmutableProperty<Person>()
 
-                private val nameMutator = immutableName.Mutator()
-                private val dateMutator = immutableDate.Mutator()
-                private val numberMutator = immutableNumber.Mutator()
-                private val personMutator = immutablePerson.Mutator()
-
                 var name by immutableName
                 var date by immutableDate
                 var number by immutableNumber
                 var person by immutablePerson
 
                 fun changeName(value: String) {
-                    nameMutator.setValue(value)
+                    immutableName.setValue(value)
                 }
 
                 fun changeDate(value: Date) {
-                    dateMutator.setValue(value)
+                    immutableDate.setValue(value)
                 }
 
                 fun changeNumber(value: Int) {
-                    numberMutator.setValue(value)
+                    immutableNumber.setValue(value)
                 }
 
                 fun changePerson(value: Person) {
-                    personMutator.setValue(value)
+                    immutablePerson.setValue(value)
                 }
             }
 

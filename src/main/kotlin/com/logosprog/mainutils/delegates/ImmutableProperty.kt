@@ -22,12 +22,7 @@ class ImmutableProperty<T : Serializable> {
         obj = value
     }
 
-
-    inner class Mutator {
-
-        fun setValue(value: T) {
-            obj = value
-        }
+    fun setValue(value: T) {
+        obj = value
     }
-
 }

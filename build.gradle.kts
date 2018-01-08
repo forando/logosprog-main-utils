@@ -12,9 +12,6 @@ buildscript {
     }
 }
 
-apply{
-
-}
 
 plugins {
     kotlin("jvm") version "1.2.10"

@@ -5,24 +5,49 @@ import java.io.Serializable
 import kotlin.reflect.KProperty
 
 /**
+ *
  * @author alog
- * @since 0.4.0
  */
 class ImmutableProperty<T : Serializable> {
 
     var obj: T? = null
 
-    operator fun getValue(instance: Any, metadata: KProperty<*>) = SerializationUtils.clone(obj)
+    operator fun getValue(instance: Any, metadata: KProperty<*>): T? {
+        if (obj != null)
+            return SerializationUtils.clone(obj)
+        return null
+    }
 
     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
-        if (obj == null) obj = value
+        obj = if (value != null)
+            SerializationUtils.clone(value)
+        else
+            null
+    }
+}
+
+/**
+ *
+ * @author alog
+ */
+class PrivateImmutableProperty<T : Serializable> {
+
+    var obj: T? = null
+
+    operator fun getValue(instance: Any, metadata: KProperty<*>): T? {
+        if (obj != null)
+            return SerializationUtils.clone(obj)
+        return null
     }
 
-    operator fun plusAssign(value: T) {
-        obj = value
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
+        if (obj == null && value != null) obj = SerializationUtils.clone(value)
     }
 
-    fun setValue(value: T) {
-        obj = value
+    fun setValue(value: T?) {
+        obj = if (value != null)
+            SerializationUtils.clone(value)
+        else
+            null
     }
 }

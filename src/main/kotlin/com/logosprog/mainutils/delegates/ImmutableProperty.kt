@@ -5,7 +5,7 @@ import java.io.Serializable
 import kotlin.reflect.KProperty
 
 /**
- *
+ * Prevents properties from mutations being applied on there references
  * @author alog
  */
 class ImmutableProperty<T : Serializable> {
@@ -27,7 +27,8 @@ class ImmutableProperty<T : Serializable> {
 }
 
 /**
- *
+ * Prevents properties from mutations being applied on there references.
+ * This delegate also prevents any mutation from outside an object that possesses a property.
  * @author alog
  */
 class PrivateImmutableProperty<T : Serializable> {

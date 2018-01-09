@@ -4,6 +4,7 @@ import java.util.*
 import kotlin.reflect.KProperty
 
 /**
+ * Prevents date property from mutations being applied on its references
  * @author alog
  */
 class ImmutableDate {
@@ -25,6 +26,8 @@ class ImmutableDate {
 }
 
 /**
+ * Prevents date property from mutations being applied on its references.
+ * This delegate also prevents any mutation from outside an object that possesses a date property.
  * @author alog
  */
 class PrivateImmutableDate {

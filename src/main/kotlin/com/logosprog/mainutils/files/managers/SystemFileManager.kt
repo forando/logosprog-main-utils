@@ -19,7 +19,7 @@ import java.io.*
  * @param subDir Optional. The subdirectory to root directory.
  * if it's given, then it will be included in the fileName path
  */
-open class SystemFileManager(val fileName: String, val rootDir: String, val subDir: String? = null){
+open class SystemFileManager(val fileName: String, private val rootDir: String, private val subDir: String? = null){
 
     init {
         if (rootDir.isEmpty() || fileName.isEmpty())
@@ -36,10 +36,10 @@ open class SystemFileManager(val fileName: String, val rootDir: String, val subD
      * @return Constructed path to the requested file
      */
     protected fun getFilePath(): String {
-        if (null != subDir) {
-            return rootDir + File.separator + subDir + File.separator + fileName
+        return if (null != subDir) {
+            rootDir + File.separator + subDir + File.separator + fileName
         } else {
-            return rootDir + File.separator + fileName
+            rootDir + File.separator + fileName
         }
     }
 

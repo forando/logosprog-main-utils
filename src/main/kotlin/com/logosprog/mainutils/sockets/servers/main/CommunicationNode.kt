@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("MemberVisibilityCanPrivate", "unused")
+
 package com.logosprog.mainutils.sockets.servers.main
 
 import com.logosprog.mainutils.sockets.main.InPut
@@ -24,9 +26,9 @@ import java.util.concurrent.Executors
  * Created by forando on 02.12.15.
  * Provides communication between two TCP/IP sockets.
  */
-abstract class CommunicationNode<B, L : CommunicationNodeListener, V : CommunicationNodeValidatorListener<B>> {
+abstract class CommunicationNode<B, in L : CommunicationNodeListener, V : CommunicationNodeValidatorListener<B>> {
 
-    private val TAG: String
+    private val tag: String = this.javaClass.simpleName
 
     /**
      * Defines if this client is connected to the server and ready to
@@ -36,7 +38,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
 
     protected var out: ObjectOutputStream? = null
     protected var inPut: InPut? = null
-    protected val lock: Any
+    protected val lock: Any = Any()
 
     private var socketListener: L? = null
     /**
@@ -49,9 +51,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
     private val outputMessagesExecutor: ExecutorService
 
     init {
-        TAG = this.javaClass.simpleName
 
-        lock = Any()
         validatorExecutor = Executors.newSingleThreadExecutor()
         outputMessagesExecutor = Executors.newSingleThreadExecutor()
     }
@@ -62,7 +62,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
      */
     fun startInDifferentThread(listener: V) {
         if (ready()) {
-            printInfoMessage(TAG + ".startInDifferentThread(): The client has already " +
+            printInfoMessage(tag + ".startInDifferentThread(): The client has already " +
                     "been started. This start is ignored")
         } else {
             if (validatorExecutor == null || validatorExecutor!!.isShutdown)
@@ -77,7 +77,7 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
      */
     open fun startInTheSameThread(): B? {
         if (ready()) {
-            printInfoMessage(TAG + ".startInTheSameThread(): The client has already" +
+            printInfoMessage(tag + ".startInTheSameThread(): The client has already" +
                     " been started. This start is ignored")
             return null
         } else {
@@ -95,18 +95,18 @@ abstract class CommunicationNode<B, L : CommunicationNodeListener, V : Communica
      */
     protected val bean: B?
         get() = synchronized(lock) {
-            try {
+            return try {
                 val socket = makeSocket()
                 if (null != socket) {
-                    printInfoMessage(TAG + ".getBean: Got new socket.")
-                    return makeBean(socket)
+                    printInfoMessage(tag + ".getBean: Got new socket.")
+                    makeBean(socket)
                 } else {
-                    return null
+                    null
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 notifyClose()
-                return null
+                null
             }
 
         }

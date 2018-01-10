@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("MemberVisibilityCanPrivate", "unused")
+
 package com.logosprog.mainutils.sockets.servers.main
 
 import com.logosprog.mainutils.sockets.servers.server.CommunicationNodeListener
@@ -38,7 +40,7 @@ object Client: CommunicationNode<ClientBean, CommunicationNodeListener, Communic
      * A Client TYPE to be registered with.
      */
     var type: Int = 0
-    private var _id: Int = 0
+    private var idField: Int = 0
 
     private val TAG: String = "Client"
     var socket: Socket? = null
@@ -48,11 +50,11 @@ object Client: CommunicationNode<ClientBean, CommunicationNodeListener, Communic
      * An ID to be registered with.
      */
     var id: Int
-        get() = _id
+        get() = idField
         set(value){
             registered = true
-            if (_id != value)
-                _id = value
+            if (idField != value)
+                idField = value
             printInfoMessage(TAG + ".setId(): Client registered with ID = " + id)
         }
 
@@ -90,12 +92,12 @@ object Client: CommunicationNode<ClientBean, CommunicationNodeListener, Communic
          */
         val inputBuffer = ByteArray(3)
         val value = input.read(inputBuffer)
-        if (value > 0 && inputBuffer[0].toInt() == 0x01 && inputBuffer[2] >= 0) {
+        return if (value > 0 && inputBuffer[0].toInt() == 0x01 && inputBuffer[2] >= 0) {
             id = inputBuffer[2].toInt()
-            return ClientBean(socket)
+            ClientBean(socket)
         } else {
             close(socket)
-            return null
+            null
         }
     }
 
@@ -108,13 +110,13 @@ object Client: CommunicationNode<ClientBean, CommunicationNodeListener, Communic
     }
 
     override fun beanIsValid(bean: ClientBean?): Boolean {
-        if (null != bean && null != bean.socket) {
+        return if (bean?.socket != null) {
             this.socket = bean.socket
             ready = true
-            return true
+            true
         } else {
             ready = false
-            return false
+            false
         }
     }
 
@@ -124,7 +126,3 @@ object Client: CommunicationNode<ClientBean, CommunicationNodeListener, Communic
 }
 
 class ClientBean(val socket: Socket?)
-
-fun main(args: Array<String>) {
-    val client = Client
-}

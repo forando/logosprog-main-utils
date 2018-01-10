@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("MemberVisibilityCanPrivate")
+
 package com.logosprog.mainutils.sockets.servers.main
 
 import com.logosprog.mainutils.sockets.servers.server.SocketManager
@@ -54,9 +56,8 @@ class Server<E : SocketManager>
             try {
                 println("server: Running on port " + serverSocket.localPort)
                 while (true) {
-                    val socket: Socket
+                    val socket: Socket = serverSocket.accept()
                     // this blocks, waiting for a Socket to the client
-                    socket = serverSocket.accept()
                     println("server: got client")
                     generalizedObject.accept(socket)
                     Thread.`yield`() // let another thread have some time perhaps to stop this one.
@@ -76,13 +77,13 @@ class Server<E : SocketManager>
      * Runs the [ServerAcceptor] to catch incoming client connections
      */
     fun start(): Boolean {
-        try{
+        return try{
             serverAcceptor = ServerAcceptor(ServerSocket(PORT))
             serverAcceptor!!.start()
-            return true
+            true
         }catch (ex: Exception){
 //            ex.printStackTrace()
-            return false
+            false
         }
     }
 

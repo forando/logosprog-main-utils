@@ -6,7 +6,7 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
-package com.logosprog.mainutils.extension_functions
+package com.logosprog.mainutils.extensionfunctions
 
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe

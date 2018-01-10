@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "unused")
+
 package com.logosprog.mainutils.files.properties.builders
 
 import com.logosprog.mainutils.files.builders.ObjectFromFileBuilder
@@ -14,13 +16,14 @@ import java.io.InputStream
 import java.util.*
 
 /**
- * Created by forando on 25.06.15.
  * Builds [Properties] object from resource file.
+ *
+ * Created by forando on 25.06.15.
  */
 open class PropertiesBuilder @Throws(IOException::class)
 constructor(inputStream: InputStream) : ObjectFromFileBuilder<Properties, InputStream> {
 
-    val properties: Properties
+    private val properties: Properties
 
     init {
         this.properties = this.build(inputStream)

@@ -28,9 +28,9 @@ open class XmlBuilder(fileName: String, rootDir: String, subDir: String): System
             val f = DocumentBuilderFactory.newInstance()
             f.isValidating = false
             val builder: DocumentBuilder? = f.newDocumentBuilder()
-            if (inputStream != null)
-                return builder?.parse(inputStream)
+            return if (inputStream != null)
+                builder?.parse(inputStream)
             else
-                return null
+                null
         }
 }

@@ -35,7 +35,7 @@ object ConsoleMessagesTest: Spek({
     }
     describe("ConditioningConsoleMessage"){
         given("An Instance with printDebugMessages = true") {
-            val consoleMessage = ConditioningConsoleMessage1(true)
+            val consoleMessage = ConditioningConsoleMessage(true)
             on("printDebug") {
                 val value = consoleMessage.printDebugMsg("test")
                 it("should return an argument value") {
@@ -44,7 +44,7 @@ object ConsoleMessagesTest: Spek({
             }
         }
         given("An Instance with printDebugMessages = false") {
-            val consoleMessage = ConditioningConsoleMessage1(false)
+            val consoleMessage = ConditioningConsoleMessage(false)
             on("printDebug") {
                 val value = consoleMessage.printDebugMsg("test")
                 it("should return null") {

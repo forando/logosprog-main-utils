@@ -10,7 +10,7 @@ import kotlin.reflect.KProperty
  */
 class ImmutableProperty<T : Serializable> {
 
-    var obj: T? = null
+    private var obj: T? = null
 
     operator fun getValue(instance: Any, metadata: KProperty<*>): T? {
         if (obj != null)
@@ -28,12 +28,12 @@ class ImmutableProperty<T : Serializable> {
 
 /**
  * Prevents properties from mutations being applied on there references.
- * This delegate also prevents any mutation from outside an object that possesses a property.
+ * This delegate also prevents any mutation from outside an object that possesses the property.
  * @author alog
  */
 class PrivateImmutableProperty<T : Serializable> {
 
-    var obj: T? = null
+    private var obj: T? = null
 
     operator fun getValue(instance: Any, metadata: KProperty<*>): T? {
         if (obj != null)

@@ -3,6 +3,8 @@
  */
 
 
+@file:Suppress("FunctionName", "unused")
+
 package com.logosprog.mainutils.files.audio
 
 import com.logosprog.mainutils.files.builders.ResourceInputStreamBuilder
@@ -12,7 +14,7 @@ import javax.sound.sampled.*
 /**
  * This Class operates audio stream (Play, Stop etc.)
  */
-class Audio(val streamBuilder: ResourceInputStreamBuilder, val audioFileName: String){
+class Audio(private val streamBuilder: ResourceInputStreamBuilder, private val audioFileName: String){
     init {
         streamBuilder.build(audioFileName)
 
@@ -21,7 +23,7 @@ class Audio(val streamBuilder: ResourceInputStreamBuilder, val audioFileName: St
     internal var audioFormat: AudioFormat? = null
     internal var audioInputStream: AudioInputStream? = null
     internal var sourceDataLine: SourceDataLine? = null
-    internal var dataLineInfo: DataLine.Info? = null
+    private var dataLineInfo: DataLine.Info? = null
     internal var stopPlayback = false
     internal var playbackFinished = true
 
@@ -61,13 +63,13 @@ class Audio(val streamBuilder: ResourceInputStreamBuilder, val audioFileName: St
      * Class to Play back the variables from the notificationSound file.
      */
     internal inner class PlayBackThread : Thread(){
-        val THREAD_NAME = "PlayBackThread"
+        private val threadName = "PlayBackThread"
 
-        var tempBuffer = ByteArray(10000)
-        var readFromInputStream: Int? = 0
+        private var tempBuffer = ByteArray(10000)
+        private var readFromInputStream: Int? = 0
 
         init {
-            this.name = THREAD_NAME
+            this.name = threadName
         }
 
         override fun run() {

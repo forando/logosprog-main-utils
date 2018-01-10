@@ -15,7 +15,7 @@ package com.logosprog.mainutils.sockets.servers.server
 interface CommunicationNodeListener {
     /**
      * Notifies that this socket has received a message from another socket.
-     * @param object A message from the server. Before use, this message
+     * @param obj A message from the server. Before use, this message
      * *               must be cast to a project specific message type.
      */
     fun onInputMessage(obj: Any)

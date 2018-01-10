@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("unused", "MemberVisibilityCanPrivate")
+
 package com.logosprog.mainutils.sockets.servers.client
 import com.logosprog.mainutils.sockets.servers.main.Client
 import com.logosprog.mainutils.sockets.servers.main.ClientBean
@@ -23,12 +25,9 @@ class Connector
 /**
  * This constructor must be used in **production**.
  * @param type The type of a client that wants to be connected to the server
- * *
  * @param id The clients id
- * *
- * @param ip The server IP address
- * *
- * @param port The server PORT
+ * @param IP The server IP address
+ * @param PORT The server PORT
  */
 @JvmOverloads constructor(
         /**
@@ -39,7 +38,7 @@ class Connector
 
         String = "localhost", internal var PORT: Int = 1337) {
 
-    private val TAG: String
+    private val tag: String = this.javaClass.simpleName
 
     internal var listener: ConnectorListener? = null
 
@@ -49,16 +48,8 @@ class Connector
      */
     private var restartsQuant = 0
 
-    private val executorClientStarter: ExecutorService
+    private val executorClientStarter: ExecutorService = Executors.newSingleThreadExecutor()
     private var futureClientStarter: Future<Boolean>? = null
-
-    init {
-
-        TAG = this.javaClass.simpleName
-
-        executorClientStarter = Executors.newSingleThreadExecutor()
-
-    }
 
 
     fun startConnection() {
@@ -99,7 +90,7 @@ class Connector
                 return false
             }
             restartsQuant++
-            printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
+            printInfoMessage(tag + ".ClientStarter.call: " + restartsQuant +
                     " Attempt to get connected to the Server!!!")
             bean = Client.startInTheSameThread()
             while (null == bean) {
@@ -120,7 +111,7 @@ class Connector
                     return false
                 }
                 restartsQuant++
-                printInfoMessage(TAG + ".ClientStarter.call: " + restartsQuant +
+                printInfoMessage(tag + ".ClientStarter.call: " + restartsQuant +
                         " Attempt to get connected to the Server!!!")
                 bean = Client.startInTheSameThread()
             }

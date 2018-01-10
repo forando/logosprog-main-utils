@@ -13,7 +13,7 @@ import kotlin.test.assertNotEquals
  * @author alog
  */
 object ImmutableDateTest : Spek({
-    describe("PrivateImmutableDate") {
+    describe("PrivateImmutableDate delegate") {
         given("an object who's date property is delegated to PrivateImmutableDate") {
             val obj = object {
 
@@ -60,7 +60,7 @@ object ImmutableDateTest : Spek({
             }
         }
     }
-    describe("ImmutableDate") {
+    describe("ImmutableDate delegate") {
         given("an object who's date property is delegated to ImmutableDate") {
             val obj = object {
 

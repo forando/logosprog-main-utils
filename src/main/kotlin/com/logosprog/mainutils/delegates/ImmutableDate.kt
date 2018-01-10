@@ -8,7 +8,7 @@ import kotlin.reflect.KProperty
  * @author alog
  */
 class ImmutableDate {
-    var date: Date? = null
+    private var date: Date? = null
 
     operator fun getValue(instance: Any, metadata: KProperty<*>): Date? {
         if (date != null) {
@@ -27,11 +27,11 @@ class ImmutableDate {
 
 /**
  * Prevents date property from mutations being applied on its references.
- * This delegate also prevents any mutation from outside an object that possesses a date property.
+ * This delegate also prevents any mutation from outside an object that possesses the property.
  * @author alog
  */
 class PrivateImmutableDate {
-    var date: Date? = null
+    private var date: Date? = null
 
     operator fun getValue(instance: Any, metadata: KProperty<*>): Date? {
         if (date != null) {

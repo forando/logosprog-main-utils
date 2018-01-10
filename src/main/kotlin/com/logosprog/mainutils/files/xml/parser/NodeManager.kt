@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("unused", "MemberVisibilityCanPrivate")
+
 package com.logosprog.mainutils.files.xml.parser
 
 import org.w3c.dom.Document
@@ -35,7 +37,7 @@ class NodeManager {
      */
     @Throws(NullPointerException::class)
     fun getNodeList(document: Document, vararg nodeNames: String): NodeList {
-        if (nodeNames == null || nodeNames.size < 1) throw NullPointerException("String[] nodeNames")
+        if (nodeNames.isEmpty()) throw NullPointerException("String[] nodeNames")
         var list = document.documentElement.getElementsByTagName(nodeNames[0])
         var i = 1
         while (i < nodeNames.size) {
@@ -62,7 +64,7 @@ class NodeManager {
      */
     @Throws(NullPointerException::class)
     fun getNodeList(node: Node, vararg nodeNames: String): NodeList? {
-        if (nodeNames == null || nodeNames.size < 1) throw NullPointerException("String[] nodeNames")
+        if (nodeNames.isEmpty()) throw NullPointerException("String[] nodeNames")
         //checking if node can be cast to Element
         if (node.nodeType != Node.ELEMENT_NODE) return null
         val nodeElement = node as Element
@@ -79,7 +81,7 @@ class NodeManager {
 
     /**
      * This method is used to get a matched by tag name xml node.
-     * @param document org.w3c.dom [Document] object.
+     * @param node org.w3c.dom [Node] object.
      * @param nodeNames An array of node names, **nested each one in another**,
      *                  including the final one the returned node is named with.
      *                  **IMPORTANT:** All parent nodes, the desired **node** is nested in,
@@ -144,7 +146,7 @@ class NodeManager {
             node.parentNode.removeChild(node)
         } else {
             val list = node.childNodes
-            for (i in 0..list.length - 1) {
+            for (i in 0 until list.length) {
                 removeAll(list.item(i), nodeType, name)
             }
         }

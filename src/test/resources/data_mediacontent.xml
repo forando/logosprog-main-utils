@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application>
+    <videos>
+        <currentvideopath play="true">
+            C:\Users\Public\eloch\videos\test.mp4
+        </currentvideopath>
+        <newvideopath change="false">
+            C:\Users\Public\eloch\videos\test.mp4
+        </newvideopath>
+    </videos>
+    <messages>
+        <message>(терминалов) не более 10-ти.</message>
+        <message>Данный продукт предназначен для компактного расположения окон в пределах одной комнаты.</message>
+        <message>Очередь.</message>
+    </messages>
+</application>

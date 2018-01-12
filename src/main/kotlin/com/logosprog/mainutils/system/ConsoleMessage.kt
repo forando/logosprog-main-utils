@@ -10,6 +10,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("PropertyName", "unused")
+
 package com.logosprog.mainutils.system
 
 /**

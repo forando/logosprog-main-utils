@@ -13,7 +13,7 @@ import java.net.Socket
 /**
  * Created by forando on 15.06.15.
  * This interface must be implemented by any class that manages
- * sockets received from [Server.ServerAcceptor]
+ * sockets received from Server.ServerAcceptor
  */
 interface SocketManager {
     /**

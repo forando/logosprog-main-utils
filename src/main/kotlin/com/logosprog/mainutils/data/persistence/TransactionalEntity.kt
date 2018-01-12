@@ -1,3 +1,5 @@
+@file:Suppress("unused", "MemberVisibilityCanPrivate")
+
 package com.logosprog.mainutils.data.persistence
 
 import com.logosprog.mainutils.system.RequestContext

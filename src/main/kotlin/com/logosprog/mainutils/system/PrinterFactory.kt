@@ -2,17 +2,18 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("unused")
+
 package com.logosprog.mainutils.system
 
 import java.awt.print.*
 import javax.print.DocPrintJob
-import javax.print.attribute.standard.PrinterName
 import javax.print.event.PrintJobAdapter
 import javax.print.event.PrintJobEvent
 
 
 open class Printer(private val printerJob: PrinterJob, private val pageFormat: PageFormat,
-                   val defaultPrinter: Boolean = false){
+                   private val defaultPrinter: Boolean = false){
     /**
      * @param printable An object that draws a picture to be printed
      */
@@ -29,6 +30,7 @@ open class Printer(private val printerJob: PrinterJob, private val pageFormat: P
     }
 }
 
+@Suppress("MemberVisibilityCanPrivate")
 class PrinterJobFinish: PrintJobAdapter(){
     var completed = false
 

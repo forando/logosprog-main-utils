@@ -2,6 +2,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+
 package com.logosprog.mainutils.files.builders
 
 import java.io.IOException
@@ -16,8 +18,7 @@ abstract class ResourceInputStreamBuilder : ObjectFromFileBuilder<InputStream, S
     @Throws(IOException::class)
     override fun build(fileName: String): InputStream {
         try {
-            val inputStream = objectClass.classLoader.getResourceAsStream(fileName)
-            return inputStream
+            return objectClass.classLoader.getResourceAsStream(fileName)
         } catch (ex: Exception) {
             ex.printStackTrace()
             throw IOException("Cannot build InputStream from $fileName resource")

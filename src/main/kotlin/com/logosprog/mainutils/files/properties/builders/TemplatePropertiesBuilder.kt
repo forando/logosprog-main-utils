@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("unused")
+
 package com.logosprog.mainutils.files.properties.builders
 
 import com.logosprog.mainutils.files.builders.TemplateFileBuilder
@@ -22,15 +24,11 @@ import java.util.*
  */
 abstract class TemplatePropertiesBuilder
 /**
-
+ *
  * @param fileName A file name that will be used to construct [Properties] object from
- * *
  * @param rootDir Application root directory
- * *
  * @param subDir Optional. A subdirectory name the file will be located
- * *
- * @param is An input stream to read a file from.
- * *
+ * @param inputStream An input stream to read a file from.
  * @throws IOException If input stream is NULL
  */
 @Throws(IOException::class)

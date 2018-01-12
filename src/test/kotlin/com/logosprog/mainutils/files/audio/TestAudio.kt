@@ -22,11 +22,11 @@ object AudioTest: Spek({
                 assertNotNull(audio)
             }
         }
-        /*on("calling Play") {
+        on("calling Play") {
             val sourceDataLine = audio.Play()
             it("should return SourceDataLine") {
                 assertNotNull(sourceDataLine)
             }
-        }*/
+        }
     }
 })

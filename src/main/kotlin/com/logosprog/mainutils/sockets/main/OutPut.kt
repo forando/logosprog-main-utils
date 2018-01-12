@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("MemberVisibilityCanPrivate")
+
 package com.logosprog.mainutils.sockets.main
 
 import java.io.ObjectOutputStream

@@ -2,6 +2,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("MemberVisibilityCanPrivate")
+
 package com.logosprog.mainutils.files.builders
 
 import com.logosprog.mainutils.files.managers.SystemFileManager
@@ -29,7 +31,7 @@ abstract class TemplateFileBuilder<T>
 @Throws(IOException::class)
 constructor(fileName: String, rootDir: String, subDir: String) : SystemFileManager(fileName, rootDir, subDir), ObjectFromFileBuilder<T, InputStream> {
 
-    private val TAG: String
+    private val tag: String = this.javaClass.simpleName
 
     /**
      * The object of predefined type that we construct from external file
@@ -43,10 +45,7 @@ constructor(fileName: String, rootDir: String, subDir: String) : SystemFileManag
         private set
 
 
-    init {
-        TAG = this.javaClass.simpleName
-    }
-
+    @Suppress("UNCHECKED_CAST")
     @Throws(IOException::class)
     override fun build(element: InputStream): T {
         if (fileExists()) {
@@ -57,7 +56,7 @@ constructor(fileName: String, rootDir: String, subDir: String) : SystemFileManag
                 mainObject = objectFromExternalFile
                 if (listener != null) listener!!.onFileGenerated()
             } else {
-                printErrorMessage("$TAG.build: An error occurred during $fileName file creation.")
+                printErrorMessage("$tag.build: An error occurred during $fileName file creation.")
             }
         }
         return mainObject as T
@@ -97,7 +96,7 @@ constructor(fileName: String, rootDir: String, subDir: String) : SystemFileManag
 
         val outputStream: OutputStream? = FileOutputStream(path)
         val buffer = ByteArray(1024)
-        var length: Int = 0
+        var length = 0
 
         while (inputStream.read(buffer).let{
             length = it

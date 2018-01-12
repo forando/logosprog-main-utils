@@ -2,7 +2,7 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
-package com.logosprog.mainutils.extension_functions
+package com.logosprog.mainutils.extensionfunctions
 
 
 operator fun Int.plus(b: Int?): Int {

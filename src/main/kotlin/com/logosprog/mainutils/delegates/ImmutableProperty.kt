@@ -5,24 +5,50 @@ import java.io.Serializable
 import kotlin.reflect.KProperty
 
 /**
+ * Prevents properties from mutations being applied on there references
  * @author alog
- * @since 0.4.0
  */
 class ImmutableProperty<T : Serializable> {
 
-    var obj: T? = null
+    private var obj: T? = null
 
-    operator fun getValue(instance: Any, metadata: KProperty<*>) = SerializationUtils.clone(obj)
+    operator fun getValue(instance: Any, metadata: KProperty<*>): T? {
+        if (obj != null)
+            return SerializationUtils.clone(obj)
+        return null
+    }
 
     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
-        if (obj == null) obj = value
+        obj = if (value != null)
+            SerializationUtils.clone(value)
+        else
+            null
+    }
+}
+
+/**
+ * Prevents properties from mutations being applied on there references.
+ * This delegate also prevents any mutation from outside an object that possesses the property.
+ * @author alog
+ */
+class PrivateImmutableProperty<T : Serializable> {
+
+    private var obj: T? = null
+
+    operator fun getValue(instance: Any, metadata: KProperty<*>): T? {
+        if (obj != null)
+            return SerializationUtils.clone(obj)
+        return null
     }
 
-    operator fun plusAssign(value: T) {
-        obj = value
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
+        if (obj == null && value != null) obj = SerializationUtils.clone(value)
     }
 
-    fun setValue(value: T) {
-        obj = value
+    fun setValue(value: T?) {
+        obj = if (value != null)
+            SerializationUtils.clone(value)
+        else
+            null
     }
 }

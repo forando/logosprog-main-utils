@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("unused")
+
 package com.logosprog.mainutils.system
 
 import java.net.InetAddress
@@ -16,20 +18,16 @@ import java.net.NetworkInterface
  */
 
 fun macAddress(): String{
-    val ip: InetAddress
-
-    ip = InetAddress.getByName("127.0.0.1")
+    val ip: InetAddress = InetAddress.getByName("127.0.0.1")
 
     val network = NetworkInterface.getByInetAddress(ip)
 
     val mac: ByteArray = network.hardwareAddress
 
-    var i = 0
     val sb = StringBuilder()
 
-    for (byte in mac){
-        sb.append("${byte}${if(i < mac.size - 1) "-" else ""}")
-        i++
+    for ((i, byte) in mac.withIndex()){
+        sb.append("$byte${if(i < mac.size - 1) "-" else ""}")
     }
 
     return sb.toString()

@@ -1,4 +1,6 @@
-package com.logosprog.mainutils.extension_functions
+@file:Suppress("unused")
+
+package com.logosprog.mainutils.extensionfunctions
 
 import java.io.*
 import java.text.DecimalFormat
@@ -22,13 +24,10 @@ fun <T: Serializable>T.toByteArray(): ByteArray{
 inline fun <reified T: Serializable> ByteArray.toObject(): T?{
     val bis = ByteArrayInputStream(this)
     var input: ObjectInputStream? = null
-    try {
+    return try {
         input = ObjectInputStream(bis)
         val obj = input.readObject()
-        if (obj is T)
-            return obj
-        else
-            return null
+        obj as? T
     }finally {
         try {
             input?.close()
@@ -39,19 +38,18 @@ inline fun <reified T: Serializable> ByteArray.toObject(): T?{
 }
 
 fun ByteArray.convertToStringRepresentation(): String?{
-    val K: Long = 1024
-    val M: Long = K*K
-    val G: Long = M*K
-    val T: Long = G*K
-    val dividers = arrayOf(T, G, M, K, 1L)
+    val k: Long = 1024
+    val m: Long = k*k
+    val g: Long = m*k
+    val t: Long = g*k
+    val dividers = arrayOf(t, g, m, k, 1L)
     val units = arrayOf("TB", "GB", "MB", "KB", "B")
 
     fun format(value: Double, divider: Double, unit: String): String{
-        val result: Double
-        if (divider > 1)
-            result = value/divider
+        val result: Double = if (divider > 1)
+            value/divider
         else
-            result = value
+            value
         return DecimalFormat("#,##0.#").format(result)+ " " + unit
     }
     var result: String? = null

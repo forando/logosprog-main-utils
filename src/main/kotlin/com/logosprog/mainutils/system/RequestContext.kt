@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.logosprog.mainutils.system
 
 import org.slf4j.LoggerFactory

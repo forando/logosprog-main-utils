@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("UNUSED_PARAMETER", "MemberVisibilityCanPrivate")
+
 package com.logosprog.mainutils.sockets.main
 
 import java.io.IOException
@@ -30,8 +32,7 @@ class InPut(private val socket: Socket, id: Int) : Thread() {
     init {
         this.name = THREAD_NAME
         myThread = this
-        //        this.id = id;
-        listeners = ArrayList<InputListener>()
+        listeners = ArrayList()
         this.input = null
     }
 

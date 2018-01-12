@@ -6,6 +6,8 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
+@file:Suppress("MemberVisibilityCanPrivate", "unused")
+
 package com.logosprog.mainutils.files.xml.parser
 
 import org.w3c.dom.Document
@@ -34,9 +36,9 @@ class NodeManager {
      * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
      */
     @Throws(NullPointerException::class)
-    fun getNodeList(document: Document, vararg nodeNames: String): NodeList {
-        if (nodeNames == null || nodeNames.size < 1) throw NullPointerException("String[] nodeNames")
-        var list = document.documentElement.getElementsByTagName(nodeNames[0])
+    fun getNodeList(document: Document, vararg nodeNames: String): NodeList? {
+        if (nodeNames.isEmpty()) throw NullPointerException("String[] nodeNames")
+        var list = document.documentElement.getElementsByTagName(nodeNames[0]) ?: return null
         var i = 1
         while (i < nodeNames.size) {
             val element = list.item(0) as Element
@@ -62,11 +64,11 @@ class NodeManager {
      */
     @Throws(NullPointerException::class)
     fun getNodeList(node: Node, vararg nodeNames: String): NodeList? {
-        if (nodeNames == null || nodeNames.size < 1) throw NullPointerException("String[] nodeNames")
+        if (nodeNames.isEmpty()) throw NullPointerException("String[] nodeNames")
         //checking if node can be cast to Element
         if (node.nodeType != Node.ELEMENT_NODE) return null
         val nodeElement = node as Element
-        var list = nodeElement.getElementsByTagName(nodeNames[0])
+        var list = nodeElement.getElementsByTagName(nodeNames[0]) ?: return null
         var i = 1
         while (i < nodeNames.size) {
             if (list.item(0) == null) return null
@@ -75,6 +77,29 @@ class NodeManager {
             ++i
         }
         return list
+    }
+
+    /**
+     * This method is used to get a matched by tag name xml node.
+     * @param node org.w3c.dom [Node] object.
+     * @param nodeNames An array of node names, **nested each one in another**,
+     *                  including the final one the returned node is named with.
+     *                  **IMPORTANT:** All parent nodes, the desired **node** is nested in,
+     *                  must have **only one representative of itself** in the xml document.
+     *                  Otherwise the first instance of each parent node will be picked
+     *                  up for the further searching.
+     *
+     * @return An [Element] object/node.
+     * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
+     */
+    @Throws(NullPointerException::class)
+    fun getNode(node: Node, vararg nodeNames: String): Element? {
+        val nodeElement = this.getNodeList(node, *nodeNames)?.item(0) ?: return null
+        //checking if node can be cast to Element
+        return if (nodeElement.nodeType == Node.ELEMENT_NODE)
+            nodeElement as Element
+        else
+            null
     }
 
     /**
@@ -91,8 +116,8 @@ class NodeManager {
      * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
      */
     @Throws(NullPointerException::class)
-    fun getNode(node: Node, vararg nodeNames: String): Element? {
-        val nodeElement = this.getNodeList(node, *nodeNames)?.item(0) ?: return null
+    fun getNode(document: Document, vararg nodeNames: String): Element? {
+        val nodeElement = this.getNodeList(document, *nodeNames)?.item(0) ?: return null
         //checking if node can be cast to Element
         return if (nodeElement.nodeType == Node.ELEMENT_NODE)
             nodeElement as Element
@@ -144,7 +169,7 @@ class NodeManager {
             node.parentNode.removeChild(node)
         } else {
             val list = node.childNodes
-            for (i in 0..list.length - 1) {
+            for (i in 0 until list.length) {
                 removeAll(list.item(i), nodeType, name)
             }
         }

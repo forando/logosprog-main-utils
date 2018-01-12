@@ -103,6 +103,29 @@ class NodeManager {
     }
 
     /**
+     * This method is used to get a matched by tag name xml node.
+     * @param node org.w3c.dom [Node] object.
+     * @param nodeNames An array of node names, **nested each one in another**,
+     *                  including the final one the returned node is named with.
+     *                  **IMPORTANT:** All parent nodes, the desired **node** is nested in,
+     *                  must have **only one representative of itself** in the xml document.
+     *                  Otherwise the first instance of each parent node will be picked
+     *                  up for the further searching.
+     *
+     * @return An [Element] object/node.
+     * @throws NullPointerException If nodeNames array does not contain items or it's NULL.
+     */
+    @Throws(NullPointerException::class)
+    fun getNode(document: Document, vararg nodeNames: String): Element? {
+        val nodeElement = this.getNodeList(document, *nodeNames)?.item(0) ?: return null
+        //checking if node can be cast to Element
+        return if (nodeElement.nodeType == Node.ELEMENT_NODE)
+            nodeElement as Element
+        else
+            null
+    }
+
+    /**
      * Removes all Element Nodes of a given name from any given Node (lets call it **rootNode** for this method).
      * @param document org.w3c.dom [Document] object.
      *

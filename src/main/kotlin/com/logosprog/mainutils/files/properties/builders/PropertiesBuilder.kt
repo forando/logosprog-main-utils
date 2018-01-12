@@ -6,7 +6,7 @@
  * Copyright (c) 2016. This code is a LogosProg property. All Rights Reserved.
  */
 
-@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "unused")
+@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "unused", "MemberVisibilityCanPrivate")
 
 package com.logosprog.mainutils.files.properties.builders
 
@@ -23,7 +23,7 @@ import java.util.*
 open class PropertiesBuilder @Throws(IOException::class)
 constructor(inputStream: InputStream) : ObjectFromFileBuilder<Properties, InputStream> {
 
-    private val properties: Properties
+    protected val properties: Properties
 
     init {
         this.properties = this.build(inputStream)

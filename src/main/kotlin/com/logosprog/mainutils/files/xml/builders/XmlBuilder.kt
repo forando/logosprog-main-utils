@@ -3,6 +3,7 @@ package com.logosprog.mainutils.files.xml.builders
 import com.logosprog.mainutils.files.managers.SystemFileManager
 import org.w3c.dom.Document
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
@@ -28,8 +29,15 @@ open class XmlBuilder(fileName: String, rootDir: String, subDir: String): System
             val f = DocumentBuilderFactory.newInstance()
             f.isValidating = false
             val builder: DocumentBuilder? = f.newDocumentBuilder()
-            return if (inputStream != null)
-                builder?.parse(inputStream)
+            return if (inputStream != null){
+                val document = builder?.parse(inputStream)
+
+                try {
+                    inputStream!!.close()
+                }catch (ignored: IOException){}
+
+                document
+            }
             else
                 null
         }

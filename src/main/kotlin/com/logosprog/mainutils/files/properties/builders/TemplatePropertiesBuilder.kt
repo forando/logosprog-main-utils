@@ -52,10 +52,8 @@ constructor(fileName: String, rootDir: String, subDir: String, inputStream: Inpu
                 properties.load(reader)
 
             } finally {
-                if (stream != null) stream.close()
-                if (reader != null) {
-                    reader.close()
-                }
+                stream?.close()
+                reader?.close()
             }
             return properties
         }

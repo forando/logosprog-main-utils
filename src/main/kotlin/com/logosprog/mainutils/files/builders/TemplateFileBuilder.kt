@@ -49,6 +49,7 @@ constructor(fileName: String, rootDir: String, subDir: String) : SystemFileManag
     @Throws(IOException::class)
     override fun build(element: InputStream): T {
         if (fileExists()) {
+            element.close()
             mainObject = objectFromExternalFile
         } else {
             val created = generateDefaultFile(element)
@@ -104,6 +105,8 @@ constructor(fileName: String, rootDir: String, subDir: String) : SystemFileManag
         }){
             outputStream?.write(buffer, 0, length)
         }
+
+        inputStream.close()
 
         return true
     }

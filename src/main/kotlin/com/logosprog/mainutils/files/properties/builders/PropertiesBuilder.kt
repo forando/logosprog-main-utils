@@ -33,6 +33,7 @@ constructor(inputStream: InputStream) : ObjectFromFileBuilder<Properties, InputS
     override fun build(inputStream: InputStream): Properties {
         val properties = Properties()
         properties.load(inputStream)
+        inputStream.close()
         return properties
     }
 }

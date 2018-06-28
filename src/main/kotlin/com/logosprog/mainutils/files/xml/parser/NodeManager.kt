@@ -15,6 +15,7 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 
+//todo: consider to move all Node functions out, so that they can be used directly, without the class instantiation
 /**
  * Parses .xml using org.w3c.dom library
  */

@@ -256,9 +256,9 @@ abstract class CommunicationNode<B, in L : CommunicationNodeListener, V : Commun
         }
     }
 
-    private fun transferMessage(`object`: Any) {
+    private fun transferMessage(obj: Any) {
 
-        if (socketListener != null) socketListener!!.onInputMessage(`object`)
+        if (socketListener != null) socketListener!!.onInputMessage(obj)
     }
 
     fun send(messageObject: Any) {
@@ -294,7 +294,7 @@ abstract class CommunicationNode<B, in L : CommunicationNodeListener, V : Commun
         @Throws(Exception::class)
         override fun call(): Void? {
             // let another thread have some time perhaps to stop this one:
-            Thread.`yield`()
+            Thread.yield()
             //interruption check:
             if (Thread.currentThread().isInterrupted) {
                 return null

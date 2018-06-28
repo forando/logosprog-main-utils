@@ -51,6 +51,7 @@ abstract class SwingTimerAnimation<T> protected constructor(protected val mainOb
         timer?.stop()
     }
 
+    //todo: consider to implement here plusAssign operator overloading with lambda argument
     fun addListener(listener: AnimationListener<T>) {
         this.listener = listener
     }

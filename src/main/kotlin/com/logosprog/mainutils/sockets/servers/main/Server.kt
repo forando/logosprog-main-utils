@@ -60,7 +60,7 @@ class Server<E : SocketManager>
                     // this blocks, waiting for a Socket to the client
                     println("server: got client")
                     generalizedObject.accept(socket)
-                    Thread.`yield`() // let another thread have some time perhaps to stop this one.
+                    Thread.yield() // let another thread have some time perhaps to stop this one.
                     if (Thread.currentThread().isInterrupted) {
 //                        throw InterruptedException("Stopped by ifInterruptedStop()")
                         println("server: stopped")

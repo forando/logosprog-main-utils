@@ -1,4 +1,4 @@
-package com.logosprog.mainutils.files.builders
+package com.logosprog.mainutils.delegates
 
 /**
  *

@@ -1,6 +1,5 @@
 package com.logosprog.mainutils.delegates
 
-import com.logosprog.mainutils.files.builders.ISettings
 import kotlin.reflect.KProperty
 
 /**

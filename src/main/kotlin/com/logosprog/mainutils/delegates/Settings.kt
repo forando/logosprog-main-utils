@@ -1,7 +1,6 @@
-package com.logosprog.mainutils.files.properties.builders
+package com.logosprog.mainutils.delegates
 
-import com.logosprog.mainutils.delegates.SettingsSelector
-import com.logosprog.mainutils.files.builders.ISettings
+import com.logosprog.mainutils.files.properties.builders.PropertiesBuilder
 import java.io.InputStream
 
 /**

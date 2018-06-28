@@ -4,6 +4,10 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# Log file
+*.log
+
+
 # Package Files #
 *.jar
 *.war
@@ -15,5 +19,6 @@ hs_err_pid*
 
 # Created by .ignore support plugin (hsz.mobi)
 .gradle
-.idea
-build/
+.idea/
+**/build/
+**/out/

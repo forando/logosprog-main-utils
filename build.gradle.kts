@@ -4,7 +4,7 @@ import org.junit.platform.gradle.plugin.FiltersExtension
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 
 buildscript {
-    extensions.add("kotlinVersion", "1.2.10")
+    extensions.add("kotlinVersion", "1.2.50")
 
     dependencies {
         classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
@@ -14,7 +14,7 @@ buildscript {
 
 
 plugins {
-    kotlin("jvm") version "1.2.10"
+    kotlin("jvm") version "1.2.50"
 }
 
 apply {

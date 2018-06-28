@@ -90,6 +90,10 @@ open class SystemFileManager(val fileName: String, private val rootDir: String, 
             outputStream?.write(buffer, 0, length)
         }
 
+        try {
+            inputStream.close()
+        }catch (ignored: IOException){}
+
         return true
     }
 }

@@ -67,7 +67,6 @@ abstract class TemplateXMLBuilder
 
         try {
             val transformerFactory = TransformerFactory.newInstance()
-            //transformerFactory.setAttribute("indent-number", 2);
             val transformer = transformerFactory.newTransformer()
             transformer.setOutputProperty(OutputKeys.INDENT, "yes")
             val source = DOMSource(document)

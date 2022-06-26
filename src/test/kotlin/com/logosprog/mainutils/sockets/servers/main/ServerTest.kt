@@ -9,8 +9,8 @@
 package com.logosprog.mainutils.sockets.servers.main
 
 import com.logosprog.mainutils.sockets.servers.server.SocketManager
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.contrib.java.lang.system.SystemOutRule

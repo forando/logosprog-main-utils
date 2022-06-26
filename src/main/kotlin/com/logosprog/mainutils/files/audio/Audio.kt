@@ -17,15 +17,14 @@ import javax.sound.sampled.*
 class Audio(private val streamBuilder: ResourceInputStreamBuilder, private val audioFileName: String){
     init {
         streamBuilder.build(audioFileName)
-
     }
 
     internal var audioFormat: AudioFormat? = null
     internal var audioInputStream: AudioInputStream? = null
     internal var sourceDataLine: SourceDataLine? = null
-    private var dataLineInfo: DataLine.Info? = null
     internal var stopPlayback = false
     internal var playbackFinished = true
+    private var dataLineInfo: DataLine.Info? = null
 
     fun Play(): SourceDataLine?{
         if (playbackFinished) {

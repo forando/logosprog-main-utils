@@ -11,13 +11,12 @@ package com.logosprog.mainutils.files.managers
 import java.io.*
 
 /**
- * Provides basic operations with files that are
- * used by each module/application. That's why they are called
- * system files.
+ * Provides basic operations with files.
+ *
  * @param fileName A name to be given to a new file
  * @param rootDir The complete path to a root directory.
  * @param subDir Optional. The subdirectory to root directory.
- * if it's given, then it will be included in the fileName path
+ * @throws [IOException] if either [fileName] or [rootDir] is empty
  */
 open class SystemFileManager(val fileName: String, private val rootDir: String, private val subDir: String? = null){
 
@@ -51,13 +50,17 @@ open class SystemFileManager(val fileName: String, private val rootDir: String, 
     fun createEmptyFile(): Boolean {
         val f = File(getFilePath())
         var dirCreated = true
-        /*
-        Checking if directory for files already exists
-         */
-        if (!f.parentFile.exists())
-            dirCreated = f.parentFile.mkdirs()
+        var newFileCreated = false
 
-        return dirCreated && f.createNewFile()
+        try {
+            if (!f.parentFile.exists())
+                dirCreated = f.parentFile.mkdirs()
+            newFileCreated = f.createNewFile()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+
+        return dirCreated && newFileCreated
     }
 
     /**
@@ -67,27 +70,39 @@ open class SystemFileManager(val fileName: String, private val rootDir: String, 
     fun deleteDefaultFile(): Boolean = File(getFilePath()).delete()
 
     /**
-     * This method copies default file from internal resource folder to specific
+     * This method copies default file from internal resource folder to a specific
      * project folder.
      * @return True - if operation was successful.
      */
     fun generateDefaultFile(): Boolean {
         val path = getFilePath()
-        val inputStream: InputStream = SystemFileManager::class.java.classLoader.getResourceAsStream(fileName) ?:
-                return false
+        val inputStream: InputStream = this.javaClass.classLoader.getResourceAsStream(fileName) ?: return false
         if (!createEmptyFile()){
             inputStream.close()
             return false
         }
-        val outputStream: OutputStream? = FileOutputStream(path)
-        val buffer = ByteArray(1024)
-        var length = 0
+        try {
+            FileOutputStream(path).use {
+                val buffer = ByteArray(1024)
+                var length = 0
 
-        while (inputStream.read(buffer).let{
-            length = it
-            it > 0
-        }){
-            outputStream?.write(buffer, 0, length)
+                while (
+                        inputStream
+                                .read(buffer)
+                                .let {
+                                    length = it
+                                    it > 0
+                                }
+                ) {
+                    it.write(buffer, 0, length)
+                }
+            }
+            return true
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return false
+        }finally {
+            inputStream.close()
         }
 
         try {

@@ -118,7 +118,7 @@ class NodeManager {
      */
     @Throws(NullPointerException::class)
     fun getNode(document: Document, vararg nodeNames: String): Element? {
-        val nodeElement = this.getNodeList(document, *nodeNames)?.item(0) ?: return null
+        val nodeElement = this.getNodeList(document, *nodeNames).item(0) ?: return null
         //checking if node can be cast to Element
         return if (nodeElement.nodeType == Node.ELEMENT_NODE)
             nodeElement as Element
